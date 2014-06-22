@@ -104,6 +104,10 @@ public class PatchGL implements GLEventListener, KeyListener, MouseListener, Mou
 		 testHandle = gl.glGenLists(1);
 		 VectorShape vs = (VectorShape)App.app().workspace().world().turtleShapeList().shape("sheep");
 		 compileShape(gl, glu, vs, testHandle, false );
+		 
+		 //to do this in the turtle visualizer. iterate thru the turtleShapeList. generate handle, create the displayList, 
+		 //store this in a hashmap<string, Integer> where with name, displaylist
+		 
 	}
     
     
@@ -494,6 +498,7 @@ public class PatchGL implements GLEventListener, KeyListener, MouseListener, Mou
 				gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2,myViewer.reporterValueMatrix[i][j]);
 				//gl.glCallList(sphereDotListHandle);
 				//gl.glCallList(altThickPatchHandle);
+				observer.applyNormal(gl);
 				gl.glCallList(testHandle);
 				gl.glPopMatrix();
 			}
