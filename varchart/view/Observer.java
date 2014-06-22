@@ -69,7 +69,7 @@ public class Observer {
 		yp = -x; //+ z * 0
 		zp = 0; // x+0 - y*0
 		gl.glRotated(pitch - 90, xp, yp, zp);
-		gl.glRotated(-heading, x, y, z);
+		gl.glRotated(360 - heading, x, y, z);
 	}
 	
 	

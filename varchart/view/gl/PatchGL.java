@@ -102,9 +102,14 @@ public class PatchGL implements GLEventListener, KeyListener, MouseListener, Mou
 		 glu.gluQuadricNormals(quadric, GLU.GLU_SMOOTH);
 		 
 		 testHandle = gl.glGenLists(1);
+		 for (String name : App.app().workspace().world().turtleShapeList().getNames())
+			 System.err.println(name);
 		 VectorShape vs = (VectorShape)App.app().workspace().world().turtleShapeList().shape("sheep");
 		 compileShape(gl, glu, vs, testHandle, false );
 		 
+		 //polygon path does NOT work at all. 
+		 // only shapes that use circles and rectangles work
+		 //to fix--> the tesselator thing needs to be done seriously.
 		 //to do this in the turtle visualizer. iterate thru the turtleShapeList. generate handle, create the displayList, 
 		 //store this in a hashmap<string, Integer> where with name, displaylist
 		 
