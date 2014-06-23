@@ -65,11 +65,12 @@ public class Observer {
 	public void applyNormal( GL gl ) {
 		double xp, yp, zp;
 		//cross product of x, y, z and 0, 0, 1
+		gl.glRotated( -heading, x, y, z);
 		xp = y; // - z * 0;
 		yp = -x; //+ z * 0
 		zp = 0; // x+0 - y*0
 		gl.glRotated(pitch - 90, xp, yp, zp);
-		gl.glRotated(360 - heading, x, y, z);
+		
 	}
 	
 	
@@ -94,6 +95,9 @@ public class Observer {
 	private void orbitRight(double delta) {
 
 	    heading = heading + delta;
+	    if (heading > 360) { heading = heading - 360; }
+	    if (heading < 0 ) { heading = heading + 360; }
+	    
 	    double dxy = dist() * StrictMath.cos(StrictMath.toRadians(pitch));
 	    double xn = -dxy * StrictMath.sin(StrictMath.toRadians(heading));
 	    double yn = -dxy * StrictMath.cos(StrictMath.toRadians(heading));

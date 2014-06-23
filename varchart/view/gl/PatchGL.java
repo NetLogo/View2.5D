@@ -18,6 +18,8 @@ import javax.media.opengl.glu.GLUquadric;
 import javax.media.opengl.glu.GLUtessellator;
 
 import org.nlogo.app.App;
+import org.nlogo.gl.render.Polygons;
+import org.nlogo.gl.render.Tessellator;
 import org.nlogo.shape.Polygon;
 import org.nlogo.shape.VectorShape;
 
@@ -357,6 +359,17 @@ public class PatchGL implements GLEventListener, KeyListener, MouseListener, Mou
     public void compileShape(GL gl, GLU glu,
     		VectorShape vShape,
     		int index, boolean rotatable) {
+    	
+    	Tessellator tessellator = new Tessellator();
+    	GLUtessellator tess = glu.gluNewTess();
+        glu.gluTessCallback(tess, GLU.GLU_TESS_BEGIN_DATA, tessellator);
+        glu.gluTessCallback(tess, GLU.GLU_TESS_EDGE_FLAG_DATA, tessellator);
+        glu.gluTessCallback(tess, GLU.GLU_TESS_VERTEX_DATA, tessellator);
+        glu.gluTessCallback(tess, GLU.GLU_TESS_END_DATA, tessellator);
+        glu.gluTessCallback(tess, GLU.GLU_TESS_COMBINE_DATA, tessellator);
+        glu.gluTessCallback(tess, GLU.GLU_TESS_ERROR_DATA, tessellator);
+        glu.gluTessProperty
+            (tess, GLU.GLU_TESS_WINDING_RULE, GLU.GLU_TESS_WINDING_ODD);
     	gl.glNewList(index, GL.GL_COMPILE);
 
     	if (!rotatable) {
@@ -372,8 +385,10 @@ public class PatchGL implements GLEventListener, KeyListener, MouseListener, Mou
     			renderRectangle
     			(gl, i, (org.nlogo.shape.Rectangle) element, rotatable);
     		} else if (element instanceof org.nlogo.shape.Polygon) {
-    			renderPolygon(gl, glu, i,
-    					(org.nlogo.shape.Polygon) element, rotatable);
+    			Polygons.renderPolygon(gl, glu, tessellator, tess, i,
+    			          (org.nlogo.shape.Polygon) element, rotatable, is3D);
+    			//renderPolygon(gl, glu, i,
+    			//		(org.nlogo.shape.Polygon) element, rotatable);
     		} else if (element instanceof org.nlogo.shape.Circle) {
     			renderCircle(gl, glu, i,
     					(org.nlogo.shape.Circle) element, rotatable);
@@ -388,8 +403,9 @@ public class PatchGL implements GLEventListener, KeyListener, MouseListener, Mou
     	if (!rotatable) {
     		gl.glEnable(GL.GL_LIGHTING);
     	}
-
+    	gl.glDisable(GL.GL_CULL_FACE);
     	gl.glEndList();
+    	
     }
 
     
@@ -500,9 +516,11 @@ public class PatchGL implements GLEventListener, KeyListener, MouseListener, Mou
 		for (int i=0; i<myViewer.worldWidth; i++) {
 			for (int j = 0; j<myViewer.worldHeight; j++) {
 				gl.glPushMatrix();
+				
 				gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2,myViewer.reporterValueMatrix[i][j]);
 				//gl.glCallList(sphereDotListHandle);
 				//gl.glCallList(altThickPatchHandle);
+				gl.glScaled(1.4, 1.4, 1.4);
 				observer.applyNormal(gl);
 				gl.glCallList(testHandle);
 				gl.glPopMatrix();
