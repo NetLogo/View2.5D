@@ -43,17 +43,12 @@ public abstract class MouseableWindow implements MouseListener,
 			double thetaY = (oldy - ny) / 2.0;
 			observer.updatePerspective( thetaX, thetaY );
 		} else if ( myViewer.getMode() == VarviewWindow.MOVE ) {
-			double delx = -2 * (nx - oldx) / observer.dist();
-			double dely = -2 * (oldy - ny) / observer.dist();
-			if ( delx > myViewer.minPxcor  &&  delx < myViewer.maxPxcor  && dely > myViewer.minPycor && dely < myViewer.maxPycor) {
-				observer.x += delx;
-				observer.y += dely;
-				observer.rotx += delx;
-				observer.roty += dely;
-			}
+			double deltax = (nx - oldx) / 2.0;
+			double deltay = (oldy - ny) / 2.0;
+			observer.shift(deltax, deltay);
 		} else if ( myViewer.getMode() == VarviewWindow.ZOOM ) {
 			double deldist = -1 * (oldy - ny);
-			observer.zoomby(myViewer, deldist);
+			observer.zoomby(deldist);
 		}
 		
 		oldx = nx;

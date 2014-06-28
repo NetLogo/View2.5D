@@ -498,12 +498,21 @@ public class PatchGL extends MouseableWindow implements GLEventListener {
 				gl.glPopMatrix();
 			}
 		}
-		gl.glColor3f(1.0f, 5.9f, 0.6f);
+		
 		for (int i=0; i<myViewer.worldWidth; i++) {
 			for (int j = 0; j<myViewer.worldHeight; j++) {
 				gl.glPushMatrix();
 				
-				gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2,((PatchView)myViewer).reporterValueMatrix[i][j]);
+				double val = ((PatchView)myViewer).reporterValueMatrix[i][j];
+				gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2,val);
+				
+				gl.glColor3f(2.5f, 2.5f, 2.5f);
+				gl.glLineWidth(0.1f);
+				gl.glBegin (GL.GL_LINES);
+				gl.glVertex3i (0, 0, 0);
+				gl.glVertex3d (0, 0, -val);
+				gl.glEnd();
+				gl.glColor3f(1.0f, 3.9f, 0.6f);
 				gl.glCallList(sphereDotListHandle);
 				//gl.glCallList(altThickPatchHandle);
 				//gl.glScaled(1.4, 1.4, 1.4);
