@@ -18,7 +18,6 @@ import org.nlogo.api.World;
 import org.nlogo.app.App;
 
 import varchart.VarchartExtension;
-import varchart.view.BarView;
 import varchart.view.PatchView;
 
 public class MakePatchView extends DefaultReporter {
