@@ -51,6 +51,7 @@ public class Observer {
 	    rotx = x;
 	    roty = y;
 	    rotz = 0;
+	    System.err.println("at start, x = " + x + "y = " + y + "z = " + z );
 	}
 	
 	public void goHome( TurtleView world ) {		
@@ -104,11 +105,21 @@ public class Observer {
 	        + (rotz - z) * (rotz - z));
 	  }
 	
-	public void zoomby(double delta) {
+	public void zoomby(VarviewWindow world, double delta) {
 		double d = dist();
-		x = ((d + delta) / d) * (x-rotx) + rotx;
-		y = ((d + delta) / d) * (y-roty) + roty;
-		z = ((d + delta) / d) * (z-rotz) + rotz;
+
+		double nx = ((d + delta) / d) * (x-rotx) + rotx;
+		double ny = ((d + delta) / d) * (y-roty) + roty;
+		double nz = ((d + delta) / d) * (z-rotz) + rotz;
+		double nd = StrictMath.sqrt((rotx - nx) * (rotx - nx)
+				+ (roty - ny) * (roty - ny)
+				+ (rotz - nz) * (rotz - nz));
+		
+		if (nd > 3 && nd < Math.max(world.worldWidth, world.worldHeight) * 2.9) {
+			x = nx;
+			y = ny;
+			z = nz;
+		}
 	}
 	
 	private void orbitRight(double delta) {

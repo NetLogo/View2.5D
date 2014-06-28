@@ -53,7 +53,7 @@ public abstract class MouseableWindow implements MouseListener,
 			}
 		} else if ( myViewer.getMode() == VarviewWindow.ZOOM ) {
 			double deldist = -1 * (oldy - ny);
-			observer.zoomby(deldist);
+			observer.zoomby(myViewer, deldist);
 		}
 		
 		oldx = nx;
