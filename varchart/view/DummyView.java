@@ -42,4 +42,9 @@ public class DummyView extends VarviewWindow {
 			g.drawString(sal+num, 10, 10);
 		}
 	}
+	
+	@Override
+	public void resetPerspective() {
+		
+	}
 }

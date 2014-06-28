@@ -79,4 +79,8 @@ public class MeshView extends VarviewWindow {
 		glManager.repaintCanvas();
 	}
 
+	@Override
+	public void resetPerspective() {
+		
+	}
 }

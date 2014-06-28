@@ -41,7 +41,19 @@ public class Observer {
 		rotz = 0;
 	}
 	
-	public void goHome( PatchView world ) {		
+	public void goHome( VarviewWindow world ) {		
+		x = world.minPxcor + ((world.maxPxcor - world.minPxcor) / 2.0);
+	    y = world.minPycor + ((world.maxPycor - world.minPycor) / 2.0);
+	    z = StrictMath.max(world.worldWidth, world.worldHeight) * 1.5;
+	    heading = 0;
+	    pitch = 90;
+	    roll = 0;
+	    rotx = x;
+	    roty = y;
+	    rotz = 0;
+	}
+	
+	public void goHome( TurtleView world ) {		
 		x = world.minPxcor + ((world.maxPxcor - world.minPxcor) / 2.0);
 	    y = world.minPycor + ((world.maxPycor - world.minPycor) / 2.0);
 	    z = StrictMath.max(world.worldWidth, world.worldHeight) * 1.5;
@@ -86,11 +98,18 @@ public class Observer {
 		
 	}
 	
-	private double dist() {
+	public double dist() {
 	    return StrictMath.sqrt((rotx - x) * (rotx - x)
 	        + (roty - y) * (roty - y)
 	        + (rotz - z) * (rotz - z));
 	  }
+	
+	public void zoomby(double delta) {
+		double d = dist();
+		x = ((d + delta) / d) * (x-rotx) + rotx;
+		y = ((d + delta) / d) * (y-roty) + roty;
+		z = ((d + delta) / d) * (z-rotz) + rotz;
+	}
 	
 	private void orbitRight(double delta) {
 

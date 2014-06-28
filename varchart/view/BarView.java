@@ -77,6 +77,11 @@ public class BarView extends VarviewWindow {
 		updateValueArray( context );
 		glManager.repaintCanvas();
 	}
+	
+	@Override
+	public void resetPerspective() {
+		
+	}
 
 }
 

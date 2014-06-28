@@ -27,15 +27,20 @@ import org.nlogo.app.App;
 import varchart.prims.MakeBarView;
 import varchart.prims.MakeMeshView;
 import varchart.prims.MakePatchView;
+import varchart.prims.MakeTurtleView;
 import varchart.prims.UpdateAllViews;
 import varchart.prims.UpdateOneView;
+import varchart.prims.UpdateTurtleView;
 import varchart.view.DummyView;
+import varchart.view.TurtleView;
 import varchart.view.VarviewWindow;
 
 public class VarchartExtension extends DefaultClassManager {
 
 	static private Integer windex = 0;
+	static private Integer tindex = 0;
 	static public HashMap<Integer, VarviewWindow> windowMap = new HashMap<Integer, VarviewWindow>();
+	static public HashMap<Integer, TurtleView> turtleWindowMap = new HashMap<Integer, TurtleView>();
 	
 	//Get next available index
 	 public static Integer getNextIndex() {
@@ -53,7 +58,23 @@ public class VarchartExtension extends DefaultClassManager {
 			return -1; 
 		}
 		
-		//org.nlogo.gl.render.Renderer glr = (org.nlogo.gl.render.Renderer) App.app().workspace().view.renderer)
+	}
+	
+	//Get next available index
+	public static Integer getNextTurtleIndex() {
+		tindex++;
+		return tindex;
+	}
+
+	//Add a window to the indexed set.  Only do so if the proposed index is correct and if the spot is open.
+	public static int storeTurtleWindowAtIndex( Integer i, TurtleView win ){
+		if ( i.equals(tindex) && !turtleWindowMap.containsKey(i) ) {
+			turtleWindowMap.put(i,win);
+			return tindex;
+		}
+		else {
+			return -1; 
+		}
 	}
 	
 	public static void frankDoesRock()  {
@@ -92,11 +113,13 @@ public class VarchartExtension extends DefaultClassManager {
 	public void load(PrimitiveManager primManager) throws ExtensionException {
 		primManager.addPrimitive("dummy", new GLSandbox() );
 		primManager.addPrimitive("patch", new MakePatchView() );
+		primManager.addPrimitive("turtle", new MakeTurtleView() );
 		
 		primManager.addPrimitive("mesh", new MakeMeshView() );
 		primManager.addPrimitive("bar", new MakeBarView() );
 		primManager.addPrimitive("update", new UpdateOneView() );
 		primManager.addPrimitive("update-all", new UpdateAllViews() );
+		primManager.addPrimitive("update-turtle-view", new UpdateTurtleView() );
 		primManager.addPrimitive("turtle-map", new TestTurtleMap() );
 	}
 

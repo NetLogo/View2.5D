@@ -1,17 +1,12 @@
 package varchart.view.gl;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
@@ -23,18 +18,14 @@ import org.nlogo.gl.render.Tessellator;
 import org.nlogo.shape.Polygon;
 import org.nlogo.shape.VectorShape;
 
-import varchart.view.Observer;
+import varchart.view.MouseableWindow;
 import varchart.view.PatchView;
+import varchart.view.VarviewWindow;
 
-public class PatchGL implements GLEventListener, KeyListener, MouseListener, MouseMotionListener {
+public class PatchGL extends MouseableWindow implements GLEventListener {
 
-	PatchView myViewer;
-	
-	Observer observer = new Observer(0, 0, 49.5);
 	
 	GLU glu;
-    GLCanvas myCanvas;
-    int oldx, oldy;
     
     //handles for compiled GL shapes
     int patchTileListHandle, patchThickTileListHandle, patchStickListHandle, sphereDotListHandle, altThickPatchHandle;
@@ -46,18 +37,10 @@ public class PatchGL implements GLEventListener, KeyListener, MouseListener, Mou
 	private boolean is3D = false;
     
     public PatchGL(PatchView parent) {
-    	myViewer = parent;
+    	super(parent);
     }
     
-    public void setCanvas(GLCanvas glCanvas) {
-		myCanvas = glCanvas;	
-	}
-
-    public void repaintCanvas() {
-      myCanvas.repaint();
-    }
-    
-    
+ 
     private void setupCompiliedDisplayLists(GL gl) {
 		
 		 patchTileListHandle = gl.glGenLists(1);
@@ -491,7 +474,10 @@ public class PatchGL implements GLEventListener, KeyListener, MouseListener, Mou
     
     @Override
 	public void display(GLAutoDrawable drawable) {
-    	
+    	/*if (myViewer.getMode() == VarviewWindow.RESET ) {
+    		observer.goHome(myViewer);
+    		myViewer.setMode(VarviewWindow.ORBIT );
+    	}*/
     	
     	GL gl = drawable.getGL();
     	gl.glMatrixMode( GL.GL_MODELVIEW );
@@ -517,12 +503,12 @@ public class PatchGL implements GLEventListener, KeyListener, MouseListener, Mou
 			for (int j = 0; j<myViewer.worldHeight; j++) {
 				gl.glPushMatrix();
 				
-				gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2,myViewer.reporterValueMatrix[i][j]);
-				//gl.glCallList(sphereDotListHandle);
+				gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2,((PatchView)myViewer).reporterValueMatrix[i][j]);
+				gl.glCallList(sphereDotListHandle);
 				//gl.glCallList(altThickPatchHandle);
-				gl.glScaled(1.4, 1.4, 1.4);
-				observer.applyNormal(gl);
-				gl.glCallList(testHandle);
+				//gl.glScaled(1.4, 1.4, 1.4);
+				//observer.applyNormal(gl);
+				//gl.glCallList(testHandle);
 				gl.glPopMatrix();
 			}
 		    }
@@ -541,79 +527,6 @@ public class PatchGL implements GLEventListener, KeyListener, MouseListener, Mou
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
-    
-    
-    
-	@Override
-	public void mouseDragged(MouseEvent me) {
-		int nx = me.getX();
-		int ny = me.getY();
-		double thetaX = (nx - oldx) / 2.0;
-		double thetaY = (oldy - ny) / 2.0;
-			
-		oldx = nx;
-		oldy = ny;
-	
-		observer.updatePerspective( thetaX, thetaY );
-		myCanvas.repaint();
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent me) {
-		oldx = me.getX();
-		oldy = me.getY();
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}

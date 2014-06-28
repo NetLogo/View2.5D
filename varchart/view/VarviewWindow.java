@@ -14,7 +14,22 @@ public abstract class VarviewWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 	int ID;
 	
+	public int worldWidth, worldHeight, minPxcor, minPycor, maxPxcor, maxPycor;
+	
 	private VarviewDashboard dashboard;
+	
+	public static final int ORBIT = 0;
+	public static final int MOVE = 1;
+	public static final int ZOOM = 2;
+	public static final int RESET = -1;
+	
+	private int mode = ORBIT;
+	
+	public void setMode(int newmode) { 
+		mode = newmode;
+	}
+	
+	public int getMode() { return mode; }
 
 	public VarviewWindow(String title, int anId) {
 		super(title);
@@ -23,7 +38,7 @@ public abstract class VarviewWindow extends JFrame {
 	}
 	
 	private void setupUI() {
-		dashboard = new VarviewDashboard( ID );
+		dashboard = new VarviewDashboard( this );
 		this.setLayout( new BorderLayout() );
 		this.add(dashboard, BorderLayout.SOUTH);
 	}
@@ -43,6 +58,8 @@ public abstract class VarviewWindow extends JFrame {
 		);
 	}
 
+	public abstract void resetPerspective();
+	
 	public abstract void manuallyRefreshReporterView( Context context );
 
 	

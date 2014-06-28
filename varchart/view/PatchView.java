@@ -22,7 +22,7 @@ public class PatchView extends VarviewWindow {
 	private PatchGL glManager;
 	private ReporterTask reporterTask;
 	
-	public int worldWidth, worldHeight, minPxcor, minPycor, maxPxcor, maxPycor;
+	
 	public double[][] reporterValueMatrix;
 
 	public PatchView(String title, ReporterTask rt, Integer id) {
@@ -36,14 +36,14 @@ public class PatchView extends VarviewWindow {
 		glManager = new PatchGL(this);
 		
 		glCanvas.addGLEventListener(glManager);
-		glCanvas.addKeyListener(glManager);
+		//glCanvas.addKeyListener(glManager);
 		glCanvas.addMouseListener(glManager);
 		glCanvas.addMouseMotionListener(glManager);
 
 		glManager.setCanvas( glCanvas );
 
 		getContentPane().add(glCanvas, BorderLayout.CENTER);
-		setSize(new Dimension(500, 500));
+		setSize(new Dimension(600, 600));
 		centerWindow(this);
 	}
 	
@@ -75,6 +75,12 @@ public class PatchView extends VarviewWindow {
 	@Override
 	public void manuallyRefreshReporterView(Context context) {
 		updateValueArray( context );
+		glManager.repaintCanvas();
+	}
+	
+	@Override
+	public void resetPerspective() {
+		glManager.observer.goHome(this);
 		glManager.repaintCanvas();
 	}
 
