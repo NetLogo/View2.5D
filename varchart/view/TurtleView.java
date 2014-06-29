@@ -27,7 +27,7 @@ public class TurtleView extends VarviewWindow {
 	
 	public ArrayList<TurtleValue> turtleReporterValues;
 	
-	public boolean showShape, showSize, showColor;
+	public TurtleViewOptions viewOptions;
 	
 	
 	public TurtleView( String title, AgentSet set, ReporterTask rt, Integer id ) {
@@ -49,13 +49,13 @@ public class TurtleView extends VarviewWindow {
 
 		getContentPane().add(glCanvas, BorderLayout.CENTER);
 		
-		//TODO:  Write UI --
-		//Use controls/prefs for turtle view.
-		showShape = true;
-		showSize = true;
-		showColor = true;
+		viewOptions = new TurtleViewOptions(this, true, true, true );
+		
+		
+		getContentPane().add(viewOptions, BorderLayout.NORTH);
+		
 				
-		setSize(new Dimension(600, 600));
+		setSize(new Dimension(600, 640));
 		centerWindow(this);		
 	}
 	
@@ -102,6 +102,10 @@ public class TurtleView extends VarviewWindow {
 	@Override
 	public void resetPerspective() {
 		glManager.observer.goHome(this);
+		refresh();
+	}
+	
+	public void refresh() {
 		glManager.repaintCanvas();
 	}
 

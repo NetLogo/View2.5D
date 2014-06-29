@@ -479,16 +479,19 @@ public class TurtleGL extends MouseableWindow implements GLEventListener {
 				gl.glVertex3d (0, 0, -tv.reporterValue);
 				gl.glEnd();
 				
-				gl.glScaled(1.4, 1.4, 1.4);
-				if ( ((TurtleView)myViewer).showSize )
+				
+				if ( ((TurtleView)myViewer).viewOptions.showSize() )
 					gl.glScaled(tv.size, tv.size, tv.size);
 				observer.applyNormal(gl);
-				if ( ((TurtleView)myViewer).showColor )
-					gl.glColor3f((float)(tv.color.getRed()/255f), (float)tv.color.getGreen()/255f, (float)tv.color.getBlue()/255f);
-				if (((TurtleView)myViewer).showShape )
+				if ( ((TurtleView)myViewer).viewOptions.showColor() )
+					gl.glColor3f((float)(4.0*tv.color.getRed()/255f), (float)(4.0*tv.color.getGreen()/255f), (float)(4.0*tv.color.getBlue()/255f));
+				if (((TurtleView)myViewer).viewOptions.showShape() ) {
+					gl.glScaled(3.0, 3.0, 3.0);
 					gl.glCallList(compiledShapes.get(tv.shape));
-				else
+				}
+				else {
 					gl.glCallList(sphereDotListHandle);
+				}
 				
 				gl.glPopMatrix();
 		}

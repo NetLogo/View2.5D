@@ -43,7 +43,7 @@ public class PatchView extends VarviewWindow {
 		glManager.setCanvas( glCanvas );
 
 		getContentPane().add(glCanvas, BorderLayout.CENTER);
-		setSize(new Dimension(600, 600));
+		setSize(new Dimension(600, 620));
 		centerWindow(this);
 	}
 	
