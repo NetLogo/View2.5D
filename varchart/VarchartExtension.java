@@ -89,7 +89,19 @@ public class VarchartExtension extends DefaultClassManager {
 		primManager.addPrimitive("update-turtle-view", new UpdateTurtleView() );
 	}
 
-	
+	@Override
+	public void unload(ExtensionManager em) {
+		for (VarviewWindow win: windowMap.values() ) {
+			if ( win != null ) {
+				win.dispose();
+			}
+		}
+		for (TurtleView tv : turtleWindowMap.values() ) {
+			if ( tv != null ) {
+				tv.dispose();
+			}
+		}
+	}
 
 
 }
