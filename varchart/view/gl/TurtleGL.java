@@ -155,7 +155,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 		}
 		
 		for (TurtleValue tv : ((TurtleView)myViewer).getCopyOfReporterValues()) {
-			
 				gl.glPushMatrix();
 				gl.glTranslated(tv.xcor , tv.ycor, tv.reporterValue);
 				
@@ -182,9 +181,8 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 				
 				gl.glPopMatrix();
 		}
-		
 	     gl.glPopMatrix();
-		 
+	     
 	}
 
 	@Override
@@ -192,11 +190,9 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 			boolean deviceChanged) {		
 	}
 
-	
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {		
 	}
-
 	
 }

@@ -16,7 +16,7 @@ public final class Compilables {
 		gl.glEnd();
 	}
 
-
+	
 	public static void PatchStickTile( GL gl, int stickheight) {
 		gl.glColor3f(1.0f, 0.6f, 5.9f);
 		gl.glBegin(GL.GL_POLYGON);
@@ -35,6 +35,7 @@ public final class Compilables {
 		gl.glEnd();
 	}
 
+	
 	//sz should be greater than 0 and less than or equal to  .5
 	//depth controls the z-size of the tile
 	public static void ThickPatchTile( GL gl, final float sz, final float depth) {
@@ -84,9 +85,7 @@ public final class Compilables {
 
 
 	public static void Sphere( GL gl, GLU glu, GLUquadric quadr, float radius, int slices, int stacks ) {
-
 		glu.gluSphere(quadr, radius, slices, stacks);
-
 	}
 
 }

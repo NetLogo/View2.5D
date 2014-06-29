@@ -16,8 +16,8 @@ public abstract class MouseableGLWindow implements MouseListener,
 
 	protected VarviewWindow myViewer;
 	
-    //TODO: fix this.  shouldn't be generic
-	protected Observer observer = new Observer(40, 0, 49.5);
+    //initial values are overwritten immediately - this is the correct initial value for the default model
+	protected Observer observer = new Observer(0, 0, 49.5);
 	
 	protected GLCanvas myCanvas;
 	protected int oldx, oldy;
@@ -109,10 +109,7 @@ public abstract class MouseableGLWindow implements MouseListener,
         observer.goHome( myViewer );
     }
     
-    
-    
-    
-    
+
 	@Override
 	public void mouseDragged(MouseEvent me) {
 		int nx = me.getX();
@@ -137,27 +134,19 @@ public abstract class MouseableGLWindow implements MouseListener,
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mouseMoved(MouseEvent arg0) {		
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mouseClicked(MouseEvent arg0) {		
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mouseEntered(MouseEvent arg0) {		
 	}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mouseExited(MouseEvent arg0) {		
 	}
 
 	@Override
@@ -171,6 +160,5 @@ public abstract class MouseableGLWindow implements MouseListener,
 	public void mouseReleased(MouseEvent arg0) {
 		dragging = false;
 	}
-
 
 }
