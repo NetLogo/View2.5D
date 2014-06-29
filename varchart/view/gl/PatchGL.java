@@ -68,6 +68,7 @@ public class PatchGL extends MouseableWindow implements GLEventListener {
     	double ratio = worldWidth / worldHeight;
     	
     	gl.glViewport(0, 0, worldWidth, worldHeight);
+    	
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
 
@@ -154,7 +155,7 @@ public class PatchGL extends MouseableWindow implements GLEventListener {
 		for (int i=0; i<myViewer.worldWidth; i++) {
 			for (int j = 0; j<myViewer.worldHeight; j++) {
 				gl.glPushMatrix();
-				gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2,0);
+				gl.glTranslated(i + myViewer.minPxcor, j + myViewer.minPycor, 0);
 				gl.glCallList(patchTileListHandle);
 				gl.glPopMatrix();
 			}
@@ -165,7 +166,7 @@ public class PatchGL extends MouseableWindow implements GLEventListener {
 				gl.glPushMatrix();
 
 				double val = ((PatchView)myViewer).reporterValueMatrix[i][j];
-				gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2,val);
+				gl.glTranslated(i + myViewer.minPxcor, j + myViewer.minPycor,val);
 
 				gl.glColor3f(2.5f, 2.5f, 2.5f);
 				gl.glLineWidth(0.1f);

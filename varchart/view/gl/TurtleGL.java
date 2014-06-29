@@ -2,7 +2,6 @@ package varchart.view.gl;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -372,9 +371,10 @@ public class TurtleGL extends MouseableWindow implements GLEventListener {
     	double ratio = worldWidth / worldHeight;
     	
     	gl.glViewport(0, 0, worldWidth, worldHeight);
-        gl.glMatrixMode(GL.GL_PROJECTION);
+    	
+    	gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
-
+        
         double zClip = Math.max(worldWidth, worldHeight) * 4;
 
         glu.gluPerspective(45.0f, ratio, 0.1, zClip);

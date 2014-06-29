@@ -13,7 +13,7 @@ public abstract class MouseableWindow implements MouseListener,
 	protected VarviewWindow myViewer;
 	
     //TODO: fix this.  shouldn't be generic
-	protected Observer observer = new Observer(0, 0, 49.5);
+	protected Observer observer = new Observer(40, 0, 49.5);
 	
 	protected GLCanvas myCanvas;
 	protected int oldx, oldy;

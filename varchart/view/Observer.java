@@ -54,18 +54,6 @@ public class Observer {
 		System.err.println("at start, x = " + x + "y = " + y + "z = " + z );
 	}
 
-	public void goHome( TurtleView world ) {		
-		x = world.minPxcor + ((world.maxPxcor - world.minPxcor) / 2.0);
-		y = world.minPycor + ((world.maxPycor - world.minPycor) / 2.0);
-		z = StrictMath.max(world.worldWidth, world.worldHeight) * 1.5;
-		heading = 0;
-		pitch = 90;
-		roll = 0;
-		rotx = x;
-		roty = y;
-		rotz = 0;
-	}
-
 	public void applyPerspective( GL gl ) {
 		gl.glRotated(90, -1.0, 0.0, 0.0);
 		gl.glRotated(heading, 0.0, 0.0, 1.0);

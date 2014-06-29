@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Vector;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLCapabilities;
@@ -51,6 +49,7 @@ public class TurtleView extends VarviewWindow {
 
 		getContentPane().add(glCanvas, BorderLayout.CENTER);
 		
+		//TODO:  Write UI --
 		//Use controls/prefs for turtle view.
 		showShape = true;
 		showSize = true;
