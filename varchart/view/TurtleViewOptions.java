@@ -3,6 +3,7 @@ package varchart.view;
 import java.awt.GridLayout;
 
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -27,6 +28,7 @@ public class TurtleViewOptions extends JPanel implements ChangeListener {
 		size.addChangeListener(this);
 		shape.addChangeListener(this);
 		
+		this.add( new JLabel("View Options: ") );
 		this.add(color);
 		this.add(size);
 		this.add(shape);
