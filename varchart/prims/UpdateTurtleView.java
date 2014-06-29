@@ -10,7 +10,6 @@ import org.nlogo.api.Syntax;
 
 import varchart.VarchartExtension;
 import varchart.view.TurtleView;
-import varchart.view.VarviewWindow;
 
 public class UpdateTurtleView extends DefaultCommand {
 

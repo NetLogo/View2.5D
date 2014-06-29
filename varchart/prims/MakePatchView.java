@@ -11,7 +11,6 @@ import org.nlogo.api.DefaultReporter;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.Patch;
-import org.nlogo.api.Primitive;
 import org.nlogo.api.ReporterTask;
 import org.nlogo.api.Syntax;
 import org.nlogo.api.World;

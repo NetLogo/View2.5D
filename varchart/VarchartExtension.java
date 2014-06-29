@@ -23,11 +23,12 @@ import varchart.view.VarviewWindow;
 public class VarchartExtension extends DefaultClassManager {
 
 	static private Integer windex = 0;
-	static private Integer tindex = 0;
 	static public HashMap<Integer, VarviewWindow> windowMap = new HashMap<Integer, VarviewWindow>();
+	
+	static private Integer tindex = 0;
 	static public HashMap<Integer, TurtleView> turtleWindowMap = new HashMap<Integer, TurtleView>();
 	
-	//Get next available index
+	//Get next available index for windows (patch)
 	 public static Integer getNextIndex() {
 		windex++;
 		return windex;
@@ -45,7 +46,7 @@ public class VarchartExtension extends DefaultClassManager {
 		
 	}
 	
-	//Get next available index
+	//Get next available index for turtle views
 	public static Integer getNextTurtleIndex() {
 		tindex++;
 		return tindex;
