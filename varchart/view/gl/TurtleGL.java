@@ -1,19 +1,14 @@
 package varchart.view.gl;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
@@ -25,19 +20,13 @@ import org.nlogo.gl.render.Tessellator;
 import org.nlogo.shape.Polygon;
 import org.nlogo.shape.VectorShape;
 
-import varchart.view.Observer;
+import varchart.view.MouseableWindow;
 import varchart.view.TurtleValue;
 import varchart.view.TurtleView;
 
-public class TurtleGL implements GLEventListener, KeyListener, MouseListener, MouseMotionListener {
+public class TurtleGL extends MouseableWindow implements GLEventListener {
 
-	TurtleView myViewer;
-	
-	public Observer observer = new Observer(0, 0, 49.5);
-	
 	GLU glu;
-    GLCanvas myCanvas;
-    int oldx, oldy;
     
     //handles for compiled GL shapes
     int patchTileListHandle, sphereDotListHandle;
@@ -49,20 +38,11 @@ public class TurtleGL implements GLEventListener, KeyListener, MouseListener, Mo
 	private boolean is3D = false;
     
     public TurtleGL(TurtleView parent) {
-    	myViewer = parent;
-    }
-    
-    public void setCanvas(GLCanvas glCanvas) {
-		myCanvas = glCanvas;	
-	}
-
-    public void repaintCanvas() {
-      myCanvas.repaint();
+    	super(parent);
     }
     
     
     private void setupCompiliedDisplayLists(GL gl) {
-    	
     	 patchTileListHandle = gl.glGenLists(1);
 		 gl.glNewList(patchTileListHandle, GL.GL_COMPILE);
 		 Compilables.PatchTile(gl);
@@ -131,30 +111,30 @@ public class TurtleGL implements GLEventListener, KeyListener, MouseListener, Mo
     }
 
     public void renderRectangularPrism(GL gl, float left, float right,
-            float back, float front,
-            float bottom, float top, boolean hollow,
-            boolean hasBottom, boolean hasSides) {
+    		float back, float front,
+    		float bottom, float top, boolean hollow,
+    		boolean hasBottom, boolean hasSides) {
 
     	if (hollow)
     		gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE);
 
-    		gl.glBegin(GL.GL_QUADS);
+    	gl.glBegin(GL.GL_QUADS);
 
-    		// top
-    		gl.glNormal3f(0f, 0f, 1f);
-    		gl.glVertex3f(left, front, top);
-    		gl.glVertex3f(left, back, top);
-    		gl.glVertex3f(right, back, top);
-    		gl.glVertex3f(right, front, top);
+    	// top
+    	gl.glNormal3f(0f, 0f, 1f);
+    	gl.glVertex3f(left, front, top);
+    	gl.glVertex3f(left, back, top);
+    	gl.glVertex3f(right, back, top);
+    	gl.glVertex3f(right, front, top);
 
-    		// bottom
-    		if (hasBottom) {
-    			gl.glNormal3f(0f, 0f, -1f);
-    			gl.glVertex3f(left, front, bottom);
-    			gl.glVertex3f(right, front, bottom);
-    			gl.glVertex3f(right, back, bottom);
-    			gl.glVertex3f(left, back, bottom);
-    		}
+    	// bottom
+    	if (hasBottom) {
+    		gl.glNormal3f(0f, 0f, -1f);
+    		gl.glVertex3f(left, front, bottom);
+    		gl.glVertex3f(right, front, bottom);
+    		gl.glVertex3f(right, back, bottom);
+    		gl.glVertex3f(left, back, bottom);
+    	}
 
     	gl.glEnd();
 
@@ -201,7 +181,7 @@ public class TurtleGL implements GLEventListener, KeyListener, MouseListener, Mo
     	if (hollow)
     		gl.glEnable(GL.GL_CULL_FACE);
     }
-    
+
 
     private void renderCircle(GL gl, GLU glu, int offset,
     		org.nlogo.shape.Circle circle,
@@ -304,7 +284,7 @@ public class TurtleGL implements GLEventListener, KeyListener, MouseListener, Mo
     		gl.glPopAttrib();
     	}
     }
-    
+
     public void renderPolygon( GL gl, GLU glu, int offset, Polygon poly, boolean rotatable ) {
     	float zDepth = 0.01f + offset * 0.0001f;
     	List<Integer> xcoords = poly.getXcoords();
@@ -317,7 +297,7 @@ public class TurtleGL implements GLEventListener, KeyListener, MouseListener, Mo
     		List<Integer> xcoords,
     		List<Integer> ycoords,
     		float zDepth, boolean rotatable) {
-    	
+
     	GLUtessellator tess = glu.gluNewTess();
     	glu.gluTessBeginPolygon(tess, null);
     	glu.gluTessBeginContour(tess);
@@ -332,21 +312,21 @@ public class TurtleGL implements GLEventListener, KeyListener, MouseListener, Mo
     	glu.gluTessEndPolygon(tess);
     }
 
-    
+
     public void compileShape(GL gl, GLU glu,
     		VectorShape vShape,
     		int index, boolean rotatable) {
-    	
+
     	Tessellator tessellator = new Tessellator();
     	GLUtessellator tess = glu.gluNewTess();
-        glu.gluTessCallback(tess, GLU.GLU_TESS_BEGIN_DATA, tessellator);
-        glu.gluTessCallback(tess, GLU.GLU_TESS_EDGE_FLAG_DATA, tessellator);
-        glu.gluTessCallback(tess, GLU.GLU_TESS_VERTEX_DATA, tessellator);
-        glu.gluTessCallback(tess, GLU.GLU_TESS_END_DATA, tessellator);
-        glu.gluTessCallback(tess, GLU.GLU_TESS_COMBINE_DATA, tessellator);
-        glu.gluTessCallback(tess, GLU.GLU_TESS_ERROR_DATA, tessellator);
-        glu.gluTessProperty
-            (tess, GLU.GLU_TESS_WINDING_RULE, GLU.GLU_TESS_WINDING_ODD);
+    	glu.gluTessCallback(tess, GLU.GLU_TESS_BEGIN_DATA, tessellator);
+    	glu.gluTessCallback(tess, GLU.GLU_TESS_EDGE_FLAG_DATA, tessellator);
+    	glu.gluTessCallback(tess, GLU.GLU_TESS_VERTEX_DATA, tessellator);
+    	glu.gluTessCallback(tess, GLU.GLU_TESS_END_DATA, tessellator);
+    	glu.gluTessCallback(tess, GLU.GLU_TESS_COMBINE_DATA, tessellator);
+    	glu.gluTessCallback(tess, GLU.GLU_TESS_ERROR_DATA, tessellator);
+    	glu.gluTessProperty
+    	(tess, GLU.GLU_TESS_WINDING_RULE, GLU.GLU_TESS_WINDING_ODD);
     	gl.glNewList(index, GL.GL_COMPILE);
 
     	if (!rotatable) {
@@ -363,7 +343,7 @@ public class TurtleGL implements GLEventListener, KeyListener, MouseListener, Mo
     			(gl, i, (org.nlogo.shape.Rectangle) element, rotatable);
     		} else if (element instanceof org.nlogo.shape.Polygon) {
     			Polygons.renderPolygon(gl, glu, tessellator, tess, i,
-    			          (org.nlogo.shape.Polygon) element, rotatable, is3D);
+    					(org.nlogo.shape.Polygon) element, rotatable, is3D);
     			//renderPolygon(gl, glu, i,
     			//		(org.nlogo.shape.Polygon) element, rotatable);
     		} else if (element instanceof org.nlogo.shape.Circle) {
@@ -382,11 +362,8 @@ public class TurtleGL implements GLEventListener, KeyListener, MouseListener, Mo
     	}
     	gl.glDisable(GL.GL_CULL_FACE);
     	gl.glEndList();
-    	
-    }
 
-    
-    //end turtle shape testing stuff
+    }
     
    
     private void mainViewport( GL gl ) {
@@ -468,8 +445,6 @@ public class TurtleGL implements GLEventListener, KeyListener, MouseListener, Mo
     
     @Override
 	public void display(GLAutoDrawable drawable) {
-    	
-    	
     	GL gl = drawable.getGL();
     	gl.glMatrixMode( GL.GL_MODELVIEW );
 		gl.glLoadIdentity();
@@ -490,8 +465,9 @@ public class TurtleGL implements GLEventListener, KeyListener, MouseListener, Mo
 			}
 		}
 		
-		
-		for (TurtleValue tv : myViewer.turtleReporterValues) {
+		//ArrayList<TurtleValue> copyOfValues = new ArrayList<TurtleValue>( ((TurtleView)myViewer).turtleReporterValues.size() );
+		//copyOfValues.addAll( ((TurtleView)myViewer).turtleReporterValues );
+		for (TurtleValue tv : ((TurtleView)myViewer).getCopyOfReporterValues()) {
 			
 				gl.glPushMatrix();
 				gl.glTranslated(tv.xcor , tv.ycor, tv.reporterValue);
@@ -504,12 +480,12 @@ public class TurtleGL implements GLEventListener, KeyListener, MouseListener, Mo
 				gl.glEnd();
 				
 				gl.glScaled(1.4, 1.4, 1.4);
-				if ( myViewer.showSize )
+				if ( ((TurtleView)myViewer).showSize )
 					gl.glScaled(tv.size, tv.size, tv.size);
 				observer.applyNormal(gl);
-				if ( myViewer.showColor )
+				if ( ((TurtleView)myViewer).showColor )
 					gl.glColor3f((float)(tv.color.getRed()/255f), (float)tv.color.getGreen()/255f, (float)tv.color.getBlue()/255f);
-				if (myViewer.showShape )
+				if (((TurtleView)myViewer).showShape )
 					gl.glCallList(compiledShapes.get(tv.shape));
 				else
 					gl.glCallList(sphereDotListHandle);
@@ -523,98 +499,14 @@ public class TurtleGL implements GLEventListener, KeyListener, MouseListener, Mo
 
 	@Override
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged,
-			boolean deviceChanged) {
-		// TODO Auto-generated method stub
-		
+			boolean deviceChanged) {		
 	}
 
 	
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
-			int height) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
-    
-    
-    
-	@Override
-	public void mouseDragged(MouseEvent me) {
-		int nx = me.getX();
-		int ny = me.getY();
-		double thetaX = (nx - oldx) / 2.0;
-		double thetaY = (oldy - ny) / 2.0;
-			
-		oldx = nx;
-		oldy = ny;
-	
-		observer.updatePerspective( thetaX, thetaY );
-		myCanvas.repaint();
+			int height) {		
 	}
 
-	@Override
-	public void mousePressed(MouseEvent me) {
-		oldx = me.getX();
-		oldy = me.getY();
-		
-	}
-
-	
-	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		myViewer.showShape = !myViewer.showShape;
-		myViewer.showSize = !myViewer.showSize;
-		myCanvas.repaint();
-		
-	}
-
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		myViewer.showColor = !myViewer.showColor;
-		myViewer.showSize = !myViewer.showSize;
-
-		myCanvas.repaint();
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 }

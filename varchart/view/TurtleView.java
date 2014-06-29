@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Vector;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLCapabilities;
@@ -42,7 +44,6 @@ public class TurtleView extends VarviewWindow {
 		glManager = new TurtleGL(this);
 		
 		glCanvas.addGLEventListener(glManager);
-		glCanvas.addKeyListener(glManager);
 		glCanvas.addMouseListener(glManager);
 		glCanvas.addMouseMotionListener(glManager);
 
@@ -56,12 +57,9 @@ public class TurtleView extends VarviewWindow {
 		showColor = true;
 				
 		setSize(new Dimension(600, 600));
-		
-		
-
-		
 		centerWindow(this);		
 	}
+	
 	
 	@Override
 	public void manuallyRefreshReporterView(Context context) {
@@ -75,10 +73,15 @@ public class TurtleView extends VarviewWindow {
 			Turtle turtle = (Turtle)a;
 			Color c = org.nlogo.api.Color.getColor(turtle.color());
 			double val = (Double)reporterTask.report(context, new Object[]{turtle});
-			System.err.println("SIZE: " + turtle.size());
 			TurtleValue tv = new TurtleValue( turtle.shape(), c, turtle.size(), turtle.xcor(), turtle.ycor(), val);
 			turtleReporterValues.add(tv);
 		}
+	}
+	
+	public ArrayList<TurtleValue> getCopyOfReporterValues() {
+		ArrayList<TurtleValue> rtn = new ArrayList<TurtleValue>(turtleReporterValues.size() );
+		rtn.addAll( turtleReporterValues );
+		return rtn;
 	}
 	
 	public void setupForRendering(  int wWidth, int wHeight, int minX, int maxX, int minY, int maxY ) {
