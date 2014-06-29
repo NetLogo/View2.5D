@@ -1,20 +1,15 @@
 package varchart.view.gl;
 
-
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
-
-import varchart.view.MouseableWindow;
+import varchart.view.MouseableGLWindow;
 import varchart.view.PatchView;
 
-public class PatchGL extends MouseableWindow implements GLEventListener {
+public class PatchGL extends MouseableGLWindow implements GLEventListener {
 	GLU glu;
     
     //handles for compiled GL shapes
@@ -61,82 +56,13 @@ public class PatchGL extends MouseableWindow implements GLEventListener {
 		 glu.gluDeleteQuadric(quadr);
 	}
     
-   
-    private void mainViewport( GL gl ) {
-    	int worldWidth = myViewer.worldWidth;
-    	int worldHeight = myViewer.worldHeight;
-    	double ratio = worldWidth / worldHeight;
-    	
-    	gl.glViewport(0, 0, worldWidth, worldHeight);
-    	
-        gl.glMatrixMode(GL.GL_PROJECTION);
-        gl.glLoadIdentity();
-
-        double zClip = Math.max(worldWidth, worldHeight) * 4;
-
-        glu.gluPerspective(45.0f, ratio, 0.1, zClip);
-        gl.glMatrixMode(GL.GL_MODELVIEW);
-        gl.glLoadIdentity();
-        observer.goHome( myViewer );
-    }
-    
     
     @Override
 	public void init(GLAutoDrawable drawable) {
     	GL gl = drawable.getGL();
     	glu = new GLU();
     	setupCompiliedDisplayLists( gl );
-    	
-        gl.glShadeModel(GL.GL_SMOOTH);                    // Enable Smooth Shading
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);          // Black Background
-        gl.glClearDepth(1.0f);                            // Depth Buffer Setup
-        gl.glEnable(GL.GL_DEPTH_TEST);              	  // Enables Depth Testing
-        gl.glDepthFunc(GL.GL_LEQUAL);             		  // The Type Of Depth Testing To Do
-
-        gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_FASTEST);
-
-        // Lighting
-        gl.glEnable(GL.GL_LIGHTING);
-
-        float direction1[] = {-1.0f, -0.3f, 0.4f, 0.0f};
-        float ambient1[] = {0.25f, 0.25f, 0.25f, 1.0f};
-        float diffuse1[] = {0.35f, 0.35f, 0.35f, 1.0f};
-        float specular1[] = {0.0f, 0.0f, 0.0f, 0.0f};
-        
-        gl.glLightfv(1, GL.GL_POSITION, FloatBuffer.wrap(direction1)); 
-        gl.glLightfv(1, GL.GL_AMBIENT, FloatBuffer.wrap(ambient1));
-        gl.glLightfv(1, GL.GL_DIFFUSE, FloatBuffer.wrap(diffuse1));
-        gl.glLightfv(1, GL.GL_SPECULAR, FloatBuffer.wrap(specular1));
-        gl.glEnable(1);
-        
-        
-        float direction2[] = {1.0f, 0.6f, -0.5f, 0.0f};
-        float ambient2[] = {0.25f, 0.25f, 0.25f, 1.0f};
-        float diffuse2[] = {0.35f, 0.35f, 0.35f, 1.0f};
-        float specular2[] = {0.0f, 0.0f, 0.0f, 0.0f};
-        
-        gl.glLightfv(2, GL.GL_POSITION, FloatBuffer.wrap(direction2)); 
-        gl.glLightfv(2, GL.GL_AMBIENT, FloatBuffer.wrap(ambient2));
-        gl.glLightfv(2, GL.GL_DIFFUSE, FloatBuffer.wrap(diffuse2));
-        gl.glLightfv(2, GL.GL_SPECULAR, FloatBuffer.wrap(specular2));
-        gl.glEnable(2);
-      
-
-        // This is necessary for properly rendering scaled objects. Without this, small objects
-        // may look too bright, and large objects will look flat.
-        gl.glEnable(GL.GL_NORMALIZE);
-
-        // Coloring
-
-        gl.glColorMaterial(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE);
-        gl.glEnable(GL.GL_COLOR_MATERIAL);
-
-        // Remove back-face rendering
-	    //  gl.glCullFace(GL.GL_BACK);
-	    //  gl.glEnable(GL.GL_CULL_FACE);
-        int StencilBits[] = new int[1];
-        gl.glGetIntegerv(GL.GL_STENCIL_BITS, IntBuffer.wrap(StencilBits));
-        mainViewport( gl );
+    	setupLightingAndViewPort(gl, glu);
 	}
 
     

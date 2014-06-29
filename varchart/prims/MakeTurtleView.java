@@ -28,6 +28,7 @@ public class MakeTurtleView extends DefaultReporter {
        return  Syntax.reporterSyntax(argTypes, Syntax.NumberType());
     }
 	
+	@SuppressWarnings("unused")
 	@Override
 	public Object report(Argument[] args, final Context context)
 			throws ExtensionException, LogoException {
