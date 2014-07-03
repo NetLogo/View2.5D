@@ -53,10 +53,9 @@ public class TurtleView extends VarviewWindow {
 		viewOptions = new TurtleViewOptions(this, true, true, true );
 		mainPanel.add(viewOptions, BorderLayout.NORTH);
 		
-		this.setSize(new Dimension(660, 640));
-		
-		
-		xExpand = 60;
+		//change if re-add scalemanipulator
+		this.setSize(new Dimension(600, 640));
+		xExpand = 0;
 		yExpand = 40;
 		this.addComponentListener( new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {

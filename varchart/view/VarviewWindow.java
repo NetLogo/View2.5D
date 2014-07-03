@@ -46,10 +46,10 @@ public abstract class VarviewWindow extends JFrame {
 	
 	private void setupUI() {
 		dashboard = new VarviewDashboard( this );
-		scale = new ScaleManipulator( this, -1, 10 );
+		//scale = new ScaleManipulator( this, -1, 10 );
 		mainPanel = new JPanel();
 		mainPanel.setLayout( new BorderLayout() );
-		mainPanel.add(scale, BorderLayout.WEST);
+		//mainPanel.add(scale, BorderLayout.WEST);
 		mainPanel.add(dashboard, BorderLayout.SOUTH);
 		this.getContentPane().add(mainPanel);
 	}
@@ -74,12 +74,12 @@ public abstract class VarviewWindow extends JFrame {
 	public abstract void manuallyRefreshReporterView( Context context );
 
 	protected void applySquareConstraint(int xBorder, int yBorder, JPanel inner) {
-        int w = this.getWidth() - xBorder;
-        int h = this.getHeight() - yBorder;
+		int chromeH = this.getHeight() - inner.getHeight();
+        int w = inner.getWidth() - xBorder;
+        int h = inner.getHeight() - yBorder;
         int constraint = Math.min(w, h);
-        System.err.println("Got here: constraint = " + constraint);
         inner.setPreferredSize(new Dimension(constraint+xBorder, constraint+yBorder));
-        this.setSize(new Dimension(constraint+xBorder, constraint+yBorder));
+        this.setSize(new Dimension(constraint+xBorder, constraint+yBorder + chromeH));
         this.invalidate();
     } 
 	

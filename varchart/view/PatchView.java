@@ -44,9 +44,9 @@ public class PatchView extends VarviewWindow {
 		glManager.setCanvas( glCanvas );
 		mainPanel.add(glCanvas, BorderLayout.CENTER);
 		
-		setSize(new Dimension(660, 620));
-		
-		xExpand = 60;
+		//change if re-add scalemanipulator
+		setSize(new Dimension(600, 620));
+		xExpand = 0;
 		yExpand = 20;
 		this.addComponentListener( new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
