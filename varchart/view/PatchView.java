@@ -2,6 +2,8 @@ package varchart.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLCapabilities;
@@ -36,14 +38,22 @@ public class PatchView extends VarviewWindow {
 		glManager = new PatchGL(this);
 		
 		glCanvas.addGLEventListener(glManager);
-		//glCanvas.addKeyListener(glManager);
 		glCanvas.addMouseListener(glManager);
 		glCanvas.addMouseMotionListener(glManager);
 
 		glManager.setCanvas( glCanvas );
-
-		getContentPane().add(glCanvas, BorderLayout.CENTER);
-		setSize(new Dimension(600, 620));
+		mainPanel.add(glCanvas, BorderLayout.CENTER);
+		
+		setSize(new Dimension(660, 620));
+		
+		xExpand = 60;
+		yExpand = 20;
+		this.addComponentListener( new ComponentAdapter() {
+			public void componentResized(ComponentEvent e) {
+				applySquareConstraint(xExpand, yExpand, mainPanel);
+			}
+		});
+		
 		centerWindow(this);
 	}
 	

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import org.nlogo.api.Context;
 
@@ -15,8 +16,11 @@ public abstract class VarviewWindow extends JFrame {
 	int ID;
 	
 	public int worldWidth, worldHeight, minPxcor, minPycor, maxPxcor, maxPycor;
+	public int xExpand, yExpand; //pixels that add to the square-inner panel. used in asserting aspect ratio.
 	
+	protected JPanel mainPanel;
 	private VarviewDashboard dashboard;
+	private ScaleManipulator scale;
 	
 	public static final int ORBIT = 0;
 	public static final int MOVE = 1;
@@ -28,8 +32,11 @@ public abstract class VarviewWindow extends JFrame {
 	public void setMode(int newmode) { 
 		mode = newmode;
 	}
-	
 	public int getMode() { return mode; }
+	
+	public double getMaxY() { return scale.maxy; }
+	public double getMinY() { return scale.miny; }
+	
 
 	public VarviewWindow(String title, int anId) {
 		super(title);
@@ -39,8 +46,12 @@ public abstract class VarviewWindow extends JFrame {
 	
 	private void setupUI() {
 		dashboard = new VarviewDashboard( this );
-		this.setLayout( new BorderLayout() );
-		this.add(dashboard, BorderLayout.SOUTH);
+		scale = new ScaleManipulator( this, -1, 10 );
+		mainPanel = new JPanel();
+		mainPanel.setLayout( new BorderLayout() );
+		mainPanel.add(scale, BorderLayout.WEST);
+		mainPanel.add(dashboard, BorderLayout.SOUTH);
+		this.getContentPane().add(mainPanel);
 	}
 
 	protected void centerWindow( Component frame ) {
@@ -62,6 +73,14 @@ public abstract class VarviewWindow extends JFrame {
 	
 	public abstract void manuallyRefreshReporterView( Context context );
 
-	
+	protected void applySquareConstraint(int xBorder, int yBorder, JPanel inner) {
+        int w = this.getWidth() - xBorder;
+        int h = this.getHeight() - yBorder;
+        int constraint = Math.min(w, h);
+        System.err.println("Got here: constraint = " + constraint);
+        inner.setPreferredSize(new Dimension(constraint+xBorder, constraint+yBorder));
+        this.setSize(new Dimension(constraint+xBorder, constraint+yBorder));
+        this.invalidate();
+    } 
 	
 }

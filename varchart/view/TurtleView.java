@@ -3,6 +3,8 @@ package varchart.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 
 import javax.media.opengl.GLCanvas;
@@ -37,7 +39,7 @@ public class TurtleView extends VarviewWindow {
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		GLCapabilities glCapabilities = new GLCapabilities();
-		GLCanvas glCanvas =  new GLCanvas(glCapabilities);
+		final GLCanvas glCanvas =  new GLCanvas(glCapabilities);
 
 		glManager = new TurtleGL(this);
 		
@@ -46,16 +48,22 @@ public class TurtleView extends VarviewWindow {
 		glCanvas.addMouseMotionListener(glManager);
 
 		glManager.setCanvas( glCanvas );
-
-		getContentPane().add(glCanvas, BorderLayout.CENTER);
+		mainPanel.add(glCanvas, BorderLayout.CENTER);
 		
 		viewOptions = new TurtleViewOptions(this, true, true, true );
+		mainPanel.add(viewOptions, BorderLayout.NORTH);
+		
+		this.setSize(new Dimension(660, 640));
 		
 		
-		getContentPane().add(viewOptions, BorderLayout.NORTH);
+		xExpand = 60;
+		yExpand = 40;
+		this.addComponentListener( new ComponentAdapter() {
+			public void componentResized(ComponentEvent e) {
+				applySquareConstraint(xExpand, yExpand, mainPanel);
+			}
+		});
 		
-				
-		setSize(new Dimension(600, 640));
 		centerWindow(this);		
 	}
 	
