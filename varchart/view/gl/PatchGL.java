@@ -13,7 +13,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 	GLU glu;
     
     //handles for compiled GL shapes
-    int patchTileListHandle, patchThickTileListHandle, patchStickListHandle, sphereDotListHandle, altThickPatchHandle;
+    int patchTileListHandle, patchThickTileListHandle, patchStickListHandle, sphereDotListHandle, altThickPatchHandle, axisHeadHandle;
 
     public PatchGL(PatchView parent) {
     	super(parent);
@@ -51,6 +51,11 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		 gl.glNewList(altThickPatchHandle, GL.GL_COMPILE);
 		 Compilables.ThickPatchTile(gl, .4f, .15f);
 		 Compilables.Sphere(gl, glu, quadr, 0.3f, slices, stacks);
+		 gl.glEndList();
+		 
+		 axisHeadHandle = gl.glGenLists(1);
+		 gl.glNewList(axisHeadHandle, GL.GL_COMPILE);
+		 Compilables.AxisHead(gl, glu, quadr, 1.3, stacks);
 		 gl.glEndList();
 		 
 		 glu.gluDeleteQuadric(quadr);
@@ -103,13 +108,16 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 				gl.glColor3f(1.0f, 3.9f, 0.6f);
 				gl.glCallList(sphereDotListHandle);
 				//gl.glCallList(altThickPatchHandle);
+				//gl.glCallList(axisHeadHandle);
 				gl.glPopMatrix();
 			}
 		}
+		drawAxesIfDragging(gl, axisHeadHandle);
 		gl.glPopMatrix();
-
     }
 
+    
+    
     @Override
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged,
     		boolean deviceChanged) {

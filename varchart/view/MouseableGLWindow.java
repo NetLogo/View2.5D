@@ -94,8 +94,11 @@ public abstract class MouseableGLWindow implements MouseListener,
     protected void mainViewport( GL gl, GLU glu ) {
     	int worldWidth = myViewer.worldWidth;
     	int worldHeight = myViewer.worldHeight;
-    	double ratio = worldWidth / worldHeight;
+    	double ratio = ((double)worldWidth) / ((double)worldHeight);
     	
+    	//setting ratio to 1 because we really don't want non-square windows.
+    	//TODO: check the logic here, especially on the viewport.
+    	ratio = 1.0;
     	gl.glViewport(0, 0, worldWidth, worldHeight);
     	
         gl.glMatrixMode(GL.GL_PROJECTION);
@@ -109,7 +112,42 @@ public abstract class MouseableGLWindow implements MouseListener,
         observer.goHome( myViewer );
     }
     
-
+    
+    protected void drawAxesIfDragging( GL gl, int axisHeadHandle ) {
+    	if (dragging) {
+			
+			gl.glColor3f(2.5f, .5f, .5f);
+			
+			gl.glLineWidth(2.4f);
+			gl.glBegin (GL.GL_LINES);
+			gl.glVertex3i (0, 0, 0);
+			gl.glVertex3i (myViewer.maxPxcor + 1, 0, 0);
+			gl.glVertex3i (0, 0, 0);
+			gl.glVertex3d (0, myViewer.maxPycor + 1, 0);
+			gl.glVertex3i (0, 0, 0);
+			gl.glVertex3d (0, 0, 11);
+			gl.glVertex3i (0, 0, 0);
+			gl.glEnd();
+			
+			gl.glPushMatrix();
+			gl.glTranslated(myViewer.maxPxcor + 1 ,0, 0);
+			gl.glRotated(90.0, 0, 1, 0);
+			gl.glCallList(axisHeadHandle);
+			gl.glPopMatrix();
+			
+			gl.glPushMatrix();
+			gl.glTranslated(0, myViewer.maxPycor + 1, 0);
+			gl.glRotated(-90.0, 1, 0, 0);
+			gl.glCallList(axisHeadHandle);
+			gl.glPopMatrix();
+			
+			gl.glPushMatrix();
+			gl.glTranslated(0 ,0, 11);
+			gl.glCallList(axisHeadHandle);
+			gl.glPopMatrix();
+		}
+    }
+    
 	@Override
 	public void mouseDragged(MouseEvent me) {
 		int nx = me.getX();
@@ -154,11 +192,13 @@ public abstract class MouseableGLWindow implements MouseListener,
 		oldx = me.getX();
 		oldy = me.getY();
 		dragging = true;
+		myCanvas.repaint();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		dragging = false;
+		myCanvas.repaint();
 	}
 
 }

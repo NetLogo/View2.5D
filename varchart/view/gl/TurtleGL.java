@@ -25,7 +25,7 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 	GLU glu;
     
     //handles for compiled GL shapes
-    int patchTileListHandle, sphereDotListHandle;
+    int patchTileListHandle, sphereDotListHandle, axisHeadHandle;
     HashMap<String,Integer> compiledShapes = new HashMap<String, Integer>();
    
     //GLU quadric for use in making spheres and in setting up NLGLU helper class for turtle shapes
@@ -67,6 +67,14 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 			 compileShape(nlGLU, gl, glu, vs, handle, false );
 			 compiledShapes.put(name, handle);
 		 }
+		 
+		 
+		 axisHeadHandle = gl.glGenLists(1);
+		 gl.glNewList(axisHeadHandle, GL.GL_COMPILE);
+		 Compilables.AxisHead(gl, glu, quadr, 1.3, stacks);
+		 gl.glEndList();
+		 
+		 //glu.gluDeleteQuadric(quadr);
 		 
 	}
     
@@ -133,57 +141,60 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 
     
     @Override
-	public void display(GLAutoDrawable drawable) {
+    public void display(GLAutoDrawable drawable) {
     	GL gl = drawable.getGL();
     	gl.glMatrixMode( GL.GL_MODELVIEW );
-		gl.glLoadIdentity();
-		
-		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);	
-		gl.glLineWidth(1.0f);
+    	gl.glLoadIdentity();
 
-		gl.glColor3f(1.0f, 0.6f, 5.9f);
-		gl.glPushMatrix();
-		
-		observer.applyPerspective(gl);
-		for (int i=0; i<myViewer.worldWidth; i++) {
-			for (int j = 0; j<myViewer.worldHeight; j++) {
-				gl.glPushMatrix();
-				gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2,0);
-				 gl.glCallList(patchTileListHandle);
-				gl.glPopMatrix();
-			}
-		}
-		
-		for (TurtleValue tv : ((TurtleView)myViewer).getCopyOfReporterValues()) {
-				gl.glPushMatrix();
-				gl.glTranslated(tv.xcor , tv.ycor, tv.reporterValue);
-				
-				gl.glColor3f(2.5f, 2.5f, 2.5f);
-				gl.glLineWidth(0.1f);
-				gl.glBegin (GL.GL_LINES);
-				gl.glVertex3i (0, 0, 0);
-				gl.glVertex3d (0, 0, -tv.reporterValue);
-				gl.glEnd();
-				
-				
-				if ( ((TurtleView)myViewer).viewOptions.showSize() )
-					gl.glScaled(tv.size, tv.size, tv.size);
-				observer.applyNormal(gl);
-				if ( ((TurtleView)myViewer).viewOptions.showColor() )
-					gl.glColor3f((float)(4.0*tv.color.getRed()/255f), (float)(4.0*tv.color.getGreen()/255f), (float)(4.0*tv.color.getBlue()/255f));
-				if (((TurtleView)myViewer).viewOptions.showShape() ) {
-					gl.glScaled(3.0, 3.0, 3.0);
-					gl.glCallList(compiledShapes.get(tv.shape));
-				}
-				else {
-					gl.glCallList(sphereDotListHandle);
-				}
-				
-				gl.glPopMatrix();
-		}
-	     gl.glPopMatrix();
-	     
-	}
+    	gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);	
+    	gl.glLineWidth(1.0f);
+
+    	gl.glColor3f(1.0f, 0.6f, 5.9f);
+    	gl.glPushMatrix();
+
+    	observer.applyPerspective(gl);
+    	for (int i=0; i<myViewer.worldWidth; i++) {
+    		for (int j = 0; j<myViewer.worldHeight; j++) {
+    			gl.glPushMatrix();
+    			gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2,0);
+    			gl.glCallList(patchTileListHandle);
+    			gl.glPopMatrix();
+    		}
+    	}
+
+    	for (TurtleValue tv : ((TurtleView)myViewer).getCopyOfReporterValues()) {
+    		gl.glPushMatrix();
+    		gl.glTranslated(tv.xcor , tv.ycor, tv.reporterValue);
+
+    		gl.glColor3f(2.5f, 2.5f, 2.5f);
+    		gl.glLineWidth(0.1f);
+    		gl.glBegin (GL.GL_LINES);
+    		gl.glVertex3i (0, 0, 0);
+    		gl.glVertex3d (0, 0, -tv.reporterValue);
+    		gl.glEnd();
+
+
+    		if ( ((TurtleView)myViewer).viewOptions.showSize() )
+    			gl.glScaled(tv.size, tv.size, tv.size);
+    		observer.applyNormal(gl);
+    		if ( ((TurtleView)myViewer).viewOptions.showColor() )
+    			gl.glColor3f((float)(4.0*tv.color.getRed()/255f), (float)(4.0*tv.color.getGreen()/255f), (float)(4.0*tv.color.getBlue()/255f));
+    		if (((TurtleView)myViewer).viewOptions.showShape() ) {
+    			gl.glScaled(3.0, 3.0, 3.0);
+    			gl.glCallList(compiledShapes.get(tv.shape));
+    		}
+    		else {
+    			gl.glCallList(sphereDotListHandle);
+    		}
+
+    		gl.glPopMatrix();
+    	}
+    	drawAxesIfDragging( gl, axisHeadHandle );
+    	gl.glPopMatrix();
+
+    }
+
+    
 
 	@Override
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged,

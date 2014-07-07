@@ -87,5 +87,12 @@ public final class Compilables {
 	public static void Sphere( GL gl, GLU glu, GLUquadric quadr, float radius, int slices, int stacks ) {
 		glu.gluSphere(quadr, radius, slices, stacks);
 	}
+	
+	public static void AxisHead(GL gl, GLU glu, GLUquadric quadr, final double sz, final int smoothness) {
+		//gl.glRotatef(-90f, 1f, 0f, 0f);
+	    glu.gluCylinder(quadr, sz / 2.0, 0.0, sz, smoothness, smoothness);
+	    gl.glRotatef(180f, 1f, 0f, 0f);
+	    glu.gluDisk(quadr, 0f, sz / 2, smoothness, 1);
+	}
 
 }
