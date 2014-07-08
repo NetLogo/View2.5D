@@ -17,7 +17,7 @@ public class VarviewDashboard extends JPanel implements ActionListener {
 	
 	private VarviewWindow myWindow;
 	
-	private JRadioButton orbitButton, zoomButton, moveButton;
+	private JRadioButton orbitButton, zoomButton, moveButton, zscaleButton;
 	public VarviewDashboard( VarviewWindow window) {
 		myWindow = window;
 		setupUI();
@@ -34,16 +34,21 @@ public class VarviewDashboard extends JPanel implements ActionListener {
 		moveButton = new JRadioButton("move");
 		moveButton.setActionCommand("move");
 		
+		zscaleButton = new JRadioButton("z-scale");
+		zscaleButton.setActionCommand("zscale");
+		
 		ButtonGroup group = new ButtonGroup();
 		group.add(orbitButton);
 		group.add(zoomButton);
 		group.add(moveButton);
+		group.add(zscaleButton);
 		
 		
 		//Register a listener for the radio buttons.
 		orbitButton.addActionListener(this);
 		zoomButton.addActionListener(this);
 		moveButton.addActionListener(this);
+		zscaleButton.addActionListener(this);
 		
 			
 		JButton resetPerspective = new JButton("reset perspective");
@@ -55,6 +60,7 @@ public class VarviewDashboard extends JPanel implements ActionListener {
 		this.add( orbitButton );
 		this.add( zoomButton );
 		this.add( moveButton );
+		this.add(zscaleButton);
 		this.add( new JLabel( "  ") );
 		this.add( resetPerspective );
 		
@@ -75,9 +81,13 @@ public class VarviewDashboard extends JPanel implements ActionListener {
 	    else if  ( cmd == "zoom" ) {
 	    	myWindow.setMode(VarviewWindow.ZOOM);
 	    }
+	    else if  ( cmd == "zscale" ) {
+	    	myWindow.setMode(VarviewWindow.SCALEZ);
+	    }
 	    else if  ( cmd == "reset" ) {
 	    	myWindow.setMode(VarviewWindow.ORBIT);
 	    	orbitButton.setSelected(true);
+	    	myWindow.zScale = 1;
 	    	myWindow.resetPerspective();
 	    }
 	}

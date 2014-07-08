@@ -115,5 +115,12 @@ public class TurtleView extends VarviewWindow {
 	public void refresh() {
 		glManager.repaintCanvas();
 	}
+	
+	public void zoomZby( double change ) {
+		if (-change < zScale) {
+			zScale += change;
+		}
+		glManager.repaintCanvas();
+	}
 
 }

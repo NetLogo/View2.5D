@@ -114,6 +114,7 @@ public abstract class MouseableGLWindow implements MouseListener,
     protected void drawAxesIfDragging( GL gl, int axisHeadHandle ) {
     	if (dragging) {
 			
+    		double zmax = 10.0 * myViewer.zScale + 1;
 			gl.glColor3f(2.5f, .5f, .5f);
 			
 			gl.glLineWidth(2.4f);
@@ -123,7 +124,7 @@ public abstract class MouseableGLWindow implements MouseListener,
 			gl.glVertex3i (0, 0, 0);
 			gl.glVertex3d (0, myViewer.maxPycor + 1, 0);
 			gl.glVertex3i (0, 0, 0);
-			gl.glVertex3d (0, 0, 11);
+			gl.glVertex3d (0, 0, zmax);
 			gl.glVertex3i (0, 0, 0);
 			gl.glEnd();
 			
@@ -140,7 +141,7 @@ public abstract class MouseableGLWindow implements MouseListener,
 			gl.glPopMatrix();
 			
 			gl.glPushMatrix();
-			gl.glTranslated(0 ,0, 11);
+			gl.glTranslated(0 ,0, zmax);
 			gl.glCallList(axisHeadHandle);
 			gl.glPopMatrix();
 		}
@@ -163,6 +164,9 @@ public abstract class MouseableGLWindow implements MouseListener,
 		} else if ( myViewer.getMode() == VarviewWindow.ZOOM ) {
 			double deldist =  (oldy - ny);
 			observer.zoomby(deldist);
+		} else if (myViewer.getMode() == VarviewWindow.SCALEZ ) {
+			double deldist = (oldy - ny) / 30.0;
+			myViewer.zoomZby(deldist);
 		}
 		
 		oldx = nx;

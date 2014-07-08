@@ -18,6 +18,10 @@ public abstract class VarviewWindow extends JFrame {
 	public int worldWidth, worldHeight, minPxcor, minPycor, maxPxcor, maxPycor;
 	public int xExpand, yExpand; //pixels that add to the square-inner panel. used in asserting aspect ratio.
 	
+	//scale factor for the rendered turtle/patch variable.
+	public double zScale = 1.0;
+	public abstract void zoomZby( double amount );
+	
 	protected JPanel mainPanel;
 	private VarviewDashboard dashboard;
 	private ScaleManipulator scale;
@@ -26,6 +30,9 @@ public abstract class VarviewWindow extends JFrame {
 	public static final int MOVE = 1;
 	public static final int ZOOM = 2;
 	public static final int RESET = -1;
+	public static final int SCALEZ = 3;
+	
+	
 	
 	private int mode = ORBIT;
 	

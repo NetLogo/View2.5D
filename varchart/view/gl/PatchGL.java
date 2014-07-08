@@ -94,7 +94,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		for (int i=0; i<myViewer.worldWidth; i++) {
 			for (int j = 0; j<myViewer.worldHeight; j++) {
 				gl.glPushMatrix();
-				gl.glTranslated(i + myViewer.minPxcor, j + myViewer.minPycor, 0);
+				gl.glTranslated(i + myViewer.minPxcor, j + myViewer.minPycor, -0.01);
 				gl.glCallList(patchTileListHandle);
 				gl.glPopMatrix();
 			}
@@ -104,7 +104,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 			for (int j = 0; j<myViewer.worldHeight; j++) {
 				gl.glPushMatrix();
 
-				double val = ((PatchView)myViewer).reporterValueMatrix[i][j];
+				double val = myViewer.zScale * ((PatchView)myViewer).reporterValueMatrix[i][j];
 				gl.glTranslated(i + myViewer.minPxcor, j + myViewer.minPycor,val);
 
 				if (sticks) {

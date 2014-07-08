@@ -93,5 +93,12 @@ public class PatchView extends VarviewWindow {
 		glManager.observer.goHome(this);
 		glManager.repaintCanvas();
 	}
+	
+	public void zoomZby( double change ) {
+		if (-change < zScale) {
+			zScale += change;
+		}
+		glManager.repaintCanvas();
+	}
 
 }

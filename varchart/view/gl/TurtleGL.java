@@ -156,7 +156,7 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
     	for (int i=0; i<myViewer.worldWidth; i++) {
     		for (int j = 0; j<myViewer.worldHeight; j++) {
     			gl.glPushMatrix();
-    			gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2,0);
+    			gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2, -0.01);
     			gl.glCallList(patchTileListHandle);
     			gl.glPopMatrix();
     		}
@@ -164,21 +164,25 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 
     	for (TurtleValue tv : ((TurtleView)myViewer).getCopyOfReporterValues()) {
     		gl.glPushMatrix();
-    		gl.glTranslated(tv.xcor , tv.ycor, tv.reporterValue);
+    		double zval = myViewer.zScale * tv.reporterValue;
+    		gl.glTranslated(tv.xcor , tv.ycor, zval);
 
     		gl.glColor3f(2.5f, 2.5f, 2.5f);
     		gl.glLineWidth(0.1f);
     		gl.glBegin (GL.GL_LINES);
     		gl.glVertex3i (0, 0, 0);
-    		gl.glVertex3d (0, 0, -tv.reporterValue);
+    		gl.glVertex3d (0, 0, -zval);
     		gl.glEnd();
 
 
     		if ( ((TurtleView)myViewer).viewOptions.showSize() )
     			gl.glScaled(tv.size, tv.size, tv.size);
+    		
     		observer.applyNormal(gl);
+    		
     		if ( ((TurtleView)myViewer).viewOptions.showColor() )
     			gl.glColor3f((float)(4.0*tv.color.getRed()/255f), (float)(4.0*tv.color.getGreen()/255f), (float)(4.0*tv.color.getBlue()/255f));
+    		
     		if (((TurtleView)myViewer).viewOptions.showShape() ) {
     			gl.glScaled(3.0, 3.0, 3.0);
     			gl.glCallList(compiledShapes.get(tv.shape));
