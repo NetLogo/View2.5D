@@ -13,8 +13,11 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 	GLU glu;
     
     //handles for compiled GL shapes
-    int patchTileListHandle, patchThickTileListHandle, patchStickListHandle, sphereDotListHandle, altThickPatchHandle, axisHeadHandle;
+    int patchTileListHandle, patchThickTileListHandle, patchStickListHandle, sphereDotListHandle, altThickPatchHandle, axisHeadHandle, patchDiskTileHandle;
 
+    boolean sticks = false;
+    boolean tangents = true;
+    
     public PatchGL(PatchView parent) {
     	super(parent);
     }
@@ -58,6 +61,11 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		 Compilables.AxisHead(gl, glu, quadr, 1.3, stacks);
 		 gl.glEndList();
 		 
+		 patchDiskTileHandle = gl.glGenLists(1);
+		 gl.glNewList(patchDiskTileHandle, GL.GL_COMPILE);
+		 Compilables.DiskPatchTile(gl, glu, quadr, 0.4, stacks);
+		 gl.glEndList();
+		 
 		 glu.gluDeleteQuadric(quadr);
 	}
     
@@ -99,16 +107,32 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 				double val = ((PatchView)myViewer).reporterValueMatrix[i][j];
 				gl.glTranslated(i + myViewer.minPxcor, j + myViewer.minPycor,val);
 
-				gl.glColor3f(2.5f, 2.5f, 2.5f);
-				gl.glLineWidth(0.1f);
-				gl.glBegin (GL.GL_LINES);
-				gl.glVertex3i (0, 0, 0);
-				gl.glVertex3d (0, 0, -val);
-				gl.glEnd();
+				if (sticks) {
+					gl.glColor3f(2.5f, 2.5f, 2.5f);
+					gl.glLineWidth(0.1f);
+					gl.glBegin (GL.GL_LINES);
+					gl.glVertex3i (0, 0, 0);
+					gl.glVertex3d (0, 0, -val);
+					gl.glEnd();
+					
+				}
 				gl.glColor3f(1.0f, 3.9f, 0.6f);
-				gl.glCallList(sphereDotListHandle);
+				if ( tangents ) {
+					if ( j>0 && j<myViewer.worldHeight-1  ) {
+						double slopey = (((PatchView)myViewer).reporterValueMatrix[i][j+1] - ((PatchView)myViewer).reporterValueMatrix[i][j-1] ) / 2.0 ;
+						double beta = 180.0 * Math.atan(slopey) / Math.PI;
+						gl.glRotated(beta, 1, 0, 0);
+					}
+					if ( i>0 && i<myViewer.worldWidth-1  ) {
+						double slopex = (((PatchView)myViewer).reporterValueMatrix[i+1][j] - ((PatchView)myViewer).reporterValueMatrix[i-1][j] ) / 2.0 ;
+						double alpha = 180.0 * Math.atan(slopex) / Math.PI;
+						gl.glRotated(-alpha, 0, 1, 0);
+					}
+					gl.glCallList(patchDiskTileHandle);
+				} else {
+					gl.glCallList(sphereDotListHandle);
+				}
 				//gl.glCallList(altThickPatchHandle);
-				//gl.glCallList(axisHeadHandle);
 				gl.glPopMatrix();
 			}
 		}

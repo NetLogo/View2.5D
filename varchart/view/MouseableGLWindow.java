@@ -36,7 +36,7 @@ public abstract class MouseableGLWindow implements MouseListener,
       myCanvas.repaint();
     }
     
-    
+ 
     protected void setupLightingAndViewPort(GL gl, GLU glu ) {
     	gl.glShadeModel(GL.GL_SMOOTH);                     // Enable Smooth Shading
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);          // Black Background
@@ -72,24 +72,22 @@ public abstract class MouseableGLWindow implements MouseListener,
         gl.glLightfv(2, GL.GL_SPECULAR, FloatBuffer.wrap(specular2));
         gl.glEnable(2);
       
-
         // This is necessary for properly rendering scaled objects. Without this, small objects
         // may look too bright, and large objects will look flat.
         gl.glEnable(GL.GL_NORMALIZE);
 
         // Coloring
-
         gl.glColorMaterial(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE);
         gl.glEnable(GL.GL_COLOR_MATERIAL);
 
-        // Remove back-face rendering
-
+        // Remove back-face rendering -- temporarily kept in.
 	    //  gl.glCullFace(GL.GL_BACK);
 	    //  gl.glEnable(GL.GL_CULL_FACE);
         int StencilBits[] = new int[1];
         gl.glGetIntegerv(GL.GL_STENCIL_BITS, IntBuffer.wrap(StencilBits));
         mainViewport( gl, glu );
     }
+    
     
     protected void mainViewport( GL gl, GLU glu ) {
     	int worldWidth = myViewer.worldWidth;
@@ -147,6 +145,7 @@ public abstract class MouseableGLWindow implements MouseListener,
 			gl.glPopMatrix();
 		}
     }
+    
     
 	@Override
 	public void mouseDragged(MouseEvent me) {
