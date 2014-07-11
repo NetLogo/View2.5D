@@ -13,10 +13,10 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 	GLU glu;
     
     //handles for compiled GL shapes
-    int patchTileListHandle, patchThickTileListHandle, patchStickListHandle, sphereDotListHandle, altThickPatchHandle, axisHeadHandle, patchDiskTileHandle;
+    int patchTileListHandle, patchThickTileListHandle, patchStickListHandle, sphereDotListHandle, altThickPatchHandle, axisHeadHandle, patchDiskTileHandle, patchSkyscraperHandle;
 
     boolean sticks = false;
-    boolean tangents = true;
+    boolean tangents = false; //true;
     
     public PatchGL(PatchView parent) {
     	super(parent);
@@ -56,6 +56,11 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		 Compilables.Sphere(gl, glu, quadr, 0.3f, slices, stacks);
 		 gl.glEndList();
 		 
+		 patchSkyscraperHandle = gl.glGenLists(1);
+		 gl.glNewList(patchSkyscraperHandle, GL.GL_COMPILE);
+		 Compilables.box(gl, .2f, 1.0f);
+		 gl.glEndList();
+		 
 		 axisHeadHandle = gl.glGenLists(1);
 		 gl.glNewList(axisHeadHandle, GL.GL_COMPILE);
 		 Compilables.AxisHead(gl, glu, quadr, 1.3, stacks);
@@ -88,7 +93,8 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);	
 		gl.glLineWidth(1.0f);
 
-		gl.glColor3f(1.0f, 0.6f, 5.9f);
+		//gl.glColor3f(1.0f, 0.6f, 5.9f);
+		gl.glColor3f(0.2f, 0.2f, 1.9f);
 		gl.glPushMatrix();
 		observer.applyPerspective(gl);
 		for (int i=0; i<myViewer.worldWidth; i++) {
@@ -116,8 +122,9 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 					gl.glEnd();
 					
 				}
-				gl.glColor3f(1.0f, 3.9f, 0.6f);
+				
 				if ( tangents ) {
+					gl.glColor3f(1.0f, 3.9f, 0.6f);
 					if ( j>0 && j<myViewer.worldHeight-1  ) {
 						double slopey = (((PatchView)myViewer).reporterValueMatrix[i][j+1] - ((PatchView)myViewer).reporterValueMatrix[i][j-1] ) / 2.0 ;
 						double beta = 180.0 * Math.atan(slopey) / Math.PI;
@@ -130,7 +137,18 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 					}
 					gl.glCallList(patchDiskTileHandle);
 				} else {
-					gl.glCallList(sphereDotListHandle);
+					//gl.glColor3f(1.0f, 3.9f, 0.6f);
+					gl.glColor3f(0.1f, 0.8f, 0.1f);
+					gl.glTranslated(0, 0, -val);
+					gl.glScaled(1, 1, val);
+					
+//					float[] rgba = {0.3f, 1f, 0.2f};
+//			        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, rgba, 0);
+//			        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, rgba, 0);
+//			        gl.glMaterialf(GL.GL_FRONT, GL.GL_SHININESS, 0.5f);
+			        
+					gl.glCallList(patchSkyscraperHandle);
+					//gl.glCallList(sphereDotListHandle);
 				}
 				//gl.glCallList(altThickPatchHandle);
 				gl.glPopMatrix();

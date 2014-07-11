@@ -60,17 +60,34 @@ public abstract class MouseableGLWindow implements MouseListener,
         gl.glLightfv(1, GL.GL_SPECULAR, FloatBuffer.wrap(specular1));
         gl.glEnable(1);
         
-        
         float direction2[] = {1.0f, 0.6f, -0.5f, 0.0f};
         float ambient2[] = {0.25f, 0.25f, 0.25f, 1.0f};
         float diffuse2[] = {0.35f, 0.35f, 0.35f, 1.0f};
         float specular2[] = {0.0f, 0.0f, 0.0f, 0.0f};
+        //float ambient2[] = {0.75f, 0.75f, 0.75f, 1.0f};
+        //float diffuse2[] = {0.85f, 0.85f, 0.85f, 1.0f};
+        //float specular2[] = {0.5f, 0.5f, 0.5f, 1.0f};
         
         gl.glLightfv(2, GL.GL_POSITION, FloatBuffer.wrap(direction2)); 
         gl.glLightfv(2, GL.GL_AMBIENT, FloatBuffer.wrap(ambient2));
         gl.glLightfv(2, GL.GL_DIFFUSE, FloatBuffer.wrap(diffuse2));
         gl.glLightfv(2, GL.GL_SPECULAR, FloatBuffer.wrap(specular2));
         gl.glEnable(2);
+        
+        
+        float SHINE_ALL_DIRECTIONS = 1;
+        float[] lightPos = {(float) (1.2 * myViewer.minPxcor), (float) (1.2 * myViewer.minPycor), 100.0f, SHINE_ALL_DIRECTIONS};
+        float[] lightColorAmbient = {0.4f, 0.4f, 0.4f, 1f};
+        float[] lightColorSpecular = {0.8f, 0.8f, 0.8f, 1f};
+
+        // Set light parameters.
+        gl.glLightfv(GL.GL_LIGHT1, GL.GL_POSITION, lightPos, 0);
+        gl.glLightfv(GL.GL_LIGHT1, GL.GL_AMBIENT, lightColorAmbient, 0);
+        gl.glLightfv(GL.GL_LIGHT1, GL.GL_SPECULAR, lightColorSpecular, 0);
+        gl.glEnable(GL.GL_LIGHT1);
+        
+        
+        
       
         // This is necessary for properly rendering scaled objects. Without this, small objects
         // may look too bright, and large objects will look flat.

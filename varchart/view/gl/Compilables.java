@@ -82,7 +82,54 @@ public final class Compilables {
 		gl.glVertex3f(sz,-sz,-depth);
 		gl.glEnd();
 	}
-
+	
+	
+	public static void box( GL gl, final float basehalf, final float height ) {
+		gl.glBegin(GL.GL_POLYGON);/* f1: front */
+		gl.glNormal3f(0,1,0);
+		gl.glVertex3f(-basehalf,basehalf,height);
+		gl.glVertex3f(basehalf,basehalf,height);
+		gl.glVertex3f(basehalf,basehalf,0);
+		gl.glVertex3f(-basehalf,basehalf,0);
+		gl.glEnd();
+		gl.glBegin(GL.GL_POLYGON);/* f2: bottom */
+		gl.glNormal3f(0,0,-1);
+		gl.glVertex3f(-basehalf,basehalf,0);
+		gl.glVertex3f(basehalf,basehalf,0);
+		gl.glVertex3f(basehalf,-basehalf,0);
+		gl.glVertex3f(-basehalf,-basehalf,0);
+		gl.glEnd();
+		gl.glBegin(GL.GL_POLYGON);/* f3:back */
+		gl.glNormal3f(0,-1,0);
+		gl.glVertex3f(-basehalf,-basehalf,height);
+		gl.glVertex3f(basehalf,-basehalf,height);
+		gl.glVertex3f(basehalf,-basehalf,0);
+		gl.glVertex3f(-basehalf,-basehalf,0);
+		gl.glEnd();
+		gl.glBegin(GL.GL_POLYGON);/* f4: top */
+		gl.glNormal3f(0,0,1);
+		gl.glVertex3f(-basehalf,basehalf,height);
+		gl.glVertex3f(basehalf,basehalf,height);
+		gl.glVertex3f(basehalf,-basehalf,height);
+		gl.glVertex3f(-basehalf,-basehalf,height);
+		gl.glEnd();
+		gl.glBegin(GL.GL_POLYGON);/* f5: left */
+		gl.glNormal3f(-1,0,0);
+		gl.glVertex3f(-basehalf,-basehalf,height);
+		gl.glVertex3f(-basehalf,basehalf,height);
+		gl.glVertex3f(-basehalf,basehalf,0);
+		gl.glVertex3f(-basehalf,-basehalf,0);
+		gl.glEnd();
+		gl.glBegin(GL.GL_POLYGON);/* f6: right */
+		gl.glNormal3f(1,0,0);
+		gl.glVertex3f(basehalf,-basehalf,height);
+		gl.glVertex3f(basehalf,basehalf,height);
+		gl.glVertex3f(basehalf,basehalf,0);
+		gl.glVertex3f(basehalf,-basehalf,0);
+		gl.glEnd();
+		
+	}
+	
 
 	public static void Sphere( GL gl, GLU glu, GLUquadric quadr, float radius, int slices, int stacks ) {
 		glu.gluSphere(quadr, radius, slices, stacks);
