@@ -62,7 +62,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		 
 		 patchSkyscraperHandle = gl.glGenLists(1);
 		 gl.glNewList(patchSkyscraperHandle, GL.GL_COMPILE);
-		 Compilables.box(gl, .35f, 1.0f);
+		 Compilables.box(gl, .4f, 1.0f);
 		 gl.glEndList();
 		 
 		 axisHeadHandle = gl.glGenLists(1);
@@ -101,12 +101,15 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		gl.glColor3f(0.2f, 0.2f, 1.9f);
 		gl.glPushMatrix();
 		observer.applyPerspective(gl);
-		for (int i=0; i<myViewer.worldWidth; i++) {
-			for (int j = 0; j<myViewer.worldHeight; j++) {
-				gl.glPushMatrix();
-				gl.glTranslated(i + myViewer.minPxcor, j + myViewer.minPycor, -0.01);
-				gl.glCallList(patchTileListHandle);
-				gl.glPopMatrix();
+		
+		if (!colors) {
+			for (int i=0; i<myViewer.worldWidth; i++) {
+				for (int j = 0; j<myViewer.worldHeight; j++) {
+					gl.glPushMatrix();
+					gl.glTranslated(i + myViewer.minPxcor, j + myViewer.minPycor, -0.01);
+					gl.glCallList(patchTileListHandle);
+					gl.glPopMatrix();
+				}
 			}
 		}
 
@@ -138,13 +141,13 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 					float[] rgba = {red, green, blue};
 			        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, rgba, 0);
 			        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, rgba, 0);
-			        gl.glMaterialf(GL.GL_FRONT, GL.GL_SHININESS, 0.5f);
+			        gl.glMaterialf(GL.GL_FRONT, GL.GL_SHININESS, 1.5f);
 				} else {
 					gl.glColor3f(1.0f, 3.9f, 0.6f);
 					float[] rgba = {0.3f, 1f, 0.2f};
 					gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, rgba, 0);
 			        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, rgba, 0);
-			        gl.glMaterialf(GL.GL_FRONT, GL.GL_SHININESS, 0.5f);
+			        gl.glMaterialf(GL.GL_FRONT, GL.GL_SHININESS, 1.5f);
 				}
 				
 				if ( tangents ) {

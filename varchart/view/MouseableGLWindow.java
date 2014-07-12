@@ -64,9 +64,6 @@ public abstract class MouseableGLWindow implements MouseListener,
         float ambient2[] = {0.25f, 0.25f, 0.25f, 1.0f};
         float diffuse2[] = {0.35f, 0.35f, 0.35f, 1.0f};
         float specular2[] = {0.0f, 0.0f, 0.0f, 0.0f};
-        //float ambient2[] = {0.75f, 0.75f, 0.75f, 1.0f};
-        //float diffuse2[] = {0.85f, 0.85f, 0.85f, 1.0f};
-        //float specular2[] = {0.5f, 0.5f, 0.5f, 1.0f};
         
         gl.glLightfv(2, GL.GL_POSITION, FloatBuffer.wrap(direction2)); 
         gl.glLightfv(2, GL.GL_AMBIENT, FloatBuffer.wrap(ambient2));
@@ -76,15 +73,36 @@ public abstract class MouseableGLWindow implements MouseListener,
         
         
         float SHINE_ALL_DIRECTIONS = 1;
-        float[] lightPos = {(float) (1.2 * myViewer.minPxcor), (float) (1.2 * myViewer.minPycor), 100.0f, SHINE_ALL_DIRECTIONS};
-        float[] lightColorAmbient = {0.4f, 0.4f, 0.4f, 1f};
-        float[] lightColorSpecular = {0.8f, 0.8f, 0.8f, 1f};
+        float[] lightPos = {(float) (1.2 * myViewer.maxPxcor), (float) (1.2 * myViewer.maxPycor), 70.0f, SHINE_ALL_DIRECTIONS};
+        float[] lightColorAmbient = {0.2f, 0.2f, 0.2f, 1f};
+        float[] lightColorSpecular = {0.7f, 0.7f, 0.7f, 1f};
 
         // Set light parameters.
         gl.glLightfv(GL.GL_LIGHT1, GL.GL_POSITION, lightPos, 0);
         gl.glLightfv(GL.GL_LIGHT1, GL.GL_AMBIENT, lightColorAmbient, 0);
         gl.glLightfv(GL.GL_LIGHT1, GL.GL_SPECULAR, lightColorSpecular, 0);
         gl.glEnable(GL.GL_LIGHT1);
+        
+        float[] lightPos2 = {(float) (1.2 * myViewer.minPxcor), 0f, 70.0f, SHINE_ALL_DIRECTIONS};
+        float[] lightColorAmbient2 = {0.4f, 0.4f, 0.4f, 1f};
+        float[] lightColorSpecular2 = {0.8f, 0.8f, 0.8f, 1f};
+
+        // Set light parameters.
+        gl.glLightfv(GL.GL_LIGHT2, GL.GL_POSITION, lightPos2, 0);
+        gl.glLightfv(GL.GL_LIGHT2, GL.GL_AMBIENT, lightColorAmbient2, 0);
+        gl.glLightfv(GL.GL_LIGHT2, GL.GL_SPECULAR, lightColorSpecular2, 0);
+       // gl.glEnable(GL.GL_LIGHT2);
+        
+        
+        float[] lightPos3 = {0f, 0f, -70.0f, SHINE_ALL_DIRECTIONS};
+        float[] lightColorAmbient3 = {0.4f, 0.4f, 0.4f, 1f};
+        float[] lightColorSpecular3 = {0.8f, 0.8f, 0.8f, 1f};
+
+        // Set light parameters.
+        gl.glLightfv(GL.GL_LIGHT3, GL.GL_POSITION, lightPos3, 0);
+        gl.glLightfv(GL.GL_LIGHT3, GL.GL_AMBIENT, lightColorAmbient3, 0);
+        gl.glLightfv(GL.GL_LIGHT3, GL.GL_SPECULAR, lightColorSpecular3, 0);
+       // gl.glEnable(GL.GL_LIGHT3);
         
         
         
@@ -132,7 +150,15 @@ public abstract class MouseableGLWindow implements MouseListener,
     	if (dragging) {
 			
     		double zmax = 10.0 * myViewer.zScale + 1;
-			gl.glColor3f(2.5f, .5f, .5f);
+    		float red = 0.9f;
+    		float green = 0f;
+    		float blue = 0f;
+    		float[] rgba = {red, green, blue};
+	        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, rgba, 0);
+	        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, rgba, 0);
+	        gl.glMaterialf(GL.GL_FRONT, GL.GL_SHININESS, 0.5f);
+    		
+			//gl.glColor3f(2.5f, .5f, .5f);
 			
 			gl.glLineWidth(2.4f);
 			gl.glBegin (GL.GL_LINES);
