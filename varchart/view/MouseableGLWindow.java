@@ -84,8 +84,8 @@ public abstract class MouseableGLWindow implements MouseListener,
         gl.glEnable(GL.GL_LIGHT1);
         
         float[] lightPos2 = {(float) (1.2 * myViewer.minPxcor), 0f, 70.0f, SHINE_ALL_DIRECTIONS};
-        float[] lightColorAmbient2 = {0.4f, 0.4f, 0.4f, 1f};
-        float[] lightColorSpecular2 = {0.8f, 0.8f, 0.8f, 1f};
+        float[] lightColorAmbient2 = {0.0f, 0.0f, 0.0f, 1f};
+        float[] lightColorSpecular2 = {0.2f, 0.2f, 0.2f, 1f};
 
         // Set light parameters.
         gl.glLightfv(GL.GL_LIGHT2, GL.GL_POSITION, lightPos2, 0);
@@ -145,20 +145,22 @@ public abstract class MouseableGLWindow implements MouseListener,
         observer.goHome( myViewer );
     }
     
+    protected void setColorAndStandardMaterial( GL gl, float red, float green, float blue ) {
+    	float[] rgba = {red, green, blue};
+		gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, rgba, 0);
+        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, rgba, 0);
+        gl.glMaterialf(GL.GL_FRONT, GL.GL_SHININESS, 0.5f);
+        gl.glColor3f(red, green, blue);
+    }
     
     protected void drawAxesIfDragging( GL gl, int axisHeadHandle ) {
     	if (dragging) {
-			
+    		//gl.glPushMatrix();
     		double zmax = 10.0 * myViewer.zScale + 1;
     		float red = 0.9f;
     		float green = 0f;
     		float blue = 0f;
-    		float[] rgba = {red, green, blue};
-	        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, rgba, 0);
-	        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, rgba, 0);
-	        gl.glMaterialf(GL.GL_FRONT, GL.GL_SHININESS, 0.5f);
-    		
-			//gl.glColor3f(2.5f, .5f, .5f);
+    		setColorAndStandardMaterial(gl, red, green, blue);
 			
 			gl.glLineWidth(2.4f);
 			gl.glBegin (GL.GL_LINES);
@@ -187,6 +189,8 @@ public abstract class MouseableGLWindow implements MouseListener,
 			gl.glTranslated(0 ,0, zmax);
 			gl.glCallList(axisHeadHandle);
 			gl.glPopMatrix();
+			
+			//gl.glPopMatrix();
 		}
     }
     

@@ -50,14 +50,14 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		 final int slices = 16;
 		 final int stacks = 16;
 		 gl.glNewList(sphereDotListHandle, GL.GL_COMPILE);
-		 Compilables.Sphere(gl, glu, quadr, radius, slices, stacks);
+		 Compilables.PinHead(gl, glu, quadr, radius, slices, stacks);
 		 gl.glEndList();
 		 
 		 
 		 altThickPatchHandle = gl.glGenLists(1);
 		 gl.glNewList(altThickPatchHandle, GL.GL_COMPILE);
 		 Compilables.ThickPatchTile(gl, .4f, .15f);
-		 Compilables.Sphere(gl, glu, quadr, 0.3f, slices, stacks);
+		 Compilables.PinHead(gl, glu, quadr, 0.3f, slices, stacks);
 		 gl.glEndList();
 		 
 		 patchSkyscraperHandle = gl.glGenLists(1);
@@ -98,9 +98,12 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		gl.glLineWidth(1.0f);
 
 		//gl.glColor3f(1.0f, 0.6f, 5.9f);
-		gl.glColor3f(0.2f, 0.2f, 1.9f);
+		//gl.glColor3f(0.2f, 0.2f, 1.9f);
+		
+		setColorAndStandardMaterial(gl, 0f, 0.1f, 0.9f);
 		gl.glPushMatrix();
 		observer.applyPerspective(gl);
+		
 		
 		if (!colors) {
 			for (int i=0; i<myViewer.worldWidth; i++) {
@@ -124,7 +127,8 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 				gl.glTranslated(i + myViewer.minPxcor, j + myViewer.minPycor,val);
 
 				if (sticks) {
-					gl.glColor3f(2.5f, 2.5f, 2.5f);
+					//gl.glColor3f(2.5f, 2.5f, 2.5f);
+					setColorAndStandardMaterial(gl, 0.6f, 0.6f, 0.6f);
 					gl.glLineWidth(0.1f);
 					gl.glBegin (GL.GL_LINES);
 					gl.glVertex3i (0, 0, 0);
@@ -137,17 +141,10 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 					float red = ((float)c.getRed())/255.0f;
 					float green = ((float)c.getGreen())/255.0f;
 					float blue = ((float)c.getBlue())/255.0f;
-					gl.glColor3f( red, green ,  blue);
-					float[] rgba = {red, green, blue};
-			        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, rgba, 0);
-			        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, rgba, 0);
-			        gl.glMaterialf(GL.GL_FRONT, GL.GL_SHININESS, 1.5f);
+					setColorAndStandardMaterial(gl, red, green, blue);
 				} else {
-					gl.glColor3f(1.0f, 3.9f, 0.6f);
-					float[] rgba = {0.3f, 1f, 0.2f};
-					gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, rgba, 0);
-			        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, rgba, 0);
-			        gl.glMaterialf(GL.GL_FRONT, GL.GL_SHININESS, 1.5f);
+					//gl.glColor3f(1.0f, 3.9f, 0.6f);
+					setColorAndStandardMaterial(gl, 0f, 0.9f, 0.1f);
 				}
 				
 				if ( tangents ) {

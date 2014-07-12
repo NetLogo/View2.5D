@@ -131,8 +131,15 @@ public final class Compilables {
 	}
 	
 
-	public static void Sphere( GL gl, GLU glu, GLUquadric quadr, float radius, int slices, int stacks ) {
-		glu.gluSphere(quadr, radius, slices, stacks);
+	public static void PinHead( GL gl, GLU glu, GLUquadric quadr, float radius, int slices, int stacks ) {
+		//glu.gluSphere(quadr, radius, slices, stacks);
+		gl.glTranslated(0, 0, -radius/4);
+		glu.gluCylinder(quadr, radius, radius, radius / 2, slices, slices);
+	    //gl.glRotatef(180f, 1f, 0f, 0f);
+	    glu.gluDisk(quadr, 0f, radius , slices, 1);
+	    gl.glTranslated(0, 0, radius/2);
+	    glu.gluDisk(quadr, 0f, radius , slices, 1);
+	    
 	}
 	
 	public static void DiskPatchTile(GL gl, GLU glu, GLUquadric quadr, final double sz, final int smoothness) {
