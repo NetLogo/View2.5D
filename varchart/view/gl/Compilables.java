@@ -131,7 +131,7 @@ public final class Compilables {
 	}
 	
 
-	public static void PinHead( GL gl, GLU glu, GLUquadric quadr, float radius, int slices, int stacks ) {
+	public static void PinHead( GL gl, GLU glu, GLUquadric quadr, float radius, int slices ) {
 		//glu.gluSphere(quadr, radius, slices, stacks);
 		gl.glTranslated(0, 0, -radius/4);
 		glu.gluCylinder(quadr, radius, radius, radius / 2, slices, slices);

@@ -25,7 +25,7 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 	GLU glu;
     
     //handles for compiled GL shapes
-    int patchTileListHandle, sphereDotListHandle, axisHeadHandle;
+    int patchTileListHandle, pinHeadListHandle, axisHeadHandle;
     HashMap<String,Integer> compiledShapes = new HashMap<String, Integer>();
    
     //GLU quadric for use in making spheres and in setting up NLGLU helper class for turtle shapes
@@ -42,41 +42,20 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 		 gl.glNewList(patchTileListHandle, GL.GL_COMPILE);
 		 Compilables.PatchTile(gl);
 		 gl.glEndList();
-		 
-//		 sphereDotListHandle = gl.glGenLists(1);
-//		 GLUquadric quadr = glu.gluNewQuadric();
-//		 glu.gluQuadricDrawStyle(quadr, GLU.GLU_FILL);
-//		 glu.gluQuadricNormals(quadr, GLU.GLU_SMOOTH);
-//		 final float radius = 0.4f;
-//		 final int slices = 16;
-//		 final int stacks = 16; 
-//		 gl.glNewList(sphereDotListHandle, GL.GL_COMPILE);
-//		 Compilables.Sphere(gl, glu, quadr, radius, slices, stacks);
-//		 gl.glEndList();
-		 
-		 
+		 		 
 		 quadric = glu.gluNewQuadric();
 		 glu.gluQuadricDrawStyle(quadric, GLU.GLU_FILL);
 		 glu.gluQuadricNormals(quadric, GLU.GLU_SMOOTH);
 		 NetLogoGLU nlGLU = new NetLogoGLU();
 		 nlGLU.setQuadric(quadric);
 		 
-		 
-		 sphereDotListHandle = gl.glGenLists(1);
-		 //GLUquadric quadr = glu.gluNewQuadric();
-		 //glu.gluQuadricDrawStyle(quadr, GLU.GLU_FILL);
-		 //glu.gluQuadricNormals(quadr, GLU.GLU_SMOOTH);
+		 pinHeadListHandle = gl.glGenLists(1);
 		 final float radius = 0.4f;
 		 final int slices = 16;
 		 final int stacks = 16; 
-		 gl.glNewList(sphereDotListHandle, GL.GL_COMPILE);
-		 Compilables.PinHead(gl, glu, quadric, radius, slices, stacks);
-		 //Compilables.AxisHead(gl, glu, quadric, 1, 16);
-		 //Compilables.ThickPatchTile(gl, 0.5f, 0.5f);
-		 //Compilables.PatchTile(gl);
+		 gl.glNewList(pinHeadListHandle, GL.GL_COMPILE);
+		 Compilables.PinHead(gl, glu, quadric, radius, slices );
 		 gl.glEndList();
-		 
-		 
 		 
 		 Set<String> names = App.app().workspace().world().turtleShapeList().getNames();
 		 for (String name : names) {
@@ -86,14 +65,10 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 			 compiledShapes.put(name, handle);
 		 }
 		 
-		 
 		 axisHeadHandle = gl.glGenLists(1);
 		 gl.glNewList(axisHeadHandle, GL.GL_COMPILE);
 		 Compilables.AxisHead(gl, glu, quadric, 1.3, stacks);
-		 gl.glEndList();
-		 
-		 //glu.gluDeleteQuadric(quadr);
-		 
+		 gl.glEndList();		 
 	}
     
  
@@ -144,7 +119,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
     	}
     	gl.glDisable(GL.GL_CULL_FACE);
     	gl.glEndList();
-
     }
     
     
@@ -210,15 +184,10 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
     		if (((TurtleView)myViewer).viewOptions.showShape() ) {
     			observer.applyNormal(gl);
     			gl.glScaled(3.0, 3.0, 3.0);
-    			//gl.glPushMatrix();
     			gl.glCallList(compiledShapes.get(tv.shape));
-    			//gl.glPopMatrix();
-
     		}
     		else {
-    			//gl.glPushMatrix();
-    			gl.glCallList(sphereDotListHandle);
-    			//gl.glPopMatrix();
+    			gl.glCallList(pinHeadListHandle);
     		}
 
     		gl.glPopMatrix();
@@ -228,7 +197,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 
     }
 
-    
 
 	@Override
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged,

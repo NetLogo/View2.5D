@@ -48,16 +48,14 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		 glu.gluQuadricNormals(quadr, GLU.GLU_SMOOTH);
 		 final float radius = 0.4f;
 		 final int slices = 16;
-		 final int stacks = 16;
 		 gl.glNewList(sphereDotListHandle, GL.GL_COMPILE);
-		 Compilables.PinHead(gl, glu, quadr, radius, slices, stacks);
+		 Compilables.PinHead(gl, glu, quadr, radius, slices );
 		 gl.glEndList();
-		 
 		 
 		 altThickPatchHandle = gl.glGenLists(1);
 		 gl.glNewList(altThickPatchHandle, GL.GL_COMPILE);
 		 Compilables.ThickPatchTile(gl, .4f, .15f);
-		 Compilables.PinHead(gl, glu, quadr, 0.3f, slices, stacks);
+		 Compilables.PinHead(gl, glu, quadr, 0.3f, slices );
 		 gl.glEndList();
 		 
 		 patchSkyscraperHandle = gl.glGenLists(1);
@@ -67,12 +65,12 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		 
 		 axisHeadHandle = gl.glGenLists(1);
 		 gl.glNewList(axisHeadHandle, GL.GL_COMPILE);
-		 Compilables.AxisHead(gl, glu, quadr, 1.3, stacks);
+		 Compilables.AxisHead(gl, glu, quadr, 1.3, slices);
 		 gl.glEndList();
 		 
 		 patchDiskTileHandle = gl.glGenLists(1);
 		 gl.glNewList(patchDiskTileHandle, GL.GL_COMPILE);
-		 Compilables.DiskPatchTile(gl, glu, quadr, 0.4, stacks);
+		 Compilables.DiskPatchTile(gl, glu, quadr, 0.4, slices);
 		 gl.glEndList();
 		 
 		 glu.gluDeleteQuadric(quadr);
@@ -134,7 +132,6 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 					gl.glVertex3i (0, 0, 0);
 					gl.glVertex3d (0, 0, -val);
 					gl.glEnd();
-					
 				}
 				
 				if ( colors ) {
@@ -165,13 +162,8 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 					//gl.glColor3f(0.1f, 0.8f, 0.1f);
 					gl.glTranslated(0, 0, -val);
 					gl.glScaled(1, 1, val);
-					
-					//float[] rgba = {0.3f, 1f, 0.2f};
-			        
 					gl.glCallList(patchSkyscraperHandle);
-					//gl.glCallList(sphereDotListHandle);
 				}
-				//gl.glCallList(altThickPatchHandle);
 				gl.glPopMatrix();
 			}
 		}
