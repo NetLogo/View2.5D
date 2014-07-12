@@ -1,5 +1,7 @@
 package varchart.view.gl;
 
+import java.awt.Color;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
@@ -7,6 +9,7 @@ import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
 import varchart.view.MouseableGLWindow;
+import varchart.view.PatchValue;
 import varchart.view.PatchView;
 
 public class PatchGL extends MouseableGLWindow implements GLEventListener {
@@ -17,6 +20,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 
     boolean sticks = false;
     boolean tangents = false; //true;
+    boolean colors = true;
     
     public PatchGL(PatchView parent) {
     	super(parent);
@@ -58,7 +62,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		 
 		 patchSkyscraperHandle = gl.glGenLists(1);
 		 gl.glNewList(patchSkyscraperHandle, GL.GL_COMPILE);
-		 Compilables.box(gl, .2f, 1.0f);
+		 Compilables.box(gl, .35f, 1.0f);
 		 gl.glEndList();
 		 
 		 axisHeadHandle = gl.glGenLists(1);
@@ -110,7 +114,10 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 			for (int j = 0; j<myViewer.worldHeight; j++) {
 				gl.glPushMatrix();
 
-				double val = myViewer.zScale * ((PatchView)myViewer).reporterValueMatrix[i][j];
+				PatchValue pv =  ((PatchView)myViewer).reporterValueMatrix[i][j];
+				double val = myViewer.zScale * pv.reporterValue;
+				Color c = pv.color;
+				
 				gl.glTranslated(i + myViewer.minPxcor, j + myViewer.minPycor,val);
 
 				if (sticks) {
@@ -123,29 +130,43 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 					
 				}
 				
-				if ( tangents ) {
+				if ( colors ) {
+					float red = ((float)c.getRed())/255.0f;
+					float green = ((float)c.getGreen())/255.0f;
+					float blue = ((float)c.getBlue())/255.0f;
+					gl.glColor3f( red, green ,  blue);
+					float[] rgba = {red, green, blue};
+			        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, rgba, 0);
+			        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, rgba, 0);
+			        gl.glMaterialf(GL.GL_FRONT, GL.GL_SHININESS, 0.5f);
+				} else {
 					gl.glColor3f(1.0f, 3.9f, 0.6f);
+					float[] rgba = {0.3f, 1f, 0.2f};
+					gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, rgba, 0);
+			        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, rgba, 0);
+			        gl.glMaterialf(GL.GL_FRONT, GL.GL_SHININESS, 0.5f);
+				}
+				
+				if ( tangents ) {
+					
 					if ( j>0 && j<myViewer.worldHeight-1  ) {
-						double slopey = (((PatchView)myViewer).reporterValueMatrix[i][j+1] - ((PatchView)myViewer).reporterValueMatrix[i][j-1] ) / 2.0 ;
+						double slopey = (((PatchView)myViewer).reporterValueMatrix[i][j+1].reporterValue - ((PatchView)myViewer).reporterValueMatrix[i][j-1].reporterValue ) / 2.0 ;
 						double beta = 180.0 * Math.atan(slopey) / Math.PI;
 						gl.glRotated(beta, 1, 0, 0);
 					}
 					if ( i>0 && i<myViewer.worldWidth-1  ) {
-						double slopex = (((PatchView)myViewer).reporterValueMatrix[i+1][j] - ((PatchView)myViewer).reporterValueMatrix[i-1][j] ) / 2.0 ;
+						double slopex = (((PatchView)myViewer).reporterValueMatrix[i+1][j].reporterValue - ((PatchView)myViewer).reporterValueMatrix[i-1][j].reporterValue ) / 2.0 ;
 						double alpha = 180.0 * Math.atan(slopex) / Math.PI;
 						gl.glRotated(-alpha, 0, 1, 0);
 					}
 					gl.glCallList(patchDiskTileHandle);
 				} else {
 					//gl.glColor3f(1.0f, 3.9f, 0.6f);
-					gl.glColor3f(0.1f, 0.8f, 0.1f);
+					//gl.glColor3f(0.1f, 0.8f, 0.1f);
 					gl.glTranslated(0, 0, -val);
 					gl.glScaled(1, 1, val);
 					
-//					float[] rgba = {0.3f, 1f, 0.2f};
-//			        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, rgba, 0);
-//			        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, rgba, 0);
-//			        gl.glMaterialf(GL.GL_FRONT, GL.GL_SHININESS, 0.5f);
+					//float[] rgba = {0.3f, 1f, 0.2f};
 			        
 					gl.glCallList(patchSkyscraperHandle);
 					//gl.glCallList(sphereDotListHandle);

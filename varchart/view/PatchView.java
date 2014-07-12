@@ -1,6 +1,7 @@
 package varchart.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -25,7 +26,7 @@ public class PatchView extends VarviewWindow {
 	private ReporterTask reporterTask;
 	
 	
-	public double[][] reporterValueMatrix;
+	public PatchValue[][] reporterValueMatrix;
 
 	public PatchView(String title, ReporterTask rt, Integer id) {
 		super(title, id);
@@ -65,7 +66,7 @@ public class PatchView extends VarviewWindow {
 		minPycor = minY;
 		maxPxcor = maxX;
 		maxPycor = maxY;
-		reporterValueMatrix = new double[worldWidth][worldHeight];
+		reporterValueMatrix = new PatchValue[worldWidth][worldHeight];
 	}
 	
 	
@@ -74,7 +75,9 @@ public class PatchView extends VarviewWindow {
 			for (int j = 0;j< worldHeight; j++) {
 				try {
 					Patch patch = App.app().workspace().world().getPatchAt(i + minPxcor, j + minPycor);
-					reporterValueMatrix[i][j] = (Double)reporterTask.report(context, new Object[]{patch});
+					Color c = org.nlogo.api.Color.getColor(patch.pcolor());
+					double val = (Double)reporterTask.report(context, new Object[]{patch});
+					reporterValueMatrix[i][j] = new PatchValue(c, val);
 				} catch (AgentException e) {
 					e.printStackTrace();
 				}
