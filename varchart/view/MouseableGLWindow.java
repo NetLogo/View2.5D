@@ -49,6 +49,9 @@ public abstract class MouseableGLWindow implements MouseListener,
         // Lighting
         gl.glEnable(GL.GL_LIGHTING);
 
+        //First two lights are non-specular, ambient & diffuse lights.
+        //this is the standard lighting from NetLogo's 3d view.  
+        //But it's too dim and lacks necessary direction for real color 3d shapes.
         float direction1[] = {-1.0f, -0.3f, 0.4f, 0.0f};
         float ambient1[] = {0.25f, 0.25f, 0.25f, 1.0f};
         float diffuse1[] = {0.35f, 0.35f, 0.35f, 1.0f};
@@ -71,7 +74,7 @@ public abstract class MouseableGLWindow implements MouseListener,
         gl.glLightfv(2, GL.GL_SPECULAR, FloatBuffer.wrap(specular2));
         gl.glEnable(2);
         
-        
+        //add an additional light to give shadows, needed for 3d shapes to show better.
         float SHINE_ALL_DIRECTIONS = 1;
         float[] lightPos = {(float) (1.2 * myViewer.maxPxcor), (float) (1.2 * myViewer.maxPycor), 70.0f, SHINE_ALL_DIRECTIONS};
         float[] lightColorAmbient = {0.2f, 0.2f, 0.2f, 1f};
@@ -82,30 +85,7 @@ public abstract class MouseableGLWindow implements MouseListener,
         gl.glLightfv(GL.GL_LIGHT1, GL.GL_AMBIENT, lightColorAmbient, 0);
         gl.glLightfv(GL.GL_LIGHT1, GL.GL_SPECULAR, lightColorSpecular, 0);
         gl.glEnable(GL.GL_LIGHT1);
-        
-        float[] lightPos2 = {(float) (1.2 * myViewer.minPxcor), 0f, 70.0f, SHINE_ALL_DIRECTIONS};
-        float[] lightColorAmbient2 = {0.0f, 0.0f, 0.0f, 1f};
-        float[] lightColorSpecular2 = {0.2f, 0.2f, 0.2f, 1f};
-
-        // Set light parameters.
-        gl.glLightfv(GL.GL_LIGHT2, GL.GL_POSITION, lightPos2, 0);
-        gl.glLightfv(GL.GL_LIGHT2, GL.GL_AMBIENT, lightColorAmbient2, 0);
-        gl.glLightfv(GL.GL_LIGHT2, GL.GL_SPECULAR, lightColorSpecular2, 0);
-       // gl.glEnable(GL.GL_LIGHT2);
-        
-        
-        float[] lightPos3 = {0f, 0f, -70.0f, SHINE_ALL_DIRECTIONS};
-        float[] lightColorAmbient3 = {0.4f, 0.4f, 0.4f, 1f};
-        float[] lightColorSpecular3 = {0.8f, 0.8f, 0.8f, 1f};
-
-        // Set light parameters.
-        gl.glLightfv(GL.GL_LIGHT3, GL.GL_POSITION, lightPos3, 0);
-        gl.glLightfv(GL.GL_LIGHT3, GL.GL_AMBIENT, lightColorAmbient3, 0);
-        gl.glLightfv(GL.GL_LIGHT3, GL.GL_SPECULAR, lightColorSpecular3, 0);
-       // gl.glEnable(GL.GL_LIGHT3);
-        
-        
-        
+       
       
         // This is necessary for properly rendering scaled objects. Without this, small objects
         // may look too bright, and large objects will look flat.
@@ -155,7 +135,7 @@ public abstract class MouseableGLWindow implements MouseListener,
     
     protected void drawAxesIfDragging( GL gl, int axisHeadHandle ) {
     	if (dragging) {
-    		//gl.glPushMatrix();
+    		
     		double zmax = 10.0 * myViewer.zScale + 1;
     		float red = 0.9f;
     		float green = 0f;
@@ -190,7 +170,6 @@ public abstract class MouseableGLWindow implements MouseListener,
 			gl.glCallList(axisHeadHandle);
 			gl.glPopMatrix();
 			
-			//gl.glPopMatrix();
 		}
     }
     

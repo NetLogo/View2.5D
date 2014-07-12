@@ -36,7 +36,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
     	super(parent);
     }
     
-    
     private void setupCompiliedDisplayLists(GL gl) {
     	 patchTileListHandle = gl.glGenLists(1);
 		 gl.glNewList(patchTileListHandle, GL.GL_COMPILE);
