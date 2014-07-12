@@ -16,10 +16,10 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 	GLU glu;
     
     //handles for compiled GL shapes
-    int patchTileListHandle, patchThickTileListHandle, patchStickListHandle, sphereDotListHandle, altThickPatchHandle, axisHeadHandle, patchDiskTileHandle, patchSkyscraperHandle;
+    int patchTileListHandle, patchThickTileListHandle, patchStickListHandle, sphereDotListHandle, altThickPatchHandle, axisHeadHandle, patchDiskTileHandle, patchSkyscraperHandle, pinHeadListHandle;
 
     boolean sticks = false;
-    boolean tangents = false; //true;
+    boolean tangents = true;
     boolean colors = true;
     
     public PatchGL(PatchView parent) {
@@ -73,6 +73,11 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		 Compilables.DiskPatchTile(gl, glu, quadr, 0.4, slices);
 		 gl.glEndList();
 		 
+		 pinHeadListHandle = gl.glGenLists(1);
+		 gl.glNewList(pinHeadListHandle, GL.GL_COMPILE);
+		 Compilables.PinHead(gl, glu, quadr, radius, slices );
+		 gl.glEndList();
+		 
 		 glu.gluDeleteQuadric(quadr);
 	}
     
@@ -103,7 +108,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		observer.applyPerspective(gl);
 		
 		
-		if (!colors) {
+		if (tangents || !colors) {
 			for (int i=0; i<myViewer.worldWidth; i++) {
 				for (int j = 0; j<myViewer.worldHeight; j++) {
 					gl.glPushMatrix();
@@ -156,7 +161,8 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 						double alpha = 180.0 * Math.atan(slopex) / Math.PI;
 						gl.glRotated(-alpha, 0, 1, 0);
 					}
-					gl.glCallList(patchDiskTileHandle);
+					gl.glCallList(pinHeadListHandle);
+					//gl.glCallList(patchDiskTileHandle);
 				} else {
 					//gl.glColor3f(1.0f, 3.9f, 0.6f);
 					//gl.glColor3f(0.1f, 0.8f, 0.1f);

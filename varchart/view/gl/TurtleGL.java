@@ -51,7 +51,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 		 pinHeadListHandle = gl.glGenLists(1);
 		 final float radius = 0.4f;
 		 final int slices = 16;
-		 final int stacks = 16; 
 		 gl.glNewList(pinHeadListHandle, GL.GL_COMPILE);
 		 Compilables.PinHead(gl, glu, quadric, radius, slices );
 		 gl.glEndList();
@@ -66,7 +65,7 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 		 
 		 axisHeadHandle = gl.glGenLists(1);
 		 gl.glNewList(axisHeadHandle, GL.GL_COMPILE);
-		 Compilables.AxisHead(gl, glu, quadric, 1.3, stacks);
+		 Compilables.AxisHead(gl, glu, quadric, 1.3, slices);
 		 gl.glEndList();		 
 	}
     
