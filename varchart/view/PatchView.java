@@ -25,6 +25,7 @@ public class PatchView extends VarviewWindow {
 	private PatchGL glManager;
 	private ReporterTask reporterTask;
 	
+	public PatchViewOptions viewOptions;
 	
 	public PatchValue[][] reporterValueMatrix;
 
@@ -45,10 +46,13 @@ public class PatchView extends VarviewWindow {
 		glManager.setCanvas( glCanvas );
 		mainPanel.add(glCanvas, BorderLayout.CENTER);
 		
+		viewOptions = new PatchViewOptions( this, true, false, false);
+		mainPanel.add(viewOptions, BorderLayout.NORTH);
+		
 		//change if re-add scalemanipulator
-		setSize(new Dimension(600, 620));
+		setSize(new Dimension(600, 650));
 		xExpand = 0;
-		yExpand = 20;
+		yExpand = 50;
 		this.addComponentListener( new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
 				applySquareConstraint(xExpand, yExpand, mainPanel);
@@ -88,6 +92,10 @@ public class PatchView extends VarviewWindow {
 	@Override
 	public void manuallyRefreshReporterView(Context context) {
 		updateValueArray( context );
+		glManager.repaintCanvas();
+	}
+	
+	public void refresh() {
 		glManager.repaintCanvas();
 	}
 	

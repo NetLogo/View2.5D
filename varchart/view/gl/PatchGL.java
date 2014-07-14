@@ -18,9 +18,9 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
     //handles for compiled GL shapes
     int patchTileListHandle, patchThickTileListHandle, patchStickListHandle, sphereDotListHandle, altThickPatchHandle, axisHeadHandle, patchDiskTileHandle, patchSkyscraperHandle, pinHeadListHandle;
 
-    boolean sticks = false;
-    boolean tangents = true;
-    boolean colors = true;
+   // boolean sticks = false;
+   // boolean tangents = true;
+   boolean colors = true;
     
     public PatchGL(PatchView parent) {
     	super(parent);
@@ -108,7 +108,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		observer.applyPerspective(gl);
 		
 		
-		if (tangents || !colors) {
+		if (  ((PatchView)myViewer).viewOptions.tangents() || !colors) {
 			for (int i=0; i<myViewer.worldWidth; i++) {
 				for (int j = 0; j<myViewer.worldHeight; j++) {
 					gl.glPushMatrix();
@@ -129,7 +129,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 				
 				gl.glTranslated(i + myViewer.minPxcor, j + myViewer.minPycor,val);
 
-				if (sticks) {
+				if (((PatchView)myViewer).viewOptions.sticks()) {
 					//gl.glColor3f(2.5f, 2.5f, 2.5f);
 					setColorAndStandardMaterial(gl, 0.6f, 0.6f, 0.6f);
 					gl.glLineWidth(0.1f);
@@ -149,7 +149,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 					setColorAndStandardMaterial(gl, 0f, 0.9f, 0.1f);
 				}
 				
-				if ( tangents ) {
+				if ( ((PatchView)myViewer).viewOptions.tangents() ) {
 					
 					if ( j>0 && j<myViewer.worldHeight-1  ) {
 						double slopey = (((PatchView)myViewer).reporterValueMatrix[i][j+1].reporterValue - ((PatchView)myViewer).reporterValueMatrix[i][j-1].reporterValue ) / 2.0 ;
