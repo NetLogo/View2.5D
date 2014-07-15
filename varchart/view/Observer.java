@@ -108,7 +108,7 @@ public class Observer {
 
 		//Don't let observer go (too far) under patch-plane or be upside-down
 		//for stopping at the xy axis, replace "dist()/6.0" with 0
-		if (zn + rotz > dist()/6.0 && newpitch < 90) {
+		if (zn + rotz > -1*dist()/6.0 && newpitch < 90) {
 			x = xn + rotx;
 			y = yn + roty;
 			z = zn + rotz;
