@@ -1,5 +1,6 @@
 package varchart.view.gl;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -142,14 +143,30 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
     	gl.glPushMatrix();
     	observer.applyPerspective(gl);
     	
-    	setColorAndStandardMaterial(gl, .1f, .1f, 1f);
-    	for (int i=0; i<myViewer.worldWidth; i++) {
-    		for (int j = 0; j<myViewer.worldHeight; j++) {
-    			gl.glPushMatrix();
-    			gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2, -0.01);
-    			gl.glCallList(patchTileListHandle);
-    			gl.glPopMatrix();
-    		}
+    	if ( ((TurtleView)myViewer).viewOptions.usePColor() ) {
+    		for (int i=0; i<myViewer.worldWidth; i++) {
+	    		for (int j = 0; j<myViewer.worldHeight; j++) {
+	    			gl.glPushMatrix();
+	    			gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2, -0.01);
+	    			Color c = ((TurtleView)myViewer).patchColorMatrix[i][j];
+	    			float red = ((float)c.getRed())/255.0f;
+	    			float green = ((float)c.getGreen())/255.0f;
+	    			float blue = ((float)c.getBlue())/255.0f;
+	    			setColorAndStandardMaterial(gl, red, green, blue);
+	    			gl.glCallList(patchTileListHandle);
+	    			gl.glPopMatrix();
+	    		}
+	    	}
+    	} else {
+	    	setColorAndStandardMaterial(gl, .1f, .1f, 1f);
+	    	for (int i=0; i<myViewer.worldWidth; i++) {
+	    		for (int j = 0; j<myViewer.worldHeight; j++) {
+	    			gl.glPushMatrix();
+	    			gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2, -0.01);
+	    			gl.glCallList(patchTileListHandle);
+	    			gl.glPopMatrix();
+	    		}
+	    	}
     	}
 
     	for (TurtleValue tv : ((TurtleView)myViewer).getCopyOfReporterValues()) {

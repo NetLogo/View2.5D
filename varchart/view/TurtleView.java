@@ -12,10 +12,13 @@ import javax.media.opengl.GLCapabilities;
 import javax.swing.JFrame;
 
 import org.nlogo.api.Agent;
+import org.nlogo.api.AgentException;
 import org.nlogo.api.AgentSet;
 import org.nlogo.api.Context;
+import org.nlogo.api.Patch;
 import org.nlogo.api.ReporterTask;
 import org.nlogo.api.Turtle;
+import org.nlogo.app.App;
 
 import varchart.view.gl.TurtleGL;
 
@@ -28,6 +31,7 @@ public class TurtleView extends VarviewWindow {
 	private ReporterTask reporterTask;
 	
 	public ArrayList<TurtleValue> turtleReporterValues;
+	public Color[][] patchColorMatrix;
 	
 	public TurtleViewOptions viewOptions;
 	
@@ -50,7 +54,7 @@ public class TurtleView extends VarviewWindow {
 		glManager.setCanvas( glCanvas );
 		mainPanel.add(glCanvas, BorderLayout.CENTER);
 		
-		viewOptions = new TurtleViewOptions(this, true, true, true );
+		viewOptions = new TurtleViewOptions(this, true, true, true, false );
 		mainPanel.add(viewOptions, BorderLayout.NORTH);
 		
 		//change if re-add scalemanipulator
@@ -82,6 +86,22 @@ public class TurtleView extends VarviewWindow {
 			TurtleValue tv = new TurtleValue( turtle.shape(), c, turtle.size(), turtle.xcor(), turtle.ycor(), val);
 			turtleReporterValues.add(tv);
 		}
+		if (viewOptions.usePColor()) {
+			updatePColors();
+		}
+	}
+	
+	private void updatePColors() {
+		for (int i = 0; i< worldWidth; i++){
+			for (int j = 0;j< worldHeight; j++) {
+				try {
+					Patch patch = App.app().workspace().world().getPatchAt(i + minPxcor, j + minPycor);
+					patchColorMatrix[i][j] = org.nlogo.api.Color.getColor(patch.pcolor());	
+				} catch (AgentException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	public ArrayList<TurtleValue> getCopyOfReporterValues() {
@@ -99,6 +119,13 @@ public class TurtleView extends VarviewWindow {
 		maxPycor = maxY;
 		
 		turtleReporterValues = new ArrayList<TurtleValue>(myAgents.count());
+		
+		patchColorMatrix = new Color[worldWidth][worldHeight];
+		for (int i = 0; i< worldWidth; i++){
+			for (int j = 0;j< worldHeight; j++) {
+				patchColorMatrix[i][j] = Color.BLUE;						
+			}
+		}
 	}
 
 	public void setAgentSet(AgentSet as) {
@@ -114,6 +141,9 @@ public class TurtleView extends VarviewWindow {
 	
 	public void refresh() {
 		glManager.repaintCanvas();
+		if (viewOptions.usePColor()) {
+			updatePColors();
+		}
 	}
 	
 	public void zoomZby( double change ) {

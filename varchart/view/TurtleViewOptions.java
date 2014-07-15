@@ -12,9 +12,9 @@ public class TurtleViewOptions extends JPanel implements ChangeListener {
 	private static final long serialVersionUID = 1L;
 	
 	TurtleView myWindow;
-	JCheckBox color, size, shape;
+	JCheckBox color, size, shape, pcolor;
 	
-	public TurtleViewOptions( TurtleView parent, boolean co, boolean sz, boolean sh ) {
+	public TurtleViewOptions( TurtleView parent, boolean co, boolean sz, boolean sh, boolean pco ) {
 		super();
 		
 		this.myWindow = parent;
@@ -23,23 +23,29 @@ public class TurtleViewOptions extends JPanel implements ChangeListener {
 		color = new JCheckBox("Color", co);
 		size = new JCheckBox("Size", sz);
 		shape = new JCheckBox("Shape", sh);
+		pcolor = new JCheckBox("PColor", pco);
 		
 		color.addChangeListener(this);
 		size.addChangeListener(this);
 		shape.addChangeListener(this);
+		pcolor.addChangeListener(this);
 		
 		this.add( new JLabel("View Options: ") );
 		this.add(color);
 		this.add(size);
 		this.add(shape);
+		this.add(pcolor);
 	}
 	
 	public boolean showColor() { return color.isSelected(); }
 	public boolean showSize() { return size.isSelected(); }
 	public boolean showShape() { return shape.isSelected(); }
+	public boolean usePColor() { return pcolor.isSelected(); }
 
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
+		System.err.println("state.  now usepcolor selection is: " + usePColor() );
+		System.err.println("source = " + arg0.getSource());
 		myWindow.refresh();
 	}
 
