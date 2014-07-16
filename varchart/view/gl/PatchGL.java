@@ -152,12 +152,12 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 				if ( ((PatchView)myViewer).viewOptions.tangents() ) {
 					
 					if ( j>0 && j<myViewer.worldHeight-1  ) {
-						double slopey = (((PatchView)myViewer).reporterValueMatrix[i][j+1].reporterValue - ((PatchView)myViewer).reporterValueMatrix[i][j-1].reporterValue ) / 2.0 ;
+						double slopey = myViewer.zScale * (((PatchView)myViewer).reporterValueMatrix[i][j+1].reporterValue - myViewer.zScale * ((PatchView)myViewer).reporterValueMatrix[i][j-1].reporterValue ) / 2.0 ;
 						double beta = 180.0 * Math.atan(slopey) / Math.PI;
 						gl.glRotated(beta, 1, 0, 0);
 					}
 					if ( i>0 && i<myViewer.worldWidth-1  ) {
-						double slopex = (((PatchView)myViewer).reporterValueMatrix[i+1][j].reporterValue - ((PatchView)myViewer).reporterValueMatrix[i-1][j].reporterValue ) / 2.0 ;
+						double slopex = myViewer.zScale * (((PatchView)myViewer).reporterValueMatrix[i+1][j].reporterValue - myViewer.zScale * ((PatchView)myViewer).reporterValueMatrix[i-1][j].reporterValue ) / 2.0 ;
 						double alpha = 180.0 * Math.atan(slopex) / Math.PI;
 						gl.glRotated(-alpha, 0, 1, 0);
 					}
