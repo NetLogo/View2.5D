@@ -75,7 +75,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		 
 		 pinHeadListHandle = gl.glGenLists(1);
 		 gl.glNewList(pinHeadListHandle, GL.GL_COMPILE);
-		 Compilables.PinHead(gl, glu, quadr, radius, slices );
+		 Compilables.PinHead(gl, glu, quadr, 0.6f, slices );
 		 gl.glEndList();
 		 
 		 glu.gluDeleteQuadric(quadr);

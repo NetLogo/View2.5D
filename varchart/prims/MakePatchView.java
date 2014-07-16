@@ -21,6 +21,12 @@ import varchart.view.PatchView;
 
 public class MakePatchView extends DefaultReporter {
 
+
+	@Override
+	public String getAgentClassString() {
+		return "O";
+	}
+	
 	@Override
     public Syntax getSyntax() {
        int[] argTypes = {Syntax.StringType(), Syntax.ReporterTaskType()};
@@ -32,7 +38,7 @@ public class MakePatchView extends DefaultReporter {
 	public Object report(Argument[] args, final Context context)
 			throws ExtensionException, LogoException {
 		String title = args[0].getString().trim();
-		if ( title.length() == 0 ) { title = "Testing GL Stuff"; }
+		if ( title.length() == 0 ) { title = "Patch Variable Visualizer"; }
 		
 		ReporterTask patchReporterTask = args[1].getReporterTask();
 

@@ -28,12 +28,17 @@ public class MakeTurtleView extends DefaultReporter {
        return  Syntax.reporterSyntax(argTypes, Syntax.NumberType());
     }
 	
+	@Override
+	public String getAgentClassString() {
+		return "O";
+	}
+	
 	@SuppressWarnings("unused")
 	@Override
 	public Object report(Argument[] args, final Context context)
 			throws ExtensionException, LogoException {
 		String title = args[0].getString().trim();
-		if ( title.length() == 0 ) { title = "Testing GL Stuff"; }
+		if ( title.length() == 0 ) { title = "Turtle Variable Visualizer"; }
 		
 		AgentSet as = args[1].getAgentSet();
 		ReporterTask turtleReporterTask = args[2].getReporterTask();

@@ -18,6 +18,11 @@ public class UpdateTurtleView extends DefaultCommand {
 		int[] argType = {Syntax.NumberType(), Syntax.AgentsetType()};
 		return  Syntax.commandSyntax( argType );
 	}
+	
+	@Override
+	public String getAgentClassString() {
+		return "O";
+	}
 
 	@Override
 	public void perform(Argument[] args, Context context) throws ExtensionException, LogoException {
