@@ -147,7 +147,7 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
     		for (int i=0; i<myViewer.worldWidth; i++) {
 	    		for (int j = 0; j<myViewer.worldHeight; j++) {
 	    			gl.glPushMatrix();
-	    			gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2, -0.01);
+	    			gl.glTranslated(i + myViewer.minPxcor, j + myViewer.minPycor, 0);
 	    			Color c = ((TurtleView)myViewer).patchColorMatrix[i][j];
 	    			float red = ((float)c.getRed())/255.0f;
 	    			float green = ((float)c.getGreen())/255.0f;
@@ -162,7 +162,7 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 	    	for (int i=0; i<myViewer.worldWidth; i++) {
 	    		for (int j = 0; j<myViewer.worldHeight; j++) {
 	    			gl.glPushMatrix();
-	    			gl.glTranslated(i - myViewer.worldWidth/2 , j - myViewer.worldHeight/2, -0.01);
+	    			gl.glTranslated(i + myViewer.minPxcor, j + myViewer.minPycor, 0);
 	    			gl.glCallList(patchTileListHandle);
 	    			gl.glPopMatrix();
 	    		}
