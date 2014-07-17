@@ -28,6 +28,8 @@ public class VarchartExtension extends DefaultClassManager {
 	static private Integer tindex = 0;
 	static public HashMap<Integer, TurtleView> turtleWindowMap = new HashMap<Integer, TurtleView>();
 	
+	public static int numWindows() { return windex + tindex; }
+	
 	//Get next available index for windows (patch)
 	 public static Integer getNextIndex() {
 		windex++;

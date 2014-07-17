@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 
 import org.nlogo.api.Context;
 
+import varchart.VarchartExtension;
+
 public abstract class VarviewWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -53,10 +55,8 @@ public abstract class VarviewWindow extends JFrame {
 	
 	private void setupUI() {
 		dashboard = new VarviewDashboard( this );
-		//scale = new ScaleManipulator( this, -1, 10 );
 		mainPanel = new JPanel();
 		mainPanel.setLayout( new BorderLayout() );
-		//mainPanel.add(scale, BorderLayout.WEST);
 		mainPanel.add(dashboard, BorderLayout.SOUTH);
 		this.getContentPane().add(mainPanel);
 	}
@@ -64,15 +64,28 @@ public abstract class VarviewWindow extends JFrame {
 	protected void centerWindow( Component frame ) {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension frameSize = frame.getSize();
+		
 		if ( frameSize.width > screenSize.width )
 			frameSize.width = screenSize.width;
 
 		if ( frameSize.height > screenSize.height )
 			frameSize.height = screenSize.height;
+		
+		int wincycle = 5;
+		int widPlay = (screenSize.width - frameSize.width);
+		int heightPlay = (screenSize.height - frameSize.height);
+		
+		int shiftWEach = widPlay / wincycle;
+		int shiftHEach = heightPlay / wincycle;
+		
+		int numWins = VarchartExtension.numWindows();
+		int placeW = (numWins % wincycle) * shiftWEach + shiftWEach / 2;
+		int placeH = (numWins % wincycle) * shiftHEach + shiftHEach / 2;
+	
 
 		frame.setLocation(
-			(screenSize.width - frameSize.width) >> 1,
-			(screenSize.height - frameSize.height) >> 1
+			placeW,
+			placeH
 		);
 	}
 
