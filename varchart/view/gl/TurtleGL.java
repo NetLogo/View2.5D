@@ -192,7 +192,7 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
     		if ( ((TurtleView)myViewer).viewOptions.showColor() ) {
     			red = (float)(tv.color.getRed()/255f);
     			green = (float)(tv.color.getGreen()/255f);
-    			blue = (float)(4.0*tv.color.getBlue()/255f);
+    			blue = (float)(tv.color.getBlue()/255f);
     		}
     		
     		setColorAndStandardMaterial( gl, red, green, blue);
