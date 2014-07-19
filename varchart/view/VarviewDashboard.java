@@ -87,7 +87,7 @@ public class VarviewDashboard extends JPanel implements ActionListener {
 	    else if  ( cmd == "reset" ) {
 	    	myWindow.setMode(VarviewWindow.ORBIT);
 	    	orbitButton.setSelected(true);
-	    	myWindow.zScale = 1;
+	    	//myWindow.zScale = 1;
 	    	myWindow.resetPerspective();
 	    }
 	}

@@ -77,7 +77,7 @@ public abstract class MouseableGLWindow implements MouseListener,
         //add an additional light to give shadows, needed for 3d shapes to show better.
         float SHINE_ALL_DIRECTIONS = 1;
         float[] lightPos = {(float) (1.2 * myViewer.maxPxcor), (float) (1.2 * myViewer.maxPycor), 70.0f, SHINE_ALL_DIRECTIONS};
-        float[] lightColorAmbient = {0.5f, 0.5f, 0.5f, 1f}; //.2fs
+        float[] lightColorAmbient = {0.4f, 0.4f, 0.4f, 1f}; //.2fs
         float[] lightColorSpecular = {0.7f, 0.7f, 0.7f, 1f};
 
         // Set light parameters.
