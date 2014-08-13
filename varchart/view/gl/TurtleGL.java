@@ -181,9 +181,9 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
     		gl.glVertex3d (0, 0, -zval);
     		gl.glEnd();
 
-    		float red = 0.6f;
-    		float green = 0.6f;
-    		float blue = 0.6f;
+    		float red = 0.8f;
+    		float green = 0.8f;
+    		float blue = 0.45f;
     	
     		if ( ((TurtleView)myViewer).viewOptions.showSize() )
     			gl.glScaled(tv.size, tv.size, tv.size);
