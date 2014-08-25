@@ -21,7 +21,7 @@ import varchart.view.PatchView;
 
 public class MakePatchView extends DefaultReporter {
 
-
+	private int i = 0;
 	@Override
 	public String getAgentClassString() {
 		return "O";
@@ -35,54 +35,86 @@ public class MakePatchView extends DefaultReporter {
 	
 	@SuppressWarnings("unused")
 	@Override
-	public Object report(Argument[] args, final Context context)
+	public Object report(final Argument[] args, final Context context)
 			throws ExtensionException, LogoException {
-		String title = args[0].getString().trim();
-		if ( title.length() == 0 ) { title = "Patch Variable Visualizer"; }
 		
-		ReporterTask patchReporterTask = args[1].getReporterTask();
-
-		try {
-			Patch patch = App.app().workspace().world().getPatchAt(0,0);
-			double test = (Double)patchReporterTask.report(context, new Object[]{patch});
-			
-		} catch (AgentException e) {
-			throw new ExtensionException("ERROR:  Your task cannot be run by patches!", e);
-		}
+		
 		
 		final Integer id = VarchartExtension.getNextIndex();
+		System.err.println("HI FRANK");
 		
-		final PatchView manualPatchView = new PatchView(title, patchReporterTask, id);
 
-		try {
-			SwingUtilities.invokeAndWait(new Runnable() {
+	//	try {
+			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					World w = App.app().workspace().world();
-					int worldWidth = w.worldWidth();
-					int worldHeight = w.worldHeight();
-					int minX = w.minPxcor();
-					int minY = w.minPycor();
-					int maxX = w.maxPxcor();
-					int maxY = w.maxPycor();
-					manualPatchView.setupForRendering( worldWidth, worldHeight, minX, maxX, minY, maxY );
-					manualPatchView.manuallyRefreshReporterView(context);
-					manualPatchView.setVisible(true);
+					String title = "";
+					try {
+						title = args[0].getString().trim();
+					} catch (ExtensionException e1) {
+						e1.printStackTrace();
+					} catch (LogoException e1) {
+						e1.printStackTrace();
+					}
+					if ( title.length() == 0 ) { title = "Patch Variable Visualizer"; }
+					
+					ReporterTask patchReporterTask;
+					try {
+						patchReporterTask = args[1].getReporterTask();
+						
+					
+						Patch patch = App.app().workspace().world().getPatchAt(0,0);
+						double test = (Double)patchReporterTask.report(context, new Object[]{patch});
+
+//					try {
+//						Thread.sleep(1000);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+						
+						final PatchView manualPatchView = new PatchView(title, patchReporterTask, id);
+						manualPatchView.postConstructor();
+
+						World w = App.app().workspace().world();
+						int worldWidth = w.worldWidth();
+						int worldHeight = w.worldHeight();
+						int minX = w.minPxcor();
+						int minY = w.minPycor();
+						int maxX = w.maxPxcor();
+						int maxY = w.maxPycor();
+
+						manualPatchView.setupForRendering( worldWidth, worldHeight, minX, maxX, minY, maxY );
+						manualPatchView.manuallyRefreshReporterView(context);
+						manualPatchView.setVisible(true);
+						i = VarchartExtension.storeWindowAtIndex(id, manualPatchView);
+						if (i < 0 ) {
+							throw new ExtensionException( "ERROR in setting up window.  Unable to place window in static list." );
+						}
+						
+					} catch (ExtensionException e1) {
+						e1.printStackTrace();
+					} catch (LogoException e1) {
+						e1.printStackTrace();
+					} catch (AgentException ae) {
+						ae.printStackTrace();
+					}	
 				}
 			});
+			
+		//}
 
-		} catch (InterruptedException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-			throw new ExtensionException( "ERROR in setting up window: " + e.getMessage() );
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-			throw new ExtensionException( "ERROR in setting up window: " + e.getMessage() );
-		} 
+		//} catch (InterruptedException e) {
+		//	e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		//	throw new ExtensionException( "ERROR in setting up window: " + e.getMessage() );
+		//} catch (InvocationTargetException e) {
+		//	e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		//	throw new ExtensionException( "ERROR in setting up window: " + e.getMessage() );
+		//} 
 		
-		int i = VarchartExtension.storeWindowAtIndex(id, manualPatchView);
 		if (i < 0 ) {
 			throw new ExtensionException( "ERROR in setting up window.  Unable to place window in static list." );
 		}
-
+		
 		return id.doubleValue();
 	}
 	

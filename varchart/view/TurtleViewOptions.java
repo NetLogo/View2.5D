@@ -44,8 +44,8 @@ public class TurtleViewOptions extends JPanel implements ChangeListener {
 
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
-		System.err.println("state.  now usepcolor selection is: " + usePColor() );
-		System.err.println("source = " + arg0.getSource());
+		//System.err.println("state.  now usepcolor selection is: " + usePColor() );
+		//System.err.println("source = " + arg0.getSource());
 		myWindow.refresh();
 	}
 

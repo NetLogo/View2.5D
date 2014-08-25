@@ -54,6 +54,8 @@ public class MakeTurtleView extends DefaultReporter {
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
+					manualTurtleView.postConstructor();
+					
 					World w = App.app().workspace().world();
 					int worldWidth = w.worldWidth();
 					int worldHeight = w.worldHeight();
@@ -61,6 +63,7 @@ public class MakeTurtleView extends DefaultReporter {
 					int minY = w.minPycor();
 					int maxX = w.maxPxcor();
 					int maxY = w.maxPycor();
+					
 					manualTurtleView.setupForRendering( worldWidth, worldHeight, minX, maxX, minY, maxY );
 					manualTurtleView.manuallyRefreshReporterView(context);
 					manualTurtleView.setVisible(true);

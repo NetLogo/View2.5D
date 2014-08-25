@@ -32,7 +32,10 @@ public class PatchView extends VarviewWindow {
 	public PatchView(String title, ReporterTask rt, Integer id) {
 		super(title, id);
 		reporterTask = rt;
-
+	}
+	
+	public void postConstructor() {
+		setupUI();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		GLCapabilities glCapabilities = new GLCapabilities();
 		GLCanvas glCanvas =  new GLCanvas(glCapabilities);
@@ -58,9 +61,9 @@ public class PatchView extends VarviewWindow {
 				applySquareConstraint(xExpand, yExpand, mainPanel);
 			}
 		});
-		
 		centerWindow(this);
 	}
+	
 	
 	
 	public void setupForRendering(  int wWidth, int wHeight, int minX, int maxX, int minY, int maxY ) {

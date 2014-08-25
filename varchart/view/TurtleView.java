@@ -40,7 +40,10 @@ public class TurtleView extends VarviewWindow {
 		super(title, id);
 		reporterTask = rt;
 		myAgents = set;
+	}
 		
+	public void postConstructor() {
+		setupUI();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		GLCapabilities glCapabilities = new GLCapabilities();
 		final GLCanvas glCanvas =  new GLCanvas(glCapabilities);

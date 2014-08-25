@@ -2,11 +2,17 @@ package varchart;
 
 import java.util.HashMap;
 
+import javax.swing.SwingUtilities;
+
 
 import org.nlogo.api.DefaultClassManager;
 
+import org.nlogo.api.Argument;
+import org.nlogo.api.Context;
+import org.nlogo.api.DefaultCommand;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.ExtensionManager;
+import org.nlogo.api.LogoException;
 import org.nlogo.api.PrimitiveManager;
 
 import org.nlogo.gl.render.JOGLException;
@@ -86,10 +92,29 @@ public class VarchartExtension extends DefaultClassManager {
 		primManager.addPrimitive("patch", new MakePatchView() );
 		primManager.addPrimitive("turtle", new MakeTurtleView() );
 		
+		primManager.addPrimitive("show-all", new ShowAll() );
 		primManager.addPrimitive("update", new UpdateOneView() );
 		primManager.addPrimitive("update-all", new UpdateAllViews() );
 		
 		primManager.addPrimitive("update-turtle-view", new UpdateTurtleView() );
+	}
+	
+
+	private static class ShowAll extends DefaultCommand {
+
+		@Override
+		public void perform(Argument[] arg0, Context arg1)
+				throws ExtensionException, LogoException {
+			for (final VarviewWindow win: windowMap.values() ) {
+				if ( win != null ) {
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							win.setVisible(true);
+						}
+					});
+				}
+			}
+		}
 	}
 
 	@Override

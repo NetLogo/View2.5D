@@ -50,10 +50,10 @@ public abstract class VarviewWindow extends JFrame {
 	public VarviewWindow(String title, int anId) {
 		super(title);
 		ID = anId;
-		setupUI();
+		//setupUI(); -- now called in invokeAndWait()
 	}
 	
-	private void setupUI() {
+	protected void setupUI() {
 		dashboard = new VarviewDashboard( this );
 		mainPanel = new JPanel();
 		mainPanel.setLayout( new BorderLayout() );
