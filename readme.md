@@ -49,6 +49,20 @@ Version 0.1 released 08/26/14
 > This *reporter* primitive returns the number of turtle and patch views that are currently active.
 
 
-####Comments & Complaints:
+###Building:
+Follow instructions for building extensions, found at http://ccl.northwestern.edu/netlogo/docs/extensions.html
+> Compile against NetLogo.jar file for NetLogo 5.0.x or 5.1, using the manifest.txt file in this repo
+> Place the result in a folder called 'view2.5d' as a subfolder of the extensions folder of your NetLogo distribution
+
+###Incorporating in models:
+> declare your use of the extension via 
+>> extensions [ view2.5d ]
+> open a window using either the view2.5d:patch-view or view2.5d:turtle-view commands 
+>>(often in your 'SETUP' procedure or via a separate button).
+> update your window's view using one of the update commands 
+>>(often in your 'GO' procedure)
+> see also examples in the 'release'
+
+###Comments & Complaints:
 Please send to Corey Brady, cbrady@northwestern.edu
 
