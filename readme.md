@@ -51,6 +51,7 @@ Version 0.1 released 08/26/14
 
 ###Building:
 Follow instructions for building extensions, found at http://ccl.northwestern.edu/netlogo/docs/extensions.html
+and https://github.com/NetLogo/NetLogo/wiki/Extensions-API
 - Compile as view2.5d.jar, building against NetLogo.jar file for NetLogo 5.0.x or 5.1
 - Use the manifest.txt file in this repo
 - Place the result in a folder called 'view2.5d' as a subfolder of the extensions folder of your NetLogo distribution
