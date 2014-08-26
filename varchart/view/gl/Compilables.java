@@ -144,12 +144,9 @@ public final class Compilables {
 	
 	public static void DiskPatchTile(GL gl, GLU glu, GLUquadric quadr, final double sz, final int smoothness) {
 	    glu.gluDisk(quadr, 0f, sz, smoothness, 1);
-	   // gl.glRotatef(180f, 1f, 0f, 0f);
-	   //  glu.gluDisk(quadr, 0f, sz, smoothness, 1);
 	}
 	
 	public static void AxisHead(GL gl, GLU glu, GLUquadric quadr, final double sz, final int smoothness) {
-		//gl.glRotatef(-90f, 1f, 0f, 0f);
 	    glu.gluCylinder(quadr, sz / 2.0, 0.0, sz, smoothness, smoothness);
 	    gl.glRotatef(180f, 1f, 0f, 0f);
 	    glu.gluDisk(quadr, 0f, sz / 2, smoothness, 1);

@@ -25,15 +25,12 @@ public abstract class VarviewWindow extends JFrame {
 	
 	protected JPanel mainPanel;
 	private VarviewDashboard dashboard;
-	private ScaleManipulator scale;
 	
 	public static final int ORBIT = 0;
 	public static final int MOVE = 1;
 	public static final int ZOOM = 2;
 	public static final int RESET = -1;
 	public static final int SCALEZ = 3;
-	
-	
 	
 	private int mode = ORBIT;
 	
@@ -42,15 +39,12 @@ public abstract class VarviewWindow extends JFrame {
 	}
 	public int getMode() { return mode; }
 	
-	public double getMaxY() { return scale.maxy; }
-	public double getMinY() { return scale.miny; }
 	
-
 	public VarviewWindow(String title) {
 		super(title);
-		//setupUI(); -- now called in invokeAndWait()
 	}
 	
+	//now called via 'postconstructor' method in subclasses
 	protected void setupUI() {
 		dashboard = new VarviewDashboard( this );
 		mainPanel = new JPanel();

@@ -51,7 +51,6 @@ public class Observer {
 		rotx = x;
 		roty = y;
 		rotz = 0;
-		//System.err.println("at start, x = " + x + "y = " + y + "z = " + z );
 	}
 
 	public void applyPerspective( GL gl ) {
@@ -77,11 +76,7 @@ public class Observer {
 
 	public void updatePerspective(double thetax, double thetay) {
 		orbitRight(thetax);
-		//System.err.println("ORBIT RIGHT: delta = " + thetax + ":" + x + "," + y + "," + z + ", HEADING=" + heading + ", PITCH=" + pitch);
-		//System.err.println("ROTATION PT:" + rotx + ", "+ roty + ", "+ rotz  );
 		orbitUp(thetay);
-		//System.err.println("ORBIT UP: delta = " + thetay + ":" + x + "," + y + "," + z + ", HEADING=" + heading + ", PITCH=" + pitch);
-		//System.err.println("ROTATION PT:" + rotx + ", "+ roty + ", "+ rotz  );
 	}
 
 
@@ -96,7 +91,6 @@ public class Observer {
 
 		x = rotx + xn;
 		y = roty + yn;
-		//System.err.println( "orbitRight " + x + "," + y + "," + z);
 	}
 
 	private void orbitUp(double delta) {
@@ -107,13 +101,12 @@ public class Observer {
 		double yn = -dxy * StrictMath.cos(StrictMath.toRadians(heading));
 
 		//Don't let observer go (too far) under patch-plane or be upside-down
-		//for stopping at the xy axis, replace "dist()/6.0" with 0
-		if (zn + rotz > -1*dist()/6.0 && newpitch < 90) {
+		//for stopping at the xy axis, replace "dist()/4.0" with 0
+		if (zn + rotz > -1*dist()/4.0 && newpitch < 90) {
 			x = xn + rotx;
 			y = yn + roty;
 			z = zn + rotz;
 			pitch = newpitch;
-			//System.err.println( "orbitUp change");
 		}
 	}
 

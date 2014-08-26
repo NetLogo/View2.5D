@@ -1,11 +1,6 @@
 package varchart;
 
-import java.util.HashMap;
-
-
-
 import org.nlogo.api.DefaultClassManager;
-
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.DefaultCommand;
@@ -14,7 +9,6 @@ import org.nlogo.api.ExtensionException;
 import org.nlogo.api.ExtensionManager;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.Syntax;
-
 import org.nlogo.api.PrimitiveManager;
 
 import org.nlogo.gl.render.JOGLException;
@@ -25,8 +19,11 @@ import varchart.prims.MakeTurtleView;
 import varchart.prims.UpdateAllViews;
 import varchart.prims.UpdateOnePatchView;
 import varchart.prims.UpdateOneTurtleView;
+
 import varchart.view.TurtleView;
 import varchart.view.VarviewWindow;
+
+import java.util.HashMap;
 
 public class VarchartExtension extends DefaultClassManager {
 
@@ -43,6 +40,7 @@ public class VarchartExtension extends DefaultClassManager {
 		windowMap.put(s,win);		
 	}
 	
+	//remove a patch window with given name, if any exists
 	public static void removePatchWindowWithTitle(String name) {
 		if (  windowMap.containsKey(name) ) {
 			VarviewWindow vvw = windowMap.get(name);
@@ -57,7 +55,8 @@ public class VarchartExtension extends DefaultClassManager {
 		removeTurtleWindowWithTitle(s);
 		turtleWindowMap.put(s,win);
 	}
-	
+
+	//remove a turtle window with given name, if any exists
 	public static void removeTurtleWindowWithTitle(String name) {
 		if (  turtleWindowMap.containsKey(name) ) {
 			VarviewWindow tvw = turtleWindowMap.get(name);
@@ -67,6 +66,7 @@ public class VarchartExtension extends DefaultClassManager {
 	}
 	
 
+	//run at extension startup.  ensure that the NetLogo native JOGL is loaded.
 	@Override
 	public void runOnce(ExtensionManager em) throws ExtensionException {
 		if (!JOGLLoader.isLoaded()) {
@@ -137,6 +137,7 @@ public class VarchartExtension extends DefaultClassManager {
 	//end utility primitives
 
 
+	//ensure that the windows are cleaned up when we unload the extension
 	@Override
 	public void unload(ExtensionManager em) {
 		for (VarviewWindow win: windowMap.values() ) {

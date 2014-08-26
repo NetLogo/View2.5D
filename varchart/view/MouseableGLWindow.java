@@ -109,8 +109,8 @@ public abstract class MouseableGLWindow implements MouseListener,
     	int worldHeight = myViewer.worldHeight;
     	double ratio = ((double)worldWidth) / ((double)worldHeight);
     	
-    	//setting ratio to 1 because we really don't want non-square windows.
-    	//TODO: check the logic here, especially on the viewport.
+    	//setting ratio to 1 because we really don't want non-square GL windows.
+    	//TODO: recheck the logic here, especially on the viewport.
     	ratio = 1.0;
     	gl.glViewport(0, 0, worldWidth, worldHeight);
     	

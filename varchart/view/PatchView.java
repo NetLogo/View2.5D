@@ -37,10 +37,12 @@ public class PatchView extends VarviewWindow {
 		reporterTask = rt;
 	}
 	
+	//called by class that instantiates PatchView, after constructor.
 	public void postConstructor() {
 		setupUI();
 		this.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 		final String myTitle = this.getTitle();
+		//window listener to ensure that the HashMap gets cleaned up.
 		this.addWindowListener(new WindowListener() {
             public void windowActivated(WindowEvent e) {}
             public void windowClosed(WindowEvent e) {}
@@ -65,7 +67,6 @@ public class PatchView extends VarviewWindow {
 		viewOptions = new PatchViewOptions( this, true, false, false);
 		mainPanel.add(viewOptions, BorderLayout.NORTH);
 		
-		//change if re-add scalemanipulator
 		setSize(new Dimension(600, 650));
 		xExpand = 0;
 		yExpand = 50;

@@ -1,6 +1,7 @@
 package varchart.prims;
 
 import javax.swing.SwingUtilities;
+
 import org.nlogo.api.Agent;
 import org.nlogo.api.AgentSet;
 import org.nlogo.api.Argument;
@@ -13,6 +14,7 @@ import org.nlogo.api.Syntax;
 import org.nlogo.api.Turtle;
 import org.nlogo.api.World;
 import org.nlogo.app.App;
+
 import varchart.VarchartExtension;
 import varchart.view.TurtleView;
 

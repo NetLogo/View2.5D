@@ -17,7 +17,6 @@ public class PatchViewOptions extends JPanel implements ChangeListener {
 	private JRadioButton structuresButton, sheetButton, pinsButton;
 	
 	
-	
 	public PatchViewOptions( PatchView parent, boolean str, boolean she, boolean pin ) {
 		super();
 		
@@ -46,7 +45,7 @@ public class PatchViewOptions extends JPanel implements ChangeListener {
 		group.add(sheetButton);
 		group.add(pinsButton);
 		
-		//Register a listener for the radio buttons.
+		//Register a listener (myself) for the radio buttons.
 		structuresButton.addChangeListener(this);
 		sheetButton.addChangeListener(this);
 		pinsButton.addChangeListener(this);
