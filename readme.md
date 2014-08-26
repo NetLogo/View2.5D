@@ -1,8 +1,10 @@
 ##View2.5D Extension for NetLogo
 
-###Purpose: To offer visualization for Patch and Turtle reporters, in real time, in a simulation's context.
+###Purpose:
+To offer visualization for Patch and Turtle reporters, in real time, in a simulation's context.
 
-###Status: Version 0.1 released 08/26/14
+###Status:
+Version 0.1 released 08/26/14
 
 ###Primitives:
 
@@ -46,4 +48,4 @@
 
 ####Comments & Complaints:
 Please send to Corey Brady, cbrady@northwestern.edu
-o
+
