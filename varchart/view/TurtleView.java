@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 import javax.media.opengl.GLCanvas;
@@ -20,6 +22,7 @@ import org.nlogo.api.ReporterTask;
 import org.nlogo.api.Turtle;
 import org.nlogo.app.App;
 
+import varchart.VarchartExtension;
 import varchart.view.gl.TurtleGL;
 
 public class TurtleView extends VarviewWindow {
@@ -36,8 +39,8 @@ public class TurtleView extends VarviewWindow {
 	public TurtleViewOptions viewOptions;
 	
 	
-	public TurtleView( String title, AgentSet set, ReporterTask rt, Integer id ) {
-		super(title, id);
+	public TurtleView( String title, AgentSet set, ReporterTask rt) {
+		super(title);
 		reporterTask = rt;
 		myAgents = set;
 	}
@@ -45,6 +48,16 @@ public class TurtleView extends VarviewWindow {
 	public void postConstructor() {
 		setupUI();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		final String myTitle = this.getTitle();
+		this.addWindowListener(new WindowListener() {
+            public void windowActivated(WindowEvent e) {}
+            public void windowClosed(WindowEvent e) {}
+            public void windowClosing(WindowEvent e) { VarchartExtension.removeTurtleWindowWithTitle(myTitle); }
+            public void windowDeactivated(WindowEvent e) {}
+            public void windowDeiconified(WindowEvent e) {}
+            public void windowIconified(WindowEvent e) {}
+            public void windowOpened(WindowEvent e) {}
+         });
 		GLCapabilities glCapabilities = new GLCapabilities();
 		final GLCanvas glCanvas =  new GLCanvas(glCapabilities);
 

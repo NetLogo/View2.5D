@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLCapabilities;
@@ -16,6 +18,7 @@ import org.nlogo.api.Patch;
 import org.nlogo.api.ReporterTask;
 import org.nlogo.app.App;
 
+import varchart.VarchartExtension;
 import varchart.view.gl.PatchGL;
 
 public class PatchView extends VarviewWindow {
@@ -29,14 +32,24 @@ public class PatchView extends VarviewWindow {
 	
 	public PatchValue[][] reporterValueMatrix;
 
-	public PatchView(String title, ReporterTask rt, Integer id) {
-		super(title, id);
+	public PatchView(String title, ReporterTask rt) {
+		super(title);
 		reporterTask = rt;
 	}
 	
 	public void postConstructor() {
 		setupUI();
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+		final String myTitle = this.getTitle();
+		this.addWindowListener(new WindowListener() {
+            public void windowActivated(WindowEvent e) {}
+            public void windowClosed(WindowEvent e) {}
+            public void windowClosing(WindowEvent e) { VarchartExtension.removePatchWindowWithTitle(myTitle); }
+            public void windowDeactivated(WindowEvent e) {}
+            public void windowDeiconified(WindowEvent e) {}
+            public void windowIconified(WindowEvent e) {}
+            public void windowOpened(WindowEvent e) {}
+         });
 		GLCapabilities glCapabilities = new GLCapabilities();
 		GLCanvas glCanvas =  new GLCanvas(glCapabilities);
 

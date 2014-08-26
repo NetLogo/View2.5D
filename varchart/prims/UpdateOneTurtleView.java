@@ -1,5 +1,6 @@
 package varchart.prims;
 
+import org.nlogo.api.AgentSet;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.DefaultCommand;
@@ -8,13 +9,13 @@ import org.nlogo.api.LogoException;
 import org.nlogo.api.Syntax;
 
 import varchart.VarchartExtension;
-import varchart.view.VarviewWindow;
+import varchart.view.TurtleView;
 
-public class UpdateOneView extends DefaultCommand {
+public class UpdateOneTurtleView extends DefaultCommand {
 
 	@Override
 	public Syntax getSyntax() {
-		int[] argType = {Syntax.NumberType()};
+		int[] argType = {Syntax.StringType(), Syntax.AgentsetType()};
 		return  Syntax.commandSyntax( argType );
 	}
 	
@@ -25,12 +26,14 @@ public class UpdateOneView extends DefaultCommand {
 
 	@Override
 	public void perform(Argument[] args, Context context) throws ExtensionException, LogoException {
-		Integer index = args[0].getIntValue();
-		if ( VarchartExtension.windowMap.containsKey( index ) ) {
-			VarviewWindow win = VarchartExtension.windowMap.get( index );
+		String title = args[0].getString();
+		AgentSet as = args[1].getAgentSet();
+		if ( VarchartExtension.turtleWindowMap.containsKey( title ) ) {
+			TurtleView win = VarchartExtension.turtleWindowMap.get( title );
+			win.setAgentSet( as );
 			win.manuallyRefreshReporterView(context);
 		} else {
-			throw new ExtensionException("No Variable Visualization window with id="+index);
+			throw new ExtensionException("No Variable Visualization window with title "+title);
 		}
 	}
 

@@ -2,7 +2,6 @@ package varchart;
 
 import java.util.HashMap;
 
-import javax.swing.SwingUtilities;
 
 
 import org.nlogo.api.DefaultClassManager;
@@ -10,9 +9,12 @@ import org.nlogo.api.DefaultClassManager;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.DefaultCommand;
+import org.nlogo.api.DefaultReporter;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.ExtensionManager;
 import org.nlogo.api.LogoException;
+import org.nlogo.api.Syntax;
+
 import org.nlogo.api.PrimitiveManager;
 
 import org.nlogo.gl.render.JOGLException;
@@ -21,58 +23,50 @@ import org.nlogo.gl.render.JOGLLoader;
 import varchart.prims.MakePatchView;
 import varchart.prims.MakeTurtleView;
 import varchart.prims.UpdateAllViews;
-import varchart.prims.UpdateOneView;
-import varchart.prims.UpdateTurtleView;
+import varchart.prims.UpdateOnePatchView;
+import varchart.prims.UpdateOneTurtleView;
 import varchart.view.TurtleView;
 import varchart.view.VarviewWindow;
 
 public class VarchartExtension extends DefaultClassManager {
 
-	static private Integer windex = 0;
-	static public HashMap<Integer, VarviewWindow> windowMap = new HashMap<Integer, VarviewWindow>();
-	
-	static private Integer tindex = 0;
-	static public HashMap<Integer, TurtleView> turtleWindowMap = new HashMap<Integer, TurtleView>();
-	
-	public static int numWindows() { return windex + tindex; }
-	
-	//Get next available index for windows (patch)
-	 public static Integer getNextIndex() {
-		windex++;
-		return windex;
-	}
-	
-	//Add a window to the indexed set.  Only do so if the proposed index is correct and if the spot is open.
-	public static int storeWindowAtIndex( Integer i, VarviewWindow win ){
-		if ( i.equals(windex) && !windowMap.containsKey(i) ) {
-			windowMap.put(i,win);
-			return windex;
-		}
-		else {
-			return -1; 
-		}
+	static public HashMap<String, VarviewWindow> windowMap = new HashMap<String, VarviewWindow>();
+	static public HashMap<String, TurtleView> turtleWindowMap = new HashMap<String, TurtleView>();
 		
+	public static int numWindows() {
+		return turtleWindowMap.size() + windowMap.size();
 	}
 	
-	//Get next available index for turtle views
-	public static Integer getNextTurtleIndex() {
-		tindex++;
-		return tindex;
+	//Add a window to the indexed set. Get rid of any existing window with that name
+	public static void storePatchWindowWithTitle( String s, VarviewWindow win ){
+		removePatchWindowWithTitle(s);
+		windowMap.put(s,win);		
 	}
-
-	//Add a window to the indexed set.  Only do so if the proposed index is correct and if the spot is open.
-	public static int storeTurtleWindowAtIndex( Integer i, TurtleView win ){
-		if ( i.equals(tindex) && !turtleWindowMap.containsKey(i) ) {
-			turtleWindowMap.put(i,win);
-			return tindex;
+	
+	public static void removePatchWindowWithTitle(String name) {
+		if (  windowMap.containsKey(name) ) {
+			VarviewWindow vvw = windowMap.get(name);
+			windowMap.remove(name);
+			vvw.dispose();
 		}
-		else {
-			return -1; 
+	}
+	
+
+	//Add a window to the indexed set. Remove any existing t view.
+	public static void storeTurtleWindowWithTitle( String s, TurtleView win ){
+		removeTurtleWindowWithTitle(s);
+		turtleWindowMap.put(s,win);
+	}
+	
+	public static void removeTurtleWindowWithTitle(String name) {
+		if (  turtleWindowMap.containsKey(name) ) {
+			VarviewWindow tvw = turtleWindowMap.get(name);
+			turtleWindowMap.remove(name);
+			tvw.dispose();
 		}
 	}
 	
 
-	
 	@Override
 	public void runOnce(ExtensionManager em) throws ExtensionException {
 		if (!JOGLLoader.isLoaded()) {
@@ -85,37 +79,63 @@ public class VarchartExtension extends DefaultClassManager {
 		}
 	}
 	
-	
-	
 	@Override
 	public void load(PrimitiveManager primManager) throws ExtensionException {
-		primManager.addPrimitive("patch", new MakePatchView() );
-		primManager.addPrimitive("turtle", new MakeTurtleView() );
+		primManager.addPrimitive("patch-view", new MakePatchView() );
+		primManager.addPrimitive("turtle-view", new MakeTurtleView() );
 		
-		primManager.addPrimitive("show-all", new ShowAll() );
-		primManager.addPrimitive("update", new UpdateOneView() );
-		primManager.addPrimitive("update-all", new UpdateAllViews() );
+		primManager.addPrimitive("update-patch-view", new UpdateOnePatchView() );
+		primManager.addPrimitive("update-all-patch-views", new UpdateAllViews() );
 		
-		primManager.addPrimitive("update-turtle-view", new UpdateTurtleView() );
+		primManager.addPrimitive("update-turtle-view", new UpdateOneTurtleView() );
+		
+		primManager.addPrimitive("remove-patch-view", new RemoveOnePatchView() );
+		primManager.addPrimitive("remove-turtle-view", new RemoveOneTurtleView() );
+		
+		primManager.addPrimitive("count-windows", new GetWindowCount() );
 	}
 	
-
-	private static class ShowAll extends DefaultCommand {
-
+	
+	//utility (or less user-facing) primitives
+	public static class GetWindowCount extends DefaultReporter {
 		@Override
-		public void perform(Argument[] arg0, Context arg1)
+		public Object report(Argument[] arg0, Context arg1)
 				throws ExtensionException, LogoException {
-			for (final VarviewWindow win: windowMap.values() ) {
-				if ( win != null ) {
-					SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
-							win.setVisible(true);
-						}
-					});
-				}
-			}
+			return new Double(numWindows());
 		}
 	}
+	
+	public static class RemoveOnePatchView extends DefaultCommand {
+		@Override
+		public Syntax getSyntax() {
+			int[] argType = {Syntax.StringType()};
+			return  Syntax.commandSyntax( argType );
+		}
+		
+		@Override
+		public void perform(Argument[] args, Context arg1)
+				throws ExtensionException, LogoException {
+			String title = args[0].getString();
+			removePatchWindowWithTitle( title );
+		}
+	}
+	
+	public static class RemoveOneTurtleView extends DefaultCommand {
+		@Override
+		public Syntax getSyntax() {
+			int[] argType = {Syntax.StringType()};
+			return  Syntax.commandSyntax( argType );
+		}
+		
+		@Override
+		public void perform(Argument[] args, Context arg1)
+				throws ExtensionException, LogoException {
+			String title = args[0].getString();
+			removeTurtleWindowWithTitle( title );
+		}
+	}
+	//end utility primitives
+
 
 	@Override
 	public void unload(ExtensionManager em) {

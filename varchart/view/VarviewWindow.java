@@ -15,7 +15,6 @@ import varchart.VarchartExtension;
 public abstract class VarviewWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	int ID;
 	
 	public int worldWidth, worldHeight, minPxcor, minPycor, maxPxcor, maxPycor;
 	public int xExpand, yExpand; //pixels that add to the square-inner panel. used in asserting aspect ratio.
@@ -47,9 +46,8 @@ public abstract class VarviewWindow extends JFrame {
 	public double getMinY() { return scale.miny; }
 	
 
-	public VarviewWindow(String title, int anId) {
+	public VarviewWindow(String title) {
 		super(title);
-		ID = anId;
 		//setupUI(); -- now called in invokeAndWait()
 	}
 	
