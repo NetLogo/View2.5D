@@ -27,24 +27,24 @@ import java.util.HashMap;
 
 public class View25DExtension extends DefaultClassManager {
 
-	static public HashMap<String, VarviewWindow> windowMap = new HashMap<String, VarviewWindow>();
+	static public HashMap<String, VarviewWindow> patchWindowMap = new HashMap<String, VarviewWindow>();
 	static public HashMap<String, TurtleView> turtleWindowMap = new HashMap<String, TurtleView>();
 		
 	public static int numWindows() {
-		return turtleWindowMap.size() + windowMap.size();
+		return turtleWindowMap.size() + patchWindowMap.size();
 	}
 	
 	//Add a window to the indexed set. Get rid of any existing window with that name
 	public static void storePatchWindowWithTitle( String s, VarviewWindow win ){
 		removePatchWindowWithTitle(s);
-		windowMap.put(s,win);		
+		patchWindowMap.put(s,win);		
 	}
 	
 	//remove a patch window with given name, if any exists
 	public static void removePatchWindowWithTitle(String name) {
-		if (  windowMap.containsKey(name) ) {
-			VarviewWindow vvw = windowMap.get(name);
-			windowMap.remove(name);
+		if (  patchWindowMap.containsKey(name) ) {
+			VarviewWindow vvw = patchWindowMap.get(name);
+			patchWindowMap.remove(name);
 			vvw.dispose();
 		}
 	}
@@ -140,7 +140,7 @@ public class View25DExtension extends DefaultClassManager {
 	//ensure that the windows are cleaned up when we unload the extension
 	@Override
 	public void unload(ExtensionManager em) {
-		for (VarviewWindow win: windowMap.values() ) {
+		for (VarviewWindow win: patchWindowMap.values() ) {
 			if ( win != null ) {
 				win.dispose();
 			}

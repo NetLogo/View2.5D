@@ -26,8 +26,8 @@ public class UpdateOnePatchView extends DefaultCommand {
 	@Override
 	public void perform(Argument[] args, Context context) throws ExtensionException, LogoException {
 		String title = args[0].getString();
-		if ( View25DExtension.windowMap.containsKey( title ) ) {
-			VarviewWindow win = View25DExtension.windowMap.get( title );
+		if ( View25DExtension.patchWindowMap.containsKey( title ) ) {
+			VarviewWindow win = View25DExtension.patchWindowMap.get( title );
 			win.manuallyRefreshReporterView(context);
 		} else {
 			throw new ExtensionException("No Variable Visualization window with title "+title);
