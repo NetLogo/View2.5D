@@ -1,4 +1,4 @@
-package varchart.view;
+package viewtoo.view;
 
 import java.awt.Color;
 

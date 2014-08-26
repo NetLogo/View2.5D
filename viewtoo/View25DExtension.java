@@ -1,4 +1,4 @@
-package varchart;
+package viewtoo;
 
 import org.nlogo.api.DefaultClassManager;
 import org.nlogo.api.Argument;
@@ -14,18 +14,18 @@ import org.nlogo.api.PrimitiveManager;
 import org.nlogo.gl.render.JOGLException;
 import org.nlogo.gl.render.JOGLLoader;
 
-import varchart.prims.MakePatchView;
-import varchart.prims.MakeTurtleView;
-import varchart.prims.UpdateAllViews;
-import varchart.prims.UpdateOnePatchView;
-import varchart.prims.UpdateOneTurtleView;
 
-import varchart.view.TurtleView;
-import varchart.view.VarviewWindow;
+import viewtoo.prims.MakePatchView;
+import viewtoo.prims.MakeTurtleView;
+import viewtoo.prims.UpdateAllViews;
+import viewtoo.prims.UpdateOnePatchView;
+import viewtoo.prims.UpdateOneTurtleView;
+import viewtoo.view.TurtleView;
+import viewtoo.view.VarviewWindow;
 
 import java.util.HashMap;
 
-public class VarchartExtension extends DefaultClassManager {
+public class View25DExtension extends DefaultClassManager {
 
 	static public HashMap<String, VarviewWindow> windowMap = new HashMap<String, VarviewWindow>();
 	static public HashMap<String, TurtleView> turtleWindowMap = new HashMap<String, TurtleView>();

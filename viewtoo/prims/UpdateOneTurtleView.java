@@ -1,5 +1,6 @@
-package varchart.prims;
+package viewtoo.prims;
 
+import org.nlogo.api.AgentSet;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.DefaultCommand;
@@ -7,14 +8,14 @@ import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.Syntax;
 
-import varchart.VarchartExtension;
-import varchart.view.VarviewWindow;
+import viewtoo.View25DExtension;
+import viewtoo.view.TurtleView;
 
-public class UpdateOnePatchView extends DefaultCommand {
+public class UpdateOneTurtleView extends DefaultCommand {
 
 	@Override
 	public Syntax getSyntax() {
-		int[] argType = {Syntax.StringType()};
+		int[] argType = {Syntax.StringType(), Syntax.AgentsetType()};
 		return  Syntax.commandSyntax( argType );
 	}
 	
@@ -26,8 +27,10 @@ public class UpdateOnePatchView extends DefaultCommand {
 	@Override
 	public void perform(Argument[] args, Context context) throws ExtensionException, LogoException {
 		String title = args[0].getString();
-		if ( VarchartExtension.windowMap.containsKey( title ) ) {
-			VarviewWindow win = VarchartExtension.windowMap.get( title );
+		AgentSet as = args[1].getAgentSet();
+		if ( View25DExtension.turtleWindowMap.containsKey( title ) ) {
+			TurtleView win = View25DExtension.turtleWindowMap.get( title );
+			win.setAgentSet( as );
 			win.manuallyRefreshReporterView(context);
 		} else {
 			throw new ExtensionException("No Variable Visualization window with title "+title);

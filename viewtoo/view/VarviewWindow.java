@@ -1,4 +1,4 @@
-package varchart.view;
+package viewtoo.view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 import org.nlogo.api.Context;
 
-import varchart.VarchartExtension;
+import viewtoo.View25DExtension;
 
 public abstract class VarviewWindow extends JFrame {
 
@@ -70,7 +70,7 @@ public abstract class VarviewWindow extends JFrame {
 		int shiftWEach = widPlay / wincycle;
 		int shiftHEach = heightPlay / wincycle;
 		
-		int numWins = VarchartExtension.numWindows();
+		int numWins = View25DExtension.numWindows();
 		int placeW = (numWins % wincycle) * shiftWEach + shiftWEach / 2;
 		int placeH = (numWins % wincycle) * shiftHEach + shiftHEach / 2;
 	

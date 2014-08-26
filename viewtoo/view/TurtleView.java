@@ -1,4 +1,4 @@
-package varchart.view;
+package viewtoo.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -22,8 +22,8 @@ import org.nlogo.api.ReporterTask;
 import org.nlogo.api.Turtle;
 import org.nlogo.app.App;
 
-import varchart.VarchartExtension;
-import varchart.view.gl.TurtleGL;
+import viewtoo.View25DExtension;
+import viewtoo.view.gl.TurtleGL;
 
 public class TurtleView extends VarviewWindow {
 
@@ -52,7 +52,7 @@ public class TurtleView extends VarviewWindow {
 		this.addWindowListener(new WindowListener() {
             public void windowActivated(WindowEvent e) {}
             public void windowClosed(WindowEvent e) {}
-            public void windowClosing(WindowEvent e) { VarchartExtension.removeTurtleWindowWithTitle(myTitle); }
+            public void windowClosing(WindowEvent e) { View25DExtension.removeTurtleWindowWithTitle(myTitle); }
             public void windowDeactivated(WindowEvent e) {}
             public void windowDeiconified(WindowEvent e) {}
             public void windowIconified(WindowEvent e) {}

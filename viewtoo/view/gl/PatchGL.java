@@ -1,4 +1,4 @@
-package varchart.view.gl;
+package viewtoo.view.gl;
 
 import java.awt.Color;
 
@@ -8,9 +8,9 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
-import varchart.view.MouseableGLWindow;
-import varchart.view.PatchValue;
-import varchart.view.PatchView;
+import viewtoo.view.MouseableGLWindow;
+import viewtoo.view.PatchValue;
+import viewtoo.view.PatchView;
 
 public class PatchGL extends MouseableGLWindow implements GLEventListener {
 	GLU glu;

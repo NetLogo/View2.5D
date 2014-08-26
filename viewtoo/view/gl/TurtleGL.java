@@ -1,4 +1,4 @@
-package varchart.view.gl;
+package viewtoo.view.gl;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -17,9 +17,9 @@ import org.nlogo.gl.render.Polygons;
 import org.nlogo.gl.render.Tessellator;
 import org.nlogo.shape.VectorShape;
 
-import varchart.view.MouseableGLWindow;
-import varchart.view.TurtleValue;
-import varchart.view.TurtleView;
+import viewtoo.view.MouseableGLWindow;
+import viewtoo.view.TurtleValue;
+import viewtoo.view.TurtleView;
 
 public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 

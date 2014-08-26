@@ -1,4 +1,4 @@
-package varchart.view.gl;
+package viewtoo.view.gl;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;

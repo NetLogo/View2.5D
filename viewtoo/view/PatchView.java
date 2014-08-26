@@ -1,4 +1,4 @@
-package varchart.view;
+package viewtoo.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,8 +18,8 @@ import org.nlogo.api.Patch;
 import org.nlogo.api.ReporterTask;
 import org.nlogo.app.App;
 
-import varchart.VarchartExtension;
-import varchart.view.gl.PatchGL;
+import viewtoo.View25DExtension;
+import viewtoo.view.gl.PatchGL;
 
 public class PatchView extends VarviewWindow {
 
@@ -46,7 +46,7 @@ public class PatchView extends VarviewWindow {
 		this.addWindowListener(new WindowListener() {
             public void windowActivated(WindowEvent e) {}
             public void windowClosed(WindowEvent e) {}
-            public void windowClosing(WindowEvent e) { VarchartExtension.removePatchWindowWithTitle(myTitle); }
+            public void windowClosing(WindowEvent e) { View25DExtension.removePatchWindowWithTitle(myTitle); }
             public void windowDeactivated(WindowEvent e) {}
             public void windowDeiconified(WindowEvent e) {}
             public void windowIconified(WindowEvent e) {}
