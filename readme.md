@@ -46,7 +46,7 @@ Version 0.1 released 08/26/14
 > This *command* primitive closes and removes the specified turtle view programmatically (equivalent to closing the window manually).
 
 - view2.5d:count-windows
-> This *reporter* primitive giving the number of turtle and patch views that are currently active.
+> This *reporter* primitive returns the number of turtle and patch views that are currently active.
 
 
 ####Comments & Complaints:
