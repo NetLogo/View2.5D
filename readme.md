@@ -8,7 +8,7 @@ Version 0.1 released 08/26/14
 
 ###Primitives:
 
-- view2.5d:patch-view <Title: String> <Reporter: Task>
+- view2.5d:patch-view {Title: String} {Reporter: Task}
 > This primitive must be called from the Observer context.  (Attempting to call from another context causes an error)
 > The Title is a String, which will be used to label the new Window and to call for subsequent updates.
 > Specification of the Reporter uses the NetLogo task syntax, from the Observer perspective.  
