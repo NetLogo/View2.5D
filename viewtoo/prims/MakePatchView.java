@@ -30,31 +30,28 @@ public class MakePatchView extends DefaultCommand {
        return  Syntax.commandSyntax(argTypes);
     }
 	
-	@SuppressWarnings("unused")
 	@Override
 	public void perform(final Argument[] args, final Context context) throws ExtensionException, LogoException {
+		
+		final String title =  args[0].getString().trim();
+		if ( title.length() == 0) {
+		  throw new ExtensionException("Window title cannot be empty.\nThis is the identifier for your window"); 
+		}
+		
+		//test the patchReporter against patch 0,0 (throw away the result of report here)
+		final ReporterTask patchReporterTask = args[1].getReporterTask();
+		try {
+			Patch patch = App.app().workspace().world().getPatchAt(0,0);
+			patchReporterTask.report(context, new Object[]{patch});
+		} catch (AgentException e) {
+			throw new ExtensionException("Error in accessing patches.");
+		} catch (Exception e) {
+			throw new ExtensionException("Error in processing your reporter.");
+		}
+		
 		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				
-				String title = "";
+			public void run() {			
 				try {
-					title = args[0].getString().trim();
-					if ( title.length() == 0 ) { throw new ExtensionException("Window title cannot be empty"); }
-				} catch (ExtensionException e1) {
-					throw new RuntimeException(e1.fillInStackTrace());
-				} catch (LogoException e1) {
-					e1.printStackTrace();
-				}
-				
-				
-				try {
-					
-					ReporterTask patchReporterTask = args[1].getReporterTask();
-					
-					Patch patch = App.app().workspace().world().getPatchAt(0,0);
-					double test = (Double)patchReporterTask.report(context, new Object[]{patch});
-
-
 					PatchView manualPatchView = new PatchView(title, patchReporterTask );
 					manualPatchView.postConstructor();
 
@@ -71,13 +68,9 @@ public class MakePatchView extends DefaultCommand {
 					manualPatchView.setVisible(true);
 					View25DExtension.storePatchWindowWithTitle(title, manualPatchView);
 					
-				} catch (ExtensionException e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
-				} catch (LogoException e1) {
-					e1.printStackTrace();
-				} catch (AgentException ae) {
-					ae.printStackTrace();
-				}	
+				}
 			}
 		});
 	}

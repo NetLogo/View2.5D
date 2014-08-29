@@ -31,52 +31,44 @@ public class MakeTurtleView extends DefaultCommand {
 		return "O";
 	}
 	
-	@SuppressWarnings("unused")
 	@Override
 	public void perform(final Argument[] args, final Context context) throws ExtensionException, LogoException {
+		
+		final String title =  args[0].getString().trim();
+		if ( title.length() == 0) {
+		  throw new ExtensionException("Window title cannot be empty.\nThis is the identifier for your window"); 
+		}
+		
+		//test the reporter against the supplied turtles (throw away the result of report here)
+		final AgentSet as = args[1].getAgentSet();
+		final ReporterTask turtleReporterTask = args[2].getReporterTask();
+		try {
+			for (Agent a: as.agents() ) {
+				Turtle turtle = (Turtle)a;
+				turtleReporterTask.report(context, new Object[]{turtle});
+			}
+		}
+		catch (Exception e1) {
+			throw new ExtensionException("Error in processing your reporter.");
+		} 
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				TurtleView manualTurtleView = new TurtleView(title, as, turtleReporterTask);
+				manualTurtleView.postConstructor();
 
-				String title = "";
-				try {
-					title = args[0].getString().trim();
-					if ( title.length() == 0 ) { throw new ExtensionException("Window title cannot be empty"); }
-				} catch (ExtensionException e1) {
-					throw new RuntimeException(e1.fillInStackTrace());
-				} catch (LogoException e1) {
-					e1.printStackTrace();
-				}
+				World w = App.app().workspace().world();
+				int worldWidth = w.worldWidth();
+				int worldHeight = w.worldHeight();
+				int minX = w.minPxcor();
+				int minY = w.minPycor();
+				int maxX = w.maxPxcor();
+				int maxY = w.maxPycor();
 
-				
-				try {
-					AgentSet as = args[1].getAgentSet();
-					ReporterTask turtleReporterTask = args[2].getReporterTask();
-					for (Agent a: as.agents() ) {
-						Turtle turtle = (Turtle)a;
-						double test = (Double)turtleReporterTask.report(context, new Object[]{turtle});
-					}
-					
-					TurtleView manualTurtleView = new TurtleView(title, as, turtleReporterTask);
-					manualTurtleView.postConstructor();
-
-					World w = App.app().workspace().world();
-					int worldWidth = w.worldWidth();
-					int worldHeight = w.worldHeight();
-					int minX = w.minPxcor();
-					int minY = w.minPycor();
-					int maxX = w.maxPxcor();
-					int maxY = w.maxPycor();
-
-					manualTurtleView.setupForRendering( worldWidth, worldHeight, minX, maxX, minY, maxY );
-					manualTurtleView.manuallyRefreshReporterView(context);
-					manualTurtleView.setVisible(true);
-					View25DExtension.storeTurtleWindowWithTitle(title, manualTurtleView);
-
-				} catch (ExtensionException e1) {
-					e1.printStackTrace();
-				} catch (LogoException e1) {
-					e1.printStackTrace();
-				} 
+				manualTurtleView.setupForRendering( worldWidth, worldHeight, minX, maxX, minY, maxY );
+				manualTurtleView.manuallyRefreshReporterView(context);
+				manualTurtleView.setVisible(true);
+				View25DExtension.storeTurtleWindowWithTitle(title, manualTurtleView);				
 			}
 		});
 	}
