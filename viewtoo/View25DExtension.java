@@ -96,6 +96,7 @@ public class View25DExtension extends DefaultClassManager {
 	}
 	
 	
+	
 	//utility (or less user-facing) primitives
 	public static class GetWindowCount extends DefaultReporter {
 		@Override

@@ -44,9 +44,9 @@ public class MakePatchView extends DefaultCommand {
 			Patch patch = App.app().workspace().world().getPatchAt(0,0);
 			patchReporterTask.report(context, new Object[]{patch});
 		} catch (AgentException e) {
-			throw new ExtensionException("Error in accessing patches.");
+			throw new ExtensionException("Error in accessing patches. " + e);
 		} catch (Exception e) {
-			throw new ExtensionException("Error in processing your reporter.");
+			throw new ExtensionException("Error in processing your reporter. " + e);
 		}
 		
 		SwingUtilities.invokeLater(new Runnable() {

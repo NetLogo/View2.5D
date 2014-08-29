@@ -49,7 +49,7 @@ public class MakeTurtleView extends DefaultCommand {
 			}
 		}
 		catch (Exception e1) {
-			throw new ExtensionException("Error in processing your reporter.");
+			throw new ExtensionException("Error in processing your reporter. " + e1);
 		} 
 		
 		SwingUtilities.invokeLater(new Runnable() {
