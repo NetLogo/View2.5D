@@ -5,11 +5,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
 
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLCapabilities;
 import javax.swing.JFrame;
 
+import org.nlogo.agent.AgentSet;
+import org.nlogo.agent.Turtle;
+import org.nlogo.api.Agent;
 import org.nlogo.api.AgentException;
 import org.nlogo.api.Context;
 import org.nlogo.api.Patch;
@@ -30,6 +34,9 @@ public class PatchView extends VarviewWindow {
 	public PatchViewOptions viewOptions;
 	
 	public PatchValue[][] reporterValueMatrix;
+	
+	public boolean doingTurtles = true;
+	public ArrayList<TurtleValue> turtleValues = new ArrayList<TurtleValue>();
 
 	public PatchView(String title, ReporterTask rt) {
 		super(title);
@@ -102,6 +109,17 @@ public class PatchView extends VarviewWindow {
 				} catch (AgentException e) {
 					e.printStackTrace();
 				}
+			}
+		}
+		turtleValues.clear();
+		if (doingTurtles) {
+			AgentSet as = App.app().workspace().world().turtles();
+			for (Agent a : as.agents() ) {
+				Turtle t = (Turtle)a;
+				double val = (Double)reporterTask.report(context, new Object[]{t});
+				Color c = org.nlogo.api.Color.getColor(t.color());
+				TurtleValue tv = new TurtleValue( t.shape(), c, t.size(), t.xcor(), t.ycor(), val );
+				turtleValues.add(tv);
 			}
 		}
 	}

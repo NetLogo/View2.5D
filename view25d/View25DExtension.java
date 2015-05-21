@@ -87,7 +87,9 @@ public class View25DExtension extends DefaultClassManager {
 	@Override
 	public void load(PrimitiveManager primManager) throws ExtensionException {
 		primManager.addPrimitive("patch-view", new MakePatchView() );
-		//primManager.addPrimitive("patch-view-with-turtles", new DecoratedPatchView() );
+		//primManager.addPrimitive("decorate-patch-view", new DecoratePatchView() );
+		//primManager.addPrimitive("undecorate-patch-view", new UndecoratePatchView() );
+		
 		primManager.addPrimitive("turtle-view", new MakeTurtleView() );
 		
 		primManager.addPrimitive("update-patch-view", new UpdateOnePatchView() );
