@@ -31,6 +31,8 @@ public class TurtleView extends VarviewWindow {
 	
 	AgentSet myAgents;
 	private TurtleGL glManager;
+	public MouseableGLWindow getGLWindow() { return glManager; }
+	
 	private ReporterTask reporterTask;
 	
 	public ArrayList<TurtleValue> turtleReporterValues;
@@ -77,12 +79,13 @@ public class TurtleView extends VarviewWindow {
 		this.setSize(new Dimension(600, 640));
 		xExpand = 0;
 		yExpand = 40;
+/*
 		this.addComponentListener( new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
 				applySquareConstraint(xExpand, yExpand, mainPanel);
 			}
 		});
-		
+*/		
 		centerWindow(this);		
 	}
 	

@@ -19,6 +19,15 @@ public abstract class MouseableGLWindow implements MouseListener,
     //initial values are overwritten immediately - this is the correct initial value for the default model
 	protected Observer observer = new Observer(0, 0, 49.5);
 	
+	public void updateObserverPerspectiveWithShifts( double thetax, double thetay ) {
+		observer.updatePerspective(thetax, thetay);
+		myCanvas.repaint();
+	}
+	
+	public double[] getObserverPerspectiveAngles() {
+		return new double[] { observer.heading, observer.pitch };
+	}
+	
 	protected GLCanvas myCanvas;
 	protected int oldx, oldy;
 	public boolean dragging = false;

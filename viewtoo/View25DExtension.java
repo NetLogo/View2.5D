@@ -1,5 +1,7 @@
 package viewtoo;
 
+import org.nlogo.api.Agent;
+import org.nlogo.api.AgentSet;
 import org.nlogo.api.DefaultClassManager;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
@@ -13,10 +15,16 @@ import org.nlogo.api.PrimitiveManager;
 
 import org.nlogo.gl.render.JOGLException;
 import org.nlogo.gl.render.JOGLLoader;
+import org.nlogo.nvm.ExtensionContext;
+import org.nlogo.nvm.Reporter;
 
 
+import viewtoo.prims.GetObserverPerspective;
+import viewtoo.prims.GetZScale;
 import viewtoo.prims.MakePatchView;
 import viewtoo.prims.MakeTurtleView;
+import viewtoo.prims.SetObserverPerspective;
+import viewtoo.prims.SetZScale;
 import viewtoo.prims.UpdateAllViews;
 import viewtoo.prims.UpdateOnePatchView;
 import viewtoo.prims.UpdateOneTurtleView;
@@ -82,6 +90,7 @@ public class View25DExtension extends DefaultClassManager {
 	@Override
 	public void load(PrimitiveManager primManager) throws ExtensionException {
 		primManager.addPrimitive("patch-view", new MakePatchView() );
+		//primManager.addPrimitive("patch-view-with-turtles", new DecoratedPatchView() );
 		primManager.addPrimitive("turtle-view", new MakeTurtleView() );
 		
 		primManager.addPrimitive("update-patch-view", new UpdateOnePatchView() );
@@ -93,9 +102,63 @@ public class View25DExtension extends DefaultClassManager {
 		primManager.addPrimitive("remove-turtle-view", new RemoveOneTurtleView() );
 		
 		primManager.addPrimitive("count-windows", new GetWindowCount() );
+		
+		primManager.addPrimitive("testblock", new TestBlock() );
+		
+		primManager.addPrimitive("set-z-scale", new SetZScale() );
+		primManager.addPrimitive("get-z-scale", new GetZScale() );
+		
+		primManager.addPrimitive("set-observer-perspective", new SetObserverPerspective() );
+		primManager.addPrimitive("get-observer-perspective", new GetObserverPerspective() );
 	}
 	
+	/*public static class DecoratedPatchView extends DefaultCommand {
+
+		@Override
+		public void perform(Argument[] arg0, Context arg1)
+				throws ExtensionException, LogoException {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}*/
 	
+	
+	//TESTING TOWARD GETTING BETTER SYNTAX THAN THE TASK ?1 SYNTAX.
+	public static class TestBlock extends DefaultReporter {
+		
+		@Override
+		public String getAgentClassString() {
+			return "OTPL:OTPL";
+		}
+		
+		@Override
+		public Syntax getSyntax() {
+			int[] argType = {Syntax.AgentsetType(), Syntax.NumberBlockType()};
+			int retType = Syntax.NumberType();
+			return  Syntax.reporterSyntax( argType, retType, "OTPL", "?" );
+		}
+
+		@Override
+		public Object report(Argument[] args, Context ctx) throws ExtensionException, LogoException {
+			AgentSet as = args[0].getAgentSet();
+			Reporter reporter = ((org.nlogo.nvm.Argument)args[1]).getReporter();
+
+			try {
+				Double resul = 0.0;
+				for (Agent a: as.agents() ) {
+					org.nlogo.agent.Agent agent = (org.nlogo.agent.Agent)a;						
+					org.nlogo.nvm.Context con = ((ExtensionContext)ctx).nvmContext();
+					resul += (Double)(new org.nlogo.nvm.Context(con, agent).evaluateReporter(agent, reporter));
+				}
+				return resul;
+			}
+			catch (Exception e1) {
+				throw new ExtensionException("Error in processing your reporter. " + e1);
+			} 
+		}
+		
+	}
 	
 	//utility (or less user-facing) primitives
 	public static class GetWindowCount extends DefaultReporter {

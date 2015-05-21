@@ -22,6 +22,7 @@ public abstract class VarviewWindow extends JFrame {
 	//scale factor for the rendered turtle/patch variable.
 	public double zScale = 1.0;
 	public abstract void zoomZby( double amount );
+	public abstract MouseableGLWindow getGLWindow();
 	
 	protected JPanel mainPanel;
 	private VarviewDashboard dashboard;

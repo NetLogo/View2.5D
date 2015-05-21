@@ -26,6 +26,7 @@ public class PatchView extends VarviewWindow {
 	private static final long serialVersionUID = 1L;
 	
 	private PatchGL glManager;
+	public MouseableGLWindow getGLWindow() { return glManager; }
 	private ReporterTask reporterTask;
 	
 	public PatchViewOptions viewOptions;
@@ -70,11 +71,12 @@ public class PatchView extends VarviewWindow {
 		setSize(new Dimension(600, 650));
 		xExpand = 0;
 		yExpand = 50;
-		this.addComponentListener( new ComponentAdapter() {
+/*		this.addComponentListener( new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
 				applySquareConstraint(xExpand, yExpand, mainPanel);
 			}
 		});
+*/
 		centerWindow(this);
 	}
 	
