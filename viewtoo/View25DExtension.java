@@ -31,6 +31,7 @@ import viewtoo.prims.UpdateOneTurtleView;
 import viewtoo.view.TurtleView;
 import viewtoo.view.VarviewWindow;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class View25DExtension extends DefaultClassManager {
@@ -100,6 +101,9 @@ public class View25DExtension extends DefaultClassManager {
 		
 		primManager.addPrimitive("remove-patch-view", new RemoveOnePatchView() );
 		primManager.addPrimitive("remove-turtle-view", new RemoveOneTurtleView() );
+		primManager.addPrimitive("remove-all-patch-views", new RemoveAllPatchViews() );
+		primManager.addPrimitive("remove-all-turtle-views", new RemoveAllTurtleViews() );
+		
 		
 		primManager.addPrimitive("count-windows", new GetWindowCount() );
 		
@@ -171,6 +175,11 @@ public class View25DExtension extends DefaultClassManager {
 	
 	public static class RemoveOnePatchView extends DefaultCommand {
 		@Override
+		public String getAgentClassString() {
+			return "O";
+		}
+		
+		@Override
 		public Syntax getSyntax() {
 			int[] argType = {Syntax.StringType()};
 			return  Syntax.commandSyntax( argType );
@@ -186,6 +195,11 @@ public class View25DExtension extends DefaultClassManager {
 	
 	public static class RemoveOneTurtleView extends DefaultCommand {
 		@Override
+		public String getAgentClassString() {
+			return "O";
+		}
+		
+		@Override
 		public Syntax getSyntax() {
 			int[] argType = {Syntax.StringType()};
 			return  Syntax.commandSyntax( argType );
@@ -198,22 +212,69 @@ public class View25DExtension extends DefaultClassManager {
 			removeTurtleWindowWithTitle( title );
 		}
 	}
+	
+	public static class RemoveAllTurtleViews extends DefaultCommand {
+		@Override
+		public String getAgentClassString() {
+			return "O";
+		}
+		
+		@Override
+		public void perform(Argument[] args, Context arg1)
+				throws ExtensionException, LogoException {
+			ArrayList<String> namesToDelete =  new ArrayList<String>();
+			namesToDelete.addAll( turtleWindowMap.keySet() );
+			for ( String name : namesToDelete ) {
+				VarviewWindow tvw = turtleWindowMap.get(name);
+				turtleWindowMap.remove(name);
+				tvw.dispose();
+			}
+		}
+	}
+
+	public static class RemoveAllPatchViews extends DefaultCommand {
+		@Override
+		public String getAgentClassString() {
+			return "O";
+		}
+		
+		@Override
+		public void perform(Argument[] args, Context arg1)
+				throws ExtensionException, LogoException {
+			
+			ArrayList<String> namesToDelete =  new ArrayList<String>();
+			namesToDelete.addAll( patchWindowMap.keySet() );
+			for ( String name : namesToDelete ) {
+				VarviewWindow vvw = patchWindowMap.get(name);
+				patchWindowMap.remove(name);
+				vvw.dispose();
+			}
+		}
+	}
 	//end utility primitives
 
 
-	//ensure that the windows are cleaned up when we unload the extension
-	@Override
-	public void unload(ExtensionManager em) {
+	
+	public static void disposeAllPatchViews() {
 		for (VarviewWindow win: patchWindowMap.values() ) {
 			if ( win != null ) {
 				win.dispose();
 			}
 		}
+	}
+	
+	public static void disposeAllTurtleViews() {
 		for (TurtleView tv : turtleWindowMap.values() ) {
 			if ( tv != null ) {
 				tv.dispose();
 			}
 		}
+	}
+	//ensure that the windows are cleaned up when we unload the extension
+	@Override
+	public void unload(ExtensionManager em) {
+		disposeAllPatchViews();
+		disposeAllTurtleViews();
 	}
 
 
