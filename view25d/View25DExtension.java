@@ -1,7 +1,5 @@
 package view25d;
 
-import org.nlogo.api.Agent;
-import org.nlogo.api.AgentSet;
 import org.nlogo.api.DefaultClassManager;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
@@ -15,7 +13,6 @@ import org.nlogo.api.PrimitiveManager;
 
 import org.nlogo.gl.render.JOGLException;
 import org.nlogo.gl.render.JOGLLoader;
-
 
 import view25d.prims.GetObserverPerspective;
 import view25d.prims.GetZScale;
