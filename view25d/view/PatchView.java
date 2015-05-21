@@ -1,4 +1,4 @@
-package viewtoo.view;
+package view25d.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,8 +18,8 @@ import org.nlogo.api.Patch;
 import org.nlogo.api.ReporterTask;
 import org.nlogo.app.App;
 
-import viewtoo.View25DExtension;
-import viewtoo.view.gl.PatchGL;
+import view25d.View25DExtension;
+import view25d.view.gl.PatchGL;
 
 public class PatchView extends VarviewWindow {
 

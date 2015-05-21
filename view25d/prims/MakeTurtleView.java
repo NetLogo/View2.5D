@@ -1,4 +1,4 @@
-package viewtoo.prims;
+package view25d.prims;
 
 import javax.swing.SwingUtilities;
 
@@ -15,8 +15,8 @@ import org.nlogo.api.Turtle;
 import org.nlogo.api.World;
 import org.nlogo.app.App;
 
-import viewtoo.View25DExtension;
-import viewtoo.view.TurtleView;
+import view25d.View25DExtension;
+import view25d.view.TurtleView;
 
 public class MakeTurtleView extends DefaultCommand {
 

@@ -1,4 +1,4 @@
-package viewtoo.view.gl;
+package view25d.view.gl;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -17,9 +17,9 @@ import org.nlogo.gl.render.Polygons;
 import org.nlogo.gl.render.Tessellator;
 import org.nlogo.shape.VectorShape;
 
-import viewtoo.view.MouseableGLWindow;
-import viewtoo.view.TurtleValue;
-import viewtoo.view.TurtleView;
+import view25d.view.MouseableGLWindow;
+import view25d.view.TurtleValue;
+import view25d.view.TurtleView;
 
 public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 

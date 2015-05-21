@@ -1,4 +1,4 @@
-package viewtoo.view.gl;
+package view25d.view.gl;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;

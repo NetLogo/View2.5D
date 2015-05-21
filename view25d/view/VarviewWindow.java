@@ -1,4 +1,4 @@
-package viewtoo.view;
+package view25d.view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 import org.nlogo.api.Context;
 
-import viewtoo.View25DExtension;
+import view25d.View25DExtension;
 
 public abstract class VarviewWindow extends JFrame {
 

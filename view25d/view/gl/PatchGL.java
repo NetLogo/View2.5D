@@ -1,4 +1,4 @@
-package viewtoo.view.gl;
+package view25d.view.gl;
 
 import java.awt.Color;
 
@@ -8,9 +8,9 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
-import viewtoo.view.MouseableGLWindow;
-import viewtoo.view.PatchValue;
-import viewtoo.view.PatchView;
+import view25d.view.MouseableGLWindow;
+import view25d.view.PatchValue;
+import view25d.view.PatchView;
 
 public class PatchGL extends MouseableGLWindow implements GLEventListener {
 	GLU glu;

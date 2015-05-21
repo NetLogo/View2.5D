@@ -1,4 +1,4 @@
-package viewtoo;
+package view25d;
 
 import org.nlogo.api.Agent;
 import org.nlogo.api.AgentSet;
@@ -19,18 +19,18 @@ import org.nlogo.nvm.ExtensionContext;
 import org.nlogo.nvm.Reporter;
 
 
-import viewtoo.prims.GetObserverPerspective;
-import viewtoo.prims.GetZScale;
-import viewtoo.prims.MakePatchView;
-import viewtoo.prims.MakeTurtleView;
-import viewtoo.prims.SetObserverPerspective;
-import viewtoo.prims.SetTurtleStemThickness;
-import viewtoo.prims.SetZScale;
-import viewtoo.prims.UpdateAllViews;
-import viewtoo.prims.UpdateOnePatchView;
-import viewtoo.prims.UpdateOneTurtleView;
-import viewtoo.view.TurtleView;
-import viewtoo.view.VarviewWindow;
+import view25d.prims.GetObserverPerspective;
+import view25d.prims.GetZScale;
+import view25d.prims.MakePatchView;
+import view25d.prims.MakeTurtleView;
+import view25d.prims.SetObserverPerspective;
+import view25d.prims.SetTurtleStemThickness;
+import view25d.prims.SetZScale;
+import view25d.prims.UpdateAllViews;
+import view25d.prims.UpdateOnePatchView;
+import view25d.prims.UpdateOneTurtleView;
+import view25d.view.TurtleView;
+import view25d.view.VarviewWindow;
 
 import java.util.ArrayList;
 import java.util.HashMap;

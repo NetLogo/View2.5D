@@ -1,4 +1,4 @@
-package viewtoo.prims;
+package view25d.prims;
 
 import javax.swing.SwingUtilities;
 
@@ -14,8 +14,8 @@ import org.nlogo.api.Syntax;
 import org.nlogo.api.World;
 import org.nlogo.app.App;
 
-import viewtoo.View25DExtension;
-import viewtoo.view.PatchView;
+import view25d.View25DExtension;
+import view25d.view.PatchView;
 
 public class MakePatchView extends DefaultCommand {
 

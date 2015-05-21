@@ -1,4 +1,4 @@
-package viewtoo.view;
+package view25d.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -22,8 +22,8 @@ import org.nlogo.api.ReporterTask;
 import org.nlogo.api.Turtle;
 import org.nlogo.app.App;
 
-import viewtoo.View25DExtension;
-import viewtoo.view.gl.TurtleGL;
+import view25d.View25DExtension;
+import view25d.view.gl.TurtleGL;
 
 public class TurtleView extends VarviewWindow {
 

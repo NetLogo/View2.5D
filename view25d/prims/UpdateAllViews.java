@@ -1,4 +1,4 @@
-package viewtoo.prims;
+package view25d.prims;
 
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
@@ -6,8 +6,8 @@ import org.nlogo.api.DefaultCommand;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
 
-import viewtoo.View25DExtension;
-import viewtoo.view.VarviewWindow;
+import view25d.View25DExtension;
+import view25d.view.VarviewWindow;
 
 public class UpdateAllViews extends DefaultCommand {
 

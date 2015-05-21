@@ -1,4 +1,4 @@
-package viewtoo.view;
+package view25d.view;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;

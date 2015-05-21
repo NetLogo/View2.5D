@@ -1,17 +1,16 @@
-package viewtoo.prims;
+package view25d.prims;
 
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.DefaultReporter;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
-import org.nlogo.api.LogoListBuilder;
 import org.nlogo.api.Syntax;
 
-import viewtoo.View25DExtension;
-import viewtoo.view.VarviewWindow;
+import view25d.View25DExtension;
+import view25d.view.VarviewWindow;
 
-public class GetObserverPerspective extends DefaultReporter {
+public class GetZScale extends DefaultReporter {
 
 	@Override
 	public String getAgentClassString() {
@@ -21,10 +20,9 @@ public class GetObserverPerspective extends DefaultReporter {
 	@Override
 	public Syntax getSyntax() {
 		int[] argType = {Syntax.StringType()};
-		int retType = Syntax.ListType();
+		int retType = Syntax.NumberType();
 		return  Syntax.reporterSyntax( argType, retType, "OTPL", "?" );
 	}
-	
 	
 	@Override
 	public Object report(Argument[] args, Context ctxt)
@@ -35,21 +33,17 @@ public class GetObserverPerspective extends DefaultReporter {
 		VarviewWindow vvwp = View25DExtension.patchWindowMap.get(whichView);
  		VarviewWindow vvwt = View25DExtension.turtleWindowMap.get(whichView);
  		
- 		double[] scale = {0.0, 0.0};
+ 		double scale = 0;
  		
 		if (vvwp != null) {
-			scale = vvwp.getGLWindow().getObserverPerspectiveAngles();
+			scale = vvwp.zScale;
 		}
 		
 		if (vvwt != null) {
-			scale = vvwt.getGLWindow().getObserverPerspectiveAngles();
+			scale = vvwt.zScale;
 		}
 		
-		LogoListBuilder llb = new LogoListBuilder();
-		llb.add(scale[0]);
-		llb.add(scale[1]);
-		return llb.toLogoList();
+		return new Double(scale);
 	}
-
 
 }
