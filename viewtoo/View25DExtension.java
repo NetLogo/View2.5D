@@ -24,6 +24,7 @@ import viewtoo.prims.GetZScale;
 import viewtoo.prims.MakePatchView;
 import viewtoo.prims.MakeTurtleView;
 import viewtoo.prims.SetObserverPerspective;
+import viewtoo.prims.SetTurtleStemThickness;
 import viewtoo.prims.SetZScale;
 import viewtoo.prims.UpdateAllViews;
 import viewtoo.prims.UpdateOnePatchView;
@@ -111,6 +112,8 @@ public class View25DExtension extends DefaultClassManager {
 		
 		primManager.addPrimitive("set-z-scale", new SetZScale() );
 		primManager.addPrimitive("get-z-scale", new GetZScale() );
+		
+		primManager.addPrimitive("set-turtle-stem-thickness", new SetTurtleStemThickness() );
 		
 		primManager.addPrimitive("set-observer-perspective", new SetObserverPerspective() );
 		primManager.addPrimitive("get-observer-perspective", new GetObserverPerspective() );

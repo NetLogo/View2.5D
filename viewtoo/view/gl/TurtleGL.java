@@ -26,7 +26,7 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 	GLU glu;
     
     //handles for compiled GL shapes
-    int patchTileListHandle, pinHeadListHandle, axisHeadHandle;
+    int patchTileListHandle, stemSkyscraperHandle, pinHeadListHandle, axisHeadHandle;
     HashMap<String,Integer> compiledShapes = new HashMap<String, Integer>();
    
     //GLU quadric for use in making spheres and in setting up NLGLU helper class for turtle shapes
@@ -48,6 +48,13 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 		 glu.gluQuadricNormals(quadric, GLU.GLU_SMOOTH);
 		 NetLogoGLU nlGLU = new NetLogoGLU();
 		 nlGLU.setQuadric(quadric);
+		 
+		 stemSkyscraperHandle = gl.glGenLists(1);
+		 gl.glNewList(stemSkyscraperHandle, GL.GL_COMPILE);
+		 //Compilables.box(gl, .4f, 1.0f);
+		 final int hexSlices = 6;
+		 Compilables.ThickStem(gl, glu, quadric, 1.0, hexSlices);
+		 gl.glEndList();
 		 
 		 pinHeadListHandle = gl.glGenLists(1);
 		 final float radius = 0.4f;
@@ -168,19 +175,29 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 	    		}
 	    	}
     	}
-
+    	
+    	
+    	double stemThickness = ((TurtleView)myViewer).viewOptions.getStemThickness();
     	for (TurtleValue tv : ((TurtleView)myViewer).getCopyOfReporterValues()) {
     		gl.glPushMatrix();
     		double zval = myViewer.zScale * tv.reporterValue;
     		gl.glTranslated(tv.xcor , tv.ycor, zval);
-
     		setColorAndStandardMaterial( gl, .5f, .5f, .5f);
-    		gl.glLineWidth(0.1f);
-    		gl.glBegin (GL.GL_LINES);
-    		gl.glVertex3i (0, 0, 0);
-    		gl.glVertex3d (0, 0, -zval);
-    		gl.glEnd();
-
+    		
+    		if ( stemThickness == 0.0 ) {
+	    		gl.glLineWidth(0.1f);
+	    		gl.glBegin (GL.GL_LINES);
+	    		gl.glVertex3i (0, 0, 0);
+	    		gl.glVertex3d (0, 0, -zval);
+	    		gl.glEnd();
+    		} else {
+    			gl.glPushMatrix();
+    			gl.glTranslated(0, 0, -zval);
+				gl.glScaled(stemThickness, stemThickness, zval);
+				gl.glCallList(stemSkyscraperHandle);
+				gl.glPopMatrix();
+    		}
+    		
     		float red = 0.8f;
     		float green = 0.8f;
     		float blue = 0.45f;

@@ -11,6 +11,7 @@ import javax.swing.event.ChangeListener;
 public class TurtleViewOptions extends JPanel implements ChangeListener {
 	private static final long serialVersionUID = 1L;
 	
+	private double stemThickness = 0.0;
 	TurtleView myWindow;
 	JCheckBox color, size, shape, pcolor;
 	
@@ -41,6 +42,12 @@ public class TurtleViewOptions extends JPanel implements ChangeListener {
 	public boolean showSize() { return size.isSelected(); }
 	public boolean showShape() { return shape.isSelected(); }
 	public boolean usePColor() { return pcolor.isSelected(); }
+	public double getStemThickness() { return stemThickness; }
+	public void setStemThickness(double thickness) { 
+		if (thickness > 0) { stemThickness = thickness;}
+		else { stemThickness = 0; }
+	}
+	
 
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
