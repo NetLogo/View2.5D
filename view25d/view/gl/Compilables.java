@@ -154,9 +154,9 @@ public final class Compilables {
 	
 	public static void ThickStem(GL gl, GLU glu, GLUquadric quadr, final double sz, final int smoothness) {
 		 
-		glu.gluCylinder(quadr, sz / 2.0, sz / 2.0, .8*sz, smoothness, smoothness);
-		gl.glTranslated(0, 0, .8*sz);
-		glu.gluCylinder(quadr, sz / 2.0, 0.0, .2*sz, smoothness, smoothness);
+		glu.gluCylinder(quadr, sz / 2.0, sz / 2.0, sz, smoothness, smoothness);
+		//gl.glTranslated(0, 0, .8*sz);
+		//glu.gluCylinder(quadr, sz / 2.0, 0.0, .2*sz, smoothness, smoothness);
 	}
 	
 	

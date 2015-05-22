@@ -14,6 +14,7 @@ import org.nlogo.api.PrimitiveManager;
 import org.nlogo.gl.render.JOGLException;
 import org.nlogo.gl.render.JOGLLoader;
 
+import view25d.prims.DecoratePatchView;
 import view25d.prims.GetObserverPerspective;
 import view25d.prims.GetZScale;
 import view25d.prims.MakePatchView;
@@ -87,8 +88,8 @@ public class View25DExtension extends DefaultClassManager {
 	@Override
 	public void load(PrimitiveManager primManager) throws ExtensionException {
 		primManager.addPrimitive("patch-view", new MakePatchView() );
-		//primManager.addPrimitive("decorate-patch-view", new DecoratePatchView() );
-		//primManager.addPrimitive("undecorate-patch-view", new UndecoratePatchView() );
+		primManager.addPrimitive("decorate-patch-view", new DecoratePatchView(true) );
+		primManager.addPrimitive("undecorate-patch-view", new DecoratePatchView(false) );
 		
 		primManager.addPrimitive("turtle-view", new MakeTurtleView() );
 		

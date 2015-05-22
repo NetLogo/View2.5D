@@ -215,6 +215,7 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
     		setColorAndStandardMaterial( gl, red, green, blue);
     		if (((TurtleView)myViewer).viewOptions.showShape() ) {
     			observer.applyNormal(gl);
+    			if (stemThickness > 0) { gl.glTranslated(0, 0, stemThickness / 2); }
     			gl.glScaled(3.0, 3.0, 3.0);
     			gl.glCallList(compiledShapes.get(tv.shape));
     		}

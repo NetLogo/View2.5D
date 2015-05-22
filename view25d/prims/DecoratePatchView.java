@@ -8,14 +8,21 @@ import org.nlogo.api.LogoException;
 import org.nlogo.api.Syntax;
 
 import view25d.View25DExtension;
-import view25d.view.TurtleView;
+import view25d.view.PatchView;
 import view25d.view.VarviewWindow;
 
-public class SetTurtleStemThickness extends DefaultCommand {
+public class DecoratePatchView extends DefaultCommand {
 
+	boolean onOff;
+	
+	public DecoratePatchView( boolean onOrOff ) {
+		this.onOff = onOrOff;
+	}
+	
+	
 	@Override
     public Syntax getSyntax() {
-       int[] argTypes = {Syntax.StringType(), Syntax.NumberType()};
+       int[] argTypes = {Syntax.StringType()};
        return  Syntax.commandSyntax(argTypes);
     }
 	
@@ -30,14 +37,11 @@ public class SetTurtleStemThickness extends DefaultCommand {
 		
 		String whichView = args[0].getString();
 		
-		VarviewWindow vvwt = View25DExtension.turtleWindowMap.get(whichView);
-		if (vvwt != null) {
-			double newThickness = args[1].getDoubleValue();
-			if ( newThickness < 0 ) { newThickness = 0.0; }
-			if ( newThickness > 1 ) { newThickness = 1.0; }
-			
-			((TurtleView)vvwt).viewOptions.setStemThickness(newThickness);
-			((TurtleView)vvwt).refresh();
+		VarviewWindow pvwt = View25DExtension.patchWindowMap.get(whichView);
+		
+		if (pvwt != null) {
+			((PatchView)pvwt).doingTurtles = onOff;
+			((PatchView)pvwt).manuallyRefreshReporterView(context);
 		}
 
 	}
