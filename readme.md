@@ -5,15 +5,30 @@ To offer visualization for Patch and Turtle reporters, in real time, in a simula
 
 ###Status:
 Version 0.1 released 08/26/14
+Version 0.9 presented CCL 05/22/15
 
 ###Primitives:
 
 - view2.5d:patch-view {Title: String} {Reporter: Task}
 > This *command* primitive must be called from the Observer context.  (Attempting to call from another context causes an error)
-> The Title is a String, which will be used to label the new Window and to call for subsequent updates.
+> The Title is a String, which will be used to label the new Window and to call for subsequent updates and modifications.
 > Specification of the Reporter uses the NetLogo task syntax, from the Observer perspective.  
 >> Example:  
 >> view2.5d:patch-view "Test" [[pxcor] of ?1]
+
+- view2.5d:decorate-patch-view {Title: String} 
+> This *command* primitive must be called from the Observer context.  (Attempting to call from another context causes an error)
+> The Title is a String, the label of an existing Patch View Window.
+> Effect:  draws the turtles of the model at their current location, on top of the Patch view display
+>> Example:  
+>> view2.5d:decorate-patch-view "Test" 
+
+- view2.5d:undecorate-patch-view {Title: String} 
+> This *command* primitive must be called from the Observer context.  (Attempting to call from another context causes an error)
+> The Title is a String, the label of an existing Patch View Window.
+> Effect:  STOPS drawing the turtles of the model at their current location, on top of the Patch view display
+>> Example:  
+>> view2.5d:undecorate-patch-view "Test"
 
 - view2.5d:turtle-view {Title: String} {Agents: TurtleSet} {Reporter: Task}
 > This *command* primitive must be called from the Observer context.  (Attempting to call from another context causes an error)
@@ -37,6 +52,35 @@ Version 0.1 released 08/26/14
 > Updates only the turtle-view window with the specified title (if any). 
 > The turtle-set selector must be supplied to refresh the set of turtles.
 
+- view2.5d:get-z-scale {Title: String} 
+> This *reporter* primitive must be called from the Observer context.  
+> Returns the current z-scale of the turtle-view or patch-view window with the specified title (if any). 
+
+- view2.5d:set-z-scale {Title: String} {Double: new z-scale}
+> This *command* primitive must be called from the Observer context.  
+> Updates only the turtle-view or patch-view window with the specified title (if any). 
+> The view is now displayed with the new z-scale.
+
+- view2.5d:set-turtle-stem-thickness {Title: String} {Double: thickness}
+> This *command* primitive must be called from the Observer context.  
+> Updates only the turtle-view window with the specified title (if any). 
+> Turtles are now drawn with "pins" or "stems" that have the specified thickness (instead of the hairline default)
+
+- view2.5d:set-turtle-stem-thickness {Title: String} {Double: thickness}
+> This *command* primitive must be called from the Observer context.  
+> Updates only the turtle-view window with the specified title (if any). 
+> Turtles are now drawn with "pins" or "stems" that have the specified thickness (instead of the hairline default)
+
+- view2.5d:set-observer-perspective {Title: String} {Double: heading} {Double: pitch}
+> This *command* primitive must be called from the Observer context.  
+> Updates only the turtle-view window with the specified title (if any). 
+> The observer's angular perspective (the place on an imaginary sphere at the zoom distance is updated to obey heading & pitch given)
+
+- view2.5d:get-observer-perspective {Title: String} 
+> This *reporter* primitive must be called from the Observer context.  
+> Returns a list reflecting the observer's angular perspective { heading pitch } (the place on an imaginary sphere at the zoom distance is updated to obey heading & pitch given)
+
+
 ####OTHER LESS IMPORTANT PRIMITIVES:
 
 - view2.5d:remove-patch-view {Title: String}
@@ -44,6 +88,13 @@ Version 0.1 released 08/26/14
 
 - view2.5d:remove-turtle-view {Title: String}
 > This *command* primitive closes and removes the specified turtle view programmatically (equivalent to closing the window manually).
+
+- view2.5d:remove-all-patch-views 
+> This *command* primitive closes and removes all patch views programmatically (equivalent to closing the windows manually).
+
+- view2.5d:remove-all-turtle-views 
+> This *command* primitive closes and removes all turtle views programmatically (equivalent to closing the windows manually).
+
 
 - view2.5d:count-windows
 > This *reporter* primitive returns the number of turtle and patch views that are currently active.
