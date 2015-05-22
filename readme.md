@@ -4,8 +4,8 @@
 To offer visualization for Patch and Turtle reporters, in real time, in a simulation's context.
 
 ###Status:
-Version 0.1 released 08/26/14
-Version 0.9 presented CCL 05/22/15
+>Version 0.1 released 08/26/14
+>Version 0.9 presented CCL 05/22/15
 
 ###Primitives:
 
@@ -60,11 +60,6 @@ Version 0.9 presented CCL 05/22/15
 > This *command* primitive must be called from the Observer context.  
 > Updates only the turtle-view or patch-view window with the specified title (if any). 
 > The view is now displayed with the new z-scale.
-
-- view2.5d:set-turtle-stem-thickness {Title: String} {Double: thickness}
-> This *command* primitive must be called from the Observer context.  
-> Updates only the turtle-view window with the specified title (if any). 
-> Turtles are now drawn with "pins" or "stems" that have the specified thickness (instead of the hairline default)
 
 - view2.5d:set-turtle-stem-thickness {Title: String} {Double: thickness}
 > This *command* primitive must be called from the Observer context.  
