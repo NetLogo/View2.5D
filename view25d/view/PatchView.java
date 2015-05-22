@@ -35,7 +35,7 @@ public class PatchView extends VarviewWindow {
 	
 	public PatchValue[][] reporterValueMatrix;
 	
-	public boolean doingTurtles = true;
+	public boolean doingTurtles = false;
 	public ArrayList<TurtleValue> turtleValues = new ArrayList<TurtleValue>();
 
 	public PatchView(String title, ReporterTask rt) {
