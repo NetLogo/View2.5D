@@ -120,6 +120,7 @@ public class PatchView extends VarviewWindow {
 				double val = (Double)reporterTask.report(context, new Object[]{t});
 				Color c = org.nlogo.api.Color.getColor(t.color());
 				TurtleValue tv = new TurtleValue( t.shape(), c, t.size(), t.xcor(), t.ycor(), val );
+				tv.setHeading(t.heading());
 				turtleValues.add(tv);
 			}
 		}

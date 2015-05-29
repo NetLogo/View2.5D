@@ -257,11 +257,12 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 			setColorAndStandardMaterial( gl, red, green, blue);
 			
 			double zval = myViewer.zScale * tv.reporterValue;
-    		gl.glTranslated(tv.xcor , tv.ycor, zval + .1);
+    		gl.glTranslated(tv.xcor , tv.ycor, zval + .001);
     		
 			//observer.applyNormal(gl);  //DON'T turn the turtles to be 'sprites'
     		gl.glScaled(tv.size, tv.size, tv.size);
 			gl.glScaled(3.0, 3.0, 3.0);
+			gl.glRotated(-1 * tv.heading, 0, 0, 1);  //Math.PI/3
 			gl.glCallList(compiledShapes.get(tv.shape));
 			
 			gl.glPopMatrix();
