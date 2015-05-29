@@ -95,7 +95,8 @@ public class TurtleView extends VarviewWindow {
 	}
 	
 	private void updateArrayList(Context context) {
-		turtleReporterValues.clear();
+		//turtleReporterValues.clear();
+		turtleReporterValues = new ArrayList<TurtleValue>();
 		for (Agent a : myAgents.agents()) {
 			Turtle turtle = (Turtle)a;
 			Color c = org.nlogo.api.Color.getColor(turtle.color());

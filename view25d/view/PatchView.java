@@ -111,7 +111,8 @@ public class PatchView extends VarviewWindow {
 				}
 			}
 		}
-		turtleValues.clear();
+		//turtleValues.clear();
+		turtleValues = new ArrayList<TurtleValue>();
 		if (doingTurtles) {
 			AgentSet as = App.app().workspace().world().turtles();
 			for (Agent a : as.agents() ) {
