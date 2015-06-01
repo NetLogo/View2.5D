@@ -66,11 +66,11 @@ To offer visualization for Patch and Turtle reporters, in real time, in a simula
 > Updates only the turtle-view window with the specified title (if any). 
 > Turtles are now drawn with "pins" or "stems" that have the specified thickness (instead of the hairline default)
 
-- view2.5d:get-observer-perspective {Title: String} 
+- view2.5d:get-observer-angles {Title: String} 
 > This *reporter* primitive must be called from the Observer context.  
 > Returns a list reflecting the observer's angular perspective { heading pitch } (the place on an imaginary sphere at the zoom distance is updated to obey heading & pitch given)
 
-- view2.5d:set-observer-perspective {Title: String} {Double: heading} {Double: pitch}
+- view2.5d:set-observer-angles {Title: String} {Double: heading} {Double: pitch}
 > This *command* primitive must be called from the Observer context.  
 > Updates only the turtle-view window with the specified title (if any). 
 > The observer's angular perspective (the place on an imaginary sphere at the zoom distance is updated to obey heading & pitch given)

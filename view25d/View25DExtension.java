@@ -15,11 +15,11 @@ import org.nlogo.gl.render.JOGLException;
 import org.nlogo.gl.render.JOGLLoader;
 
 import view25d.prims.DecoratePatchView;
-import view25d.prims.GetObserverPerspective;
+import view25d.prims.GetObserverAngles;
 import view25d.prims.GetZScale;
 import view25d.prims.MakePatchView;
 import view25d.prims.MakeTurtleView;
-import view25d.prims.SetObserverPerspective;
+import view25d.prims.SetObserverAngles;
 import view25d.prims.SetTurtleStemThickness;
 import view25d.prims.SetZScale;
 import view25d.prims.UpdateAllViews;
@@ -110,8 +110,11 @@ public class View25DExtension extends DefaultClassManager {
 		
 		primManager.addPrimitive("set-turtle-stem-thickness", new SetTurtleStemThickness() );
 		
-		primManager.addPrimitive("set-observer-perspective", new SetObserverPerspective() );
-		primManager.addPrimitive("get-observer-perspective", new GetObserverPerspective() );
+		primManager.addPrimitive("set-observer-angles", new SetObserverAngles() );
+		primManager.addPrimitive("get-observer-angles", new GetObserverAngles() );
+		//primManager.addPrimitive("set-observer-xyz", new SetObserverXYZ() );
+		//primManager.addPrimitive("get-observer-xyz", new GetObserverXYZ() );
+		
 	}
 	
 	/*public static class DecoratedPatchView extends DefaultCommand {

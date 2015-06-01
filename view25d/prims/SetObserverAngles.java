@@ -11,7 +11,7 @@ import view25d.View25DExtension;
 import view25d.view.MouseableGLWindow;
 import view25d.view.VarviewWindow;
 
-public class SetObserverPerspective extends DefaultCommand {
+public class SetObserverAngles extends DefaultCommand {
 
 	@Override
     public Syntax getSyntax() {

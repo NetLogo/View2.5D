@@ -11,7 +11,7 @@ import org.nlogo.api.Syntax;
 import view25d.View25DExtension;
 import view25d.view.VarviewWindow;
 
-public class GetObserverPerspective extends DefaultReporter {
+public class GetObserverAngles extends DefaultReporter {
 
 	@Override
 	public String getAgentClassString() {
@@ -35,19 +35,19 @@ public class GetObserverPerspective extends DefaultReporter {
 		VarviewWindow vvwp = View25DExtension.patchWindowMap.get(whichView);
  		VarviewWindow vvwt = View25DExtension.turtleWindowMap.get(whichView);
  		
- 		double[] scale = {0.0, 0.0};
+ 		double[] angles = {0.0, 0.0};
  		
 		if (vvwp != null) {
-			scale = vvwp.getGLWindow().getObserverPerspectiveAngles();
+			angles = vvwp.getGLWindow().getObserverPerspectiveAngles();
 		}
 		
 		if (vvwt != null) {
-			scale = vvwt.getGLWindow().getObserverPerspectiveAngles();
+			angles = vvwt.getGLWindow().getObserverPerspectiveAngles();
 		}
 		
 		LogoListBuilder llb = new LogoListBuilder();
-		llb.add(scale[0]);
-		llb.add(scale[1]);
+		llb.add(angles[0]);
+		llb.add(angles[1]);
 		return llb.toLogoList();
 	}
 

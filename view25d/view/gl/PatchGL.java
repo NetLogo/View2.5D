@@ -1,6 +1,7 @@
 package view25d.view.gl;
 
 import java.awt.Color;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -247,25 +248,29 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		}
 		
 		//this will be an empty arraylist if we're not drawing the turtle images on the patch view
-		for ( TurtleValue tv : ((PatchView)myViewer).turtleValues ) {
-			gl.glPushMatrix();
+		try {
+			for ( TurtleValue tv : ((PatchView)myViewer).turtleValues ) {
+				gl.glPushMatrix();
+				
+				float red = (float)(tv.color.getRed()/255f);
+				float green = (float)(tv.color.getGreen()/255f);
+				float blue = (float)(tv.color.getBlue()/255f);
 			
-			float red = (float)(tv.color.getRed()/255f);
-			float green = (float)(tv.color.getGreen()/255f);
-			float blue = (float)(tv.color.getBlue()/255f);
-		
-			setColorAndStandardMaterial( gl, red, green, blue);
-			
-			double zval = myViewer.zScale * tv.reporterValue;
-    		gl.glTranslated(tv.xcor , tv.ycor, zval + .001);
-    		
-			//observer.applyNormal(gl);  //DON'T turn the turtles to be 'sprites'
-    		gl.glScaled(tv.size, tv.size, tv.size);
-			gl.glScaled(3.0, 3.0, 3.0);
-			gl.glRotated(-1 * tv.heading, 0, 0, 1);  //Math.PI/3
-			gl.glCallList(compiledShapes.get(tv.shape));
-			
-			gl.glPopMatrix();
+				setColorAndStandardMaterial( gl, red, green, blue);
+				
+				double zval = myViewer.zScale * tv.reporterValue;
+	    		gl.glTranslated(tv.xcor , tv.ycor, zval + .001); //a tiny bit above the patch rep.
+				//observer.applyNormal(gl);  //DON'T turn the turtles to be 'sprites'
+	    		gl.glScaled(tv.size, tv.size, tv.size);
+				gl.glScaled(3.0, 3.0, 3.0);
+				gl.glRotated(-1 * tv.heading, 0, 0, 1);  //DO reflect the turtles' headings
+				gl.glCallList(compiledShapes.get(tv.shape));
+				
+				gl.glPopMatrix();
+			}
+		} catch (ConcurrentModificationException cme ) {
+			cme.printStackTrace();
+			throw cme;
 		}
 		
 		drawAxesIfDragging(gl, axisHeadHandle);
