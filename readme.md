@@ -20,6 +20,8 @@ To offer visualization for Patch and Turtle reporters, in real time, in a simula
 > This *command* primitive must be called from the Observer context.  (Attempting to call from another context causes an error)
 > The Title is a String, the label of an existing Patch View Window.
 > Effect:  draws the turtles of the model at their current location, on top of the Patch view display
+> NOTE: only has an effect in the "structures" patch view (in the others, the patch value is inclined based on neighbors & gradient)
+> NOTE: for negative patch values, the turtle shapes are drawn below (orbit underneath to see them)
 >> Example:  
 >> view2.5d:decorate-patch-view "Test" 
 

@@ -1,6 +1,7 @@
 package view25d.view.gl;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +98,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		 for (String name : names) {
 			 int handle = gl.glGenLists(1);
 			 VectorShape vs = (VectorShape)App.app().workspace().world().turtleShapeList().shape( name );
-			 compileShape(nlGLU, gl, glu, vs, handle, false );
+			 compileShape(nlGLU, gl, glu, vs, handle, true ); //rotatable is false in sprite case.
 			 compiledShapes.put(name, handle);
 		 }
 		 
@@ -116,8 +117,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
     	glu.gluTessCallback(tess, GLU.GLU_TESS_END_DATA, tessellator);
     	glu.gluTessCallback(tess, GLU.GLU_TESS_COMBINE_DATA, tessellator);
     	glu.gluTessCallback(tess, GLU.GLU_TESS_ERROR_DATA, tessellator);
-    	glu.gluTessProperty
-    	(tess, GLU.GLU_TESS_WINDING_RULE, GLU.GLU_TESS_WINDING_ODD);
+    	glu.gluTessProperty(tess, GLU.GLU_TESS_WINDING_RULE, GLU.GLU_TESS_WINDING_ODD);
     	gl.glNewList(index, GL.GL_COMPILE);
 
     	if (!rotatable) {
@@ -246,33 +246,56 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 				gl.glPopMatrix();
 			}
 		}
-		
+
 		//this will be an empty arraylist if we're not drawing the turtle images on the patch view
-		try {
-			for ( TurtleValue tv : ((PatchView)myViewer).turtleValues ) {
+		//try {
+		if ( ((PatchView)myViewer).viewOptions.structures() ) {
+			//TODO: understand why this copy is necessary (according to Frank it should not be given that i "new" the arraylist on update)
+			ArrayList<TurtleValue> tvalscopy = new ArrayList<TurtleValue>();
+			tvalscopy.addAll(  ((PatchView)myViewer).turtleValues  );
+			//(for testing to prove that it is necessary)
+			//ArrayList<TurtleValue> tvalscopy = ((PatchView)myViewer).turtleValues;
+			for ( TurtleValue tv : tvalscopy ) {
 				gl.glPushMatrix();
-				
-				float red = (float)(tv.color.getRed()/255f);
-				float green = (float)(tv.color.getGreen()/255f);
-				float blue = (float)(tv.color.getBlue()/255f);
-			
-				setColorAndStandardMaterial( gl, red, green, blue);
-				
-				double zval = myViewer.zScale * tv.reporterValue;
-	    		gl.glTranslated(tv.xcor , tv.ycor, zval + .001); //a tiny bit above the patch rep.
-				//observer.applyNormal(gl);  //DON'T turn the turtles to be 'sprites'
-	    		gl.glScaled(tv.size, tv.size, tv.size);
-				gl.glScaled(3.0, 3.0, 3.0);
-				gl.glRotated(-1 * tv.heading, 0, 0, 1);  //DO reflect the turtles' headings
-				gl.glCallList(compiledShapes.get(tv.shape));
-				
+				try {
+					//for testing to prove that the NPE is a null turtle value
+					//if (tv == null ) { throw new RuntimeException("Null Turtle Value!"); }
+					float red = (float)(tv.color.getRed()/255f);
+					float green = (float)(tv.color.getGreen()/255f);
+					float blue = (float)(tv.color.getBlue()/255f);
+
+					setColorAndStandardMaterial( gl, red, green, blue);
+
+					double zval = myViewer.zScale * tv.reporterValue;
+					if (zval < 0 ) {
+						gl.glTranslated(tv.xcor , tv.ycor, zval - .045); //a tiny bit below the patch rep, take line thickness into account.
+					} else {
+						gl.glTranslated(tv.xcor , tv.ycor, zval + .045); //a tiny bit above the patch rep, take line thickness into account.
+					}
+					
+						//observer.applyNormal(gl);  //DON'T turn the turtles to be 'sprites'
+					gl.glScaled(tv.size, tv.size, tv.size);
+					gl.glScaled(3.0, 3.0, 3.0);
+					gl.glRotated(-1 * tv.heading, 0, 0, 1);  //DO reflect the turtles' headings
+					gl.glCallList(compiledShapes.get(tv.shape));
+				} catch (ConcurrentModificationException cme) {
+					cme.printStackTrace();
+					//proving that there are no cmes any more
+					throw cme;
+				} catch (NullPointerException npe) {
+					npe.printStackTrace();
+					//swallowing the turtle value npes -- uncomment to see that it's pretty rare
+					//throw npe;
+				}
 				gl.glPopMatrix();
 			}
-		} catch (ConcurrentModificationException cme ) {
-			cme.printStackTrace();
-			throw cme;
 		}
+		//} catch (ConcurrentModificationException cme ) {
+		//	cme.printStackTrace();
+		//	throw new RuntimeException("YO!");
+		//}
 		
+
 		drawAxesIfDragging(gl, axisHeadHandle);
 		
 		gl.glPopMatrix();
