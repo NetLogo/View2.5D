@@ -128,10 +128,10 @@ and https://github.com/NetLogo/NetLogo/wiki/Extensions-API
 >> extensions [ view2.5d ]
 
 - open a window using either the view2.5d:patch-view or view2.5d:turtle-view commands 
->> (often in your 'SETUP' procedure or via a separate button).
+- (often in your 'SETUP' procedure or via a separate button).
 
 - update your window's view using one of the update commands 
->> (often in your 'GO' procedure)
+- (often in your 'GO' procedure)
 
 - See also examples included in the zipfiles of the Releases
 
