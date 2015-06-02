@@ -247,13 +247,11 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 			}
 		}
 
-		//this will be an empty arraylist if we're not drawing the turtle images on the patch view
-		//try {
 		if ( ((PatchView)myViewer).viewOptions.structures() ) {
 			//TODO: understand why this copy is necessary (according to Frank it should not be given that i "new" the arraylist on update)
 			ArrayList<TurtleValue> tvalscopy = new ArrayList<TurtleValue>();
 			tvalscopy.addAll(  ((PatchView)myViewer).turtleValues  );
-			//(for testing to prove that it is necessary)
+			//(for testing to prove that it is necessary -- uncomment this and comment out the 2 lines above)
 			//ArrayList<TurtleValue> tvalscopy = ((PatchView)myViewer).turtleValues;
 			for ( TurtleValue tv : tvalscopy ) {
 				gl.glPushMatrix();
@@ -290,10 +288,6 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 				gl.glPopMatrix();
 			}
 		}
-		//} catch (ConcurrentModificationException cme ) {
-		//	cme.printStackTrace();
-		//	throw new RuntimeException("YO!");
-		//}
 		
 
 		drawAxesIfDragging(gl, axisHeadHandle);
