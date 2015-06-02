@@ -73,7 +73,25 @@ To offer visualization for Patch and Turtle reporters, in real time, in a simula
 - view2.5d:set-observer-angles {Title: String} {Double: heading} {Double: pitch}
 > This *command* primitive must be called from the Observer context.  
 > Updates only the turtle-view window with the specified title (if any). 
-> The observer's angular perspective (the place on an imaginary sphere at the zoom distance is updated to obey heading & pitch given)
+> Sets the observer's angular perspective (the place on an imaginary sphere at the zoom distance is updated to obey heading & pitch given)
+
+- view2.5d:get-observer-xy-focus {Title: String} 
+> This *reporter* primitive must be called from the Observer context.  
+> Returns a list reflecting the x and y coordinates the observer is "looking at" in the patch plane 
+
+- view2.5d:set-observer-xy-focus {Title: String} {Double: xcor} {Double: ycor}
+> This *command* primitive must be called from the Observer context.  
+> Updates only the turtle-view window with the specified title (if any). 
+> Sets the x and y coordinates the observer that is "looking at" in the patch plane
+
+- view2.5d:get-observer-distance {Title: String} 
+> This *reporter* primitive must be called from the Observer context.  
+> Returns the observer's distance from its "focus point"
+
+- view2.5d:set-observer-distance {Title: String} {Double: new distance} 
+> This *command* primitive must be called from the Observer context.  
+> Updates only the turtle-view window with the specified title (if any). 
+> Sets the observer's distance from its "focus point"
 
 
 ####OTHER LESS IMPORTANT PRIMITIVES:

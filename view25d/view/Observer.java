@@ -74,9 +74,9 @@ public class Observer {
 	}
 
 
-	public void updatePerspective(double thetax, double thetay) {
-		orbitRight(thetax);
-		orbitUp(thetay);
+	public void updatePerspectiveAngles(double delthetax, double delthetay) {
+		orbitRight(delthetax);
+		orbitUp(delthetay);
 	}
 
 
@@ -119,6 +119,10 @@ public class Observer {
 		double delx = - ((cosH * deltax + sinH * deltay) * 0.1);
 		double dely = ((sinH * deltax - cosH * deltay) * 0.1);
 
+		objectiveShift( delx, dely );
+	}
+	
+	public void objectiveShift( double delx, double dely ) {
 		x += delx;
 		y += dely;
 
@@ -126,6 +130,17 @@ public class Observer {
 		roty += dely; 
 	}
 
+	public void zoomToDistance( double distance ) {
+		double odist = dist();
+		double ratio = distance / odist;
+		double xlen = x - rotx;
+		double ylen = y - roty;
+		double zlen = z - rotz;
+		
+		x = rotx + ratio * xlen;
+		y = roty + ratio * ylen;
+		z = rotz + ratio * zlen;
+	}
 
 	public void zoomby(double deltavert) {
 		if (deltavert < dist()) {

@@ -19,13 +19,31 @@ public abstract class MouseableGLWindow implements MouseListener,
     //initial values are overwritten immediately - this is the correct initial value for the default model
 	protected Observer observer = new Observer(0, 0, 49.5);
 	
-	public void updateObserverPerspectiveWithShifts( double thetax, double thetay ) {
-		observer.updatePerspective(thetax, thetay);
+	public void updateObserverPerspectiveAnglesWithDeltas( double thetax, double thetay ) {
+		observer.updatePerspectiveAngles(thetax, thetay);
+		myCanvas.repaint();
+	}
+
+	public double[] getObserverPerspectiveAngles() {
+		return new double[] { observer.heading, observer.pitch };
+	}
+	
+	public void shiftObserverFocusPoint( double deltax, double deltay ) {
+		observer.objectiveShift(deltax, deltay);
 		myCanvas.repaint();
 	}
 	
-	public double[] getObserverPerspectiveAngles() {
-		return new double[] { observer.heading, observer.pitch };
+	public double[] getObserverPerspectiveFocusPoint() {
+		return new double[] { observer.rotx, observer.roty };
+	}
+	
+	public void zoomToDistance( double dist ) {
+		observer.zoomToDistance(dist);
+		myCanvas.repaint();
+	}
+	
+	public double getObserverDistance() {
+		return observer.dist(); 
 	}
 	
 	protected GLCanvas myCanvas;
@@ -191,7 +209,7 @@ public abstract class MouseableGLWindow implements MouseListener,
 		if ( myViewer.getMode() == VarviewWindow.ORBIT ) {
 			double thetaX = (nx - oldx) / 2.0;
 			double thetaY = (oldy - ny) / 2.0;
-			observer.updatePerspective( thetaX, thetaY );
+			observer.updatePerspectiveAngles( thetaX, thetaY );
 		} else if ( myViewer.getMode() == VarviewWindow.MOVE ) {
 			double deltax = (nx - oldx) / 2.0;
 			double deltay = (oldy - ny) / 2.0;

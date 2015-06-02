@@ -11,7 +11,7 @@ import view25d.View25DExtension;
 import view25d.view.MouseableGLWindow;
 import view25d.view.VarviewWindow;
 
-public class SetObserverAngles extends DefaultCommand {
+public class SetObserverFocus extends DefaultCommand {
 
 	@Override
     public Syntax getSyntax() {
@@ -29,8 +29,8 @@ public class SetObserverAngles extends DefaultCommand {
 			throws ExtensionException, LogoException {
 		
 		String whichView = args[0].getString();
-		double newHeading = args[1].getDoubleValue();
-		double newPitch = args[2].getDoubleValue();
+		double newX = args[1].getDoubleValue();
+		double newY = args[2].getDoubleValue();
 		
 		VarviewWindow vvwp = View25DExtension.patchWindowMap.get(whichView);
 		
@@ -38,28 +38,28 @@ public class SetObserverAngles extends DefaultCommand {
  		
 		if (vvwp != null) {
 			MouseableGLWindow win = vvwp.getGLWindow();
-			double [] headingAndPitch = win.getObserverPerspectiveAngles();
+			double [] coords = win.getObserverPerspectiveFocusPoint();
 			
-			double oldHeading = headingAndPitch[0];
-			double delHeading = newHeading - oldHeading;
+			double oldX = coords[0];
+			double delX = newX - oldX;
 			
-			double oldPitch = headingAndPitch[1];
-			double delPitch = -1 * (newPitch - oldPitch);
+			double oldY = coords[1];
+			double delY = newY - oldY;
 
-			win.updateObserverPerspectiveAnglesWithDeltas(delHeading, delPitch);
+			win.shiftObserverFocusPoint(delX, delY);
 		}
 		
 		if (vvwt != null) {
 			MouseableGLWindow win = vvwt.getGLWindow();
-			double [] headingAndPitch = win.getObserverPerspectiveAngles();
+			double [] coords = win.getObserverPerspectiveFocusPoint();
 			
-			double oldHeading = headingAndPitch[0];
-			double delHeading = newHeading - oldHeading;
+			double oldX = coords[0];
+			double delX = newX - oldX;
 			
-			double oldPitch = headingAndPitch[1];
-			double delPitch = -1 * (newPitch - oldPitch);
+			double oldY = coords[1];
+			double delY = newY - oldY;
 
-			win.updateObserverPerspectiveAnglesWithDeltas(delHeading, delPitch);
+			win.shiftObserverFocusPoint(delX, delY);
 		}
 
 	}
