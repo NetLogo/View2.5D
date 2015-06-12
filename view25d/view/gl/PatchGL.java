@@ -248,16 +248,9 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 		}
 
 		if ( ((PatchView)myViewer).viewOptions.structures() ) {
-			//TODO: understand why this copy is necessary (according to Frank it should not be given that i "new" the arraylist on update)
-			ArrayList<TurtleValue> tvalscopy = new ArrayList<TurtleValue>();
-			tvalscopy.addAll(  ((PatchView)myViewer).turtleValues  );
-			//(for testing to prove that it is necessary -- uncomment this and comment out the 2 lines above)
-			//ArrayList<TurtleValue> tvalscopy = ((PatchView)myViewer).turtleValues;
-			for ( TurtleValue tv : tvalscopy ) {
+			for ( TurtleValue tv : ((PatchView)myViewer).turtleValues ) {
 				gl.glPushMatrix();
 				try {
-					//for testing to prove that the NPE is a null turtle value
-					//if (tv == null ) { throw new RuntimeException("Null Turtle Value!"); }
 					float red = (float)(tv.color.getRed()/255f);
 					float green = (float)(tv.color.getGreen()/255f);
 					float blue = (float)(tv.color.getBlue()/255f);
@@ -271,7 +264,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 						gl.glTranslated(tv.xcor , tv.ycor, zval + .045); //a tiny bit above the patch rep, take line thickness into account.
 					}
 					
-						//observer.applyNormal(gl);  //DON'T turn the turtles to be 'sprites'
+					//observer.applyNormal(gl);  //DON'T turn the turtles to be 'sprites'
 					gl.glScaled(tv.size, tv.size, tv.size);
 					gl.glScaled(3.0, 3.0, 3.0);
 					gl.glRotated(-1 * tv.heading, 0, 0, 1);  //DO reflect the turtles' headings
@@ -282,8 +275,8 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 					throw cme;
 				} catch (NullPointerException npe) {
 					npe.printStackTrace();
-					//swallowing the turtle value npes -- uncomment to see that it's pretty rare
-					//throw npe;
+					//proving there are not npes any more.
+					throw npe;
 				}
 				gl.glPopMatrix();
 			}

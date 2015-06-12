@@ -111,8 +111,8 @@ public class PatchView extends VarviewWindow {
 				}
 			}
 		}
-		//turtleValues.clear();
-		turtleValues = new ArrayList<TurtleValue>();
+
+		ArrayList<TurtleValue> temp = new ArrayList<TurtleValue>();
 		if (doingTurtles) {
 			AgentSet as = App.app().workspace().world().turtles();
 			for (Agent a : as.agents() ) {
@@ -121,9 +121,11 @@ public class PatchView extends VarviewWindow {
 				Color c = org.nlogo.api.Color.getColor(t.color());
 				TurtleValue tv = new TurtleValue( t.shape(), c, t.size(), t.xcor(), t.ycor(), val );
 				tv.setHeading(t.heading());
-				turtleValues.add(tv);
+				temp.add(tv);
 			}
 		}
+		//copy over the new values in an atomic step to avoid concurrent access
+		turtleValues = temp;
 	}
 	
 	@Override
