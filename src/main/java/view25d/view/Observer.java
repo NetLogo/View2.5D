@@ -1,12 +1,12 @@
 package view25d.view;
 
-import javax.media.opengl.GL;
+import com.jogamp.opengl.GL2;
 
 public class Observer {
-	
+
 	double heading, pitch, roll;
 	double x, y, z;
-	
+
 	double rotx, roty, rotz;
 
 	public double getX() {
@@ -41,7 +41,7 @@ public class Observer {
 		rotz = 0;
 	}
 
-	public void goHome( VarviewWindow world ) {		
+	public void goHome( VarviewWindow world ) {
 		x = world.minPxcor + ((world.maxPxcor - world.minPxcor) / 2.0);
 		y = world.minPycor + ((world.maxPycor - world.minPycor) / 2.0);
 		z = StrictMath.max(world.worldWidth, world.worldHeight) * 1.5;
@@ -53,7 +53,7 @@ public class Observer {
 		rotz = 0;
 	}
 
-	public void applyPerspective( GL gl ) {
+	public void applyPerspective( GL2 gl ) {
 		gl.glRotated(90, -1.0, 0.0, 0.0);
 		gl.glRotated(heading, 0.0, 0.0, 1.0);
 		gl.glRotated(pitch,
@@ -62,7 +62,7 @@ public class Observer {
 		gl.glTranslated(-1*x, -1*y, -1*z);
 	}
 
-	public void applyNormal( GL gl ) {
+	public void applyNormal( GL2 gl ) {
 		double xp, yp, zp;
 		//cross product of x, y, z and 0, 0, 1
 		gl.glRotated( -heading, x, y, z);
@@ -121,13 +121,13 @@ public class Observer {
 
 		objectiveShift( delx, dely );
 	}
-	
+
 	public void objectiveShift( double delx, double dely ) {
 		x += delx;
 		y += dely;
 
-		rotx += delx; 
-		roty += dely; 
+		rotx += delx;
+		roty += dely;
 	}
 
 	public void zoomToDistance( double distance ) {
@@ -136,7 +136,7 @@ public class Observer {
 		double xlen = x - rotx;
 		double ylen = y - roty;
 		double zlen = z - rotz;
-		
+
 		x = rotx + ratio * xlen;
 		y = roty + ratio * ylen;
 		z = rotz + ratio * zlen;

@@ -3,25 +3,21 @@ package view25d.prims;
 import org.nlogo.api.AgentSet;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
-import org.nlogo.api.DefaultCommand;
+import org.nlogo.api.Command;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
-import org.nlogo.api.Syntax;
+import org.nlogo.core.Syntax;
+import org.nlogo.core.SyntaxJ;
 
 import view25d.View25DExtension;
 import view25d.view.TurtleView;
 
-public class UpdateOneTurtleView extends DefaultCommand {
+public class UpdateOneTurtleView implements Command {
 
 	@Override
 	public Syntax getSyntax() {
 		int[] argType = {Syntax.StringType(), Syntax.AgentsetType()};
-		return  Syntax.commandSyntax( argType );
-	}
-	
-	@Override
-	public String getAgentClassString() {
-		return "O";
+		return  SyntaxJ.commandSyntax( argType, "O---" );
 	}
 
 	@Override

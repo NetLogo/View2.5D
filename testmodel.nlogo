@@ -3,17 +3,17 @@ extensions [ view2.5d ]
 patches-own [ testvar ]
 
 to setup
-  
+
   ca
   ask patches [ set pcolor random-float 2 ]
   reset-ticks
-  
+
 end
 
 to go
-  ask patches [ 
-    set testvar testvar - random-float .1 + random-float .1 
-    if (abs testvar > 1) [ set testvar 0 ]  
+  ask patches [
+    set testvar testvar - random-float .1 + random-float .1
+    if (abs testvar > 1) [ set testvar 0 ]
   ]
   view2.5d:update-all-patch-views
   tick
@@ -22,10 +22,10 @@ end
 GRAPHICS-WINDOW
 210
 10
-649
-470
-16
-16
+647
+448
+-1
+-1
 13.0
 1
 10
@@ -472,9 +472,8 @@ false
 0
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
-
 @#$#@#$#@
-NetLogo 5.2.0
+NetLogo 6.0-M8
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
@@ -490,7 +489,6 @@ true
 0
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
-
 @#$#@#$#@
 0
 @#$#@#$#@
