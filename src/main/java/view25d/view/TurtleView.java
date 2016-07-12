@@ -67,6 +67,7 @@ public class TurtleView extends VarviewWindow {
         glCanvas.addGLEventListener(glManager);
         glCanvas.addMouseListener(glManager);
         glCanvas.addMouseMotionListener(glManager);
+        glCanvas.addMouseWheelListener(glManager);
 
         glManager.setCanvas( glCanvas );
         mainPanel.add(glCanvas, BorderLayout.CENTER);

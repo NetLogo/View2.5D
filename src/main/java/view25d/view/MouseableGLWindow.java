@@ -1,8 +1,8 @@
 package view25d.view;
 
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseAdapter;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -12,8 +12,7 @@ import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 
 
-public abstract class MouseableGLWindow implements MouseListener,
-        MouseMotionListener {
+public abstract class MouseableGLWindow extends MouseAdapter {
 
     protected VarviewWindow myViewer;
 
@@ -145,7 +144,8 @@ public abstract class MouseableGLWindow implements MouseListener,
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
 
-        double zClip = Math.max(worldWidth, worldHeight) * 4;
+        // It's nice to be able to zoom way, so large zClip
+        double zClip = Math.max(worldWidth, worldHeight) * 40;
 
         glu.gluPerspective(45.0f, ratio, 0.1, zClip);
         gl.glMatrixMode(GL2.GL_MODELVIEW);
@@ -229,20 +229,11 @@ public abstract class MouseableGLWindow implements MouseListener,
     }
 
     @Override
-    public void mouseMoved(MouseEvent arg0) {
+    public void mouseWheelMoved(MouseWheelEvent me) {
+        observer.zoomby(me.getPreciseWheelRotation());
+        myCanvas.repaint();
     }
 
-    @Override
-    public void mouseClicked(MouseEvent arg0) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent arg0) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent arg0) {
-    }
 
     @Override
     public void mousePressed(MouseEvent me) {
