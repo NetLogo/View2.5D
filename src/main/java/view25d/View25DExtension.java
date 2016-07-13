@@ -12,9 +12,6 @@ import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.PrimitiveManager;
 
-import org.nlogo.gl.render.JOGLException;
-import org.nlogo.gl.render.JOGLLoader;
-
 import view25d.prims.DecoratePatchView;
 import view25d.prims.GetObserverAngles;
 import view25d.prims.GetObserverDistance;
