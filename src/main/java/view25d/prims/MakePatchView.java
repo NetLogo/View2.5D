@@ -22,7 +22,7 @@ public class MakePatchView implements Command {
 
     @Override
     public Syntax getSyntax() {
-       int[] argTypes = {Syntax.StringType(), Syntax.ReporterTaskType()};
+       int[] argTypes = {Syntax.StringType(), Syntax.ReporterType()};
        return  SyntaxJ.commandSyntax(argTypes, "O---");
     }
 
