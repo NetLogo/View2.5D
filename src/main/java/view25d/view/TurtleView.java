@@ -17,7 +17,7 @@ import org.nlogo.api.AgentException;
 import org.nlogo.api.AgentSet;
 import org.nlogo.api.Context;
 import org.nlogo.api.Patch;
-import org.nlogo.api.ReporterTask;
+import org.nlogo.api.AnonymousReporter;
 import org.nlogo.api.Turtle;
 import org.nlogo.app.App;
 
@@ -32,7 +32,7 @@ public class TurtleView extends VarviewWindow {
     private TurtleGL glManager;
     public MouseableGLWindow getGLWindow() { return glManager; }
 
-    private ReporterTask reporterTask;
+    private AnonymousReporter reporter;
 
     public ArrayList<TurtleValue> turtleReporterValues;
     public Color[][] patchColorMatrix;
@@ -40,9 +40,9 @@ public class TurtleView extends VarviewWindow {
     public TurtleViewOptions viewOptions;
 
 
-    public TurtleView( String title, AgentSet set, ReporterTask rt) {
+    public TurtleView( String title, AgentSet set, AnonymousReporter rt) {
         super(title);
-        reporterTask = rt;
+        reporter = rt;
         myAgents = set;
     }
 
@@ -102,7 +102,7 @@ public class TurtleView extends VarviewWindow {
         for (Agent a : myAgents.agents()) {
             Turtle turtle = (Turtle)a;
             Color c = org.nlogo.api.Color.getColor(turtle.color());
-            double val = (Double)reporterTask.report(context, new Object[]{turtle});
+            double val = (Double)reporter.report(context, new Object[]{turtle});
             TurtleValue tv = new TurtleValue( turtle.shape(), c, turtle.size(), turtle.xcor(), turtle.ycor(), val);
             turtleReporterValues.add(tv);
         }

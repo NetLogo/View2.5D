@@ -9,7 +9,7 @@ import org.nlogo.api.Context;
 import org.nlogo.api.Command;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
-import org.nlogo.api.ReporterTask;
+import org.nlogo.api.AnonymousReporter;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.Turtle;
@@ -37,11 +37,11 @@ public class MakeTurtleView implements Command {
 
         //test the reporter against the supplied turtles (throw away the result of report here)
         final AgentSet as = args[1].getAgentSet();
-        final ReporterTask turtleReporterTask = args[2].getReporterTask();
+        final AnonymousReporter turtleReporter = args[2].getReporter();
         try {
             for (Agent a: as.agents() ) {
                 Turtle turtle = (Turtle)a;
-                turtleReporterTask.report(context, new Object[]{turtle});
+                turtleReporter.report(context, new Object[]{turtle});
             }
         }
         catch (Exception e1) {
@@ -50,7 +50,7 @@ public class MakeTurtleView implements Command {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                TurtleView manualTurtleView = new TurtleView(title, as, turtleReporterTask);
+                TurtleView manualTurtleView = new TurtleView(title, as, turtleReporter);
                 manualTurtleView.postConstructor();
 
                 World w = App.app().workspace().world();

@@ -18,7 +18,7 @@ import org.nlogo.api.Agent;
 import org.nlogo.api.AgentException;
 import org.nlogo.api.Context;
 import org.nlogo.api.Patch;
-import org.nlogo.api.ReporterTask;
+import org.nlogo.api.AnonymousReporter;
 import org.nlogo.app.App;
 
 import view25d.View25DExtension;
@@ -30,7 +30,7 @@ public class PatchView extends VarviewWindow {
 
     private PatchGL glManager;
     public MouseableGLWindow getGLWindow() { return glManager; }
-    private ReporterTask reporterTask;
+    private AnonymousReporter reporter;
 
     public PatchViewOptions viewOptions;
 
@@ -39,9 +39,9 @@ public class PatchView extends VarviewWindow {
     public boolean doingTurtles = false;
     public ArrayList<TurtleValue> turtleValues = new ArrayList<TurtleValue>();
 
-    public PatchView(String title, ReporterTask rt) {
+    public PatchView(String title, AnonymousReporter rt) {
         super(title);
-        reporterTask = rt;
+        reporter = rt;
     }
 
     //called by class that instantiates PatchView, after constructor.
@@ -106,7 +106,7 @@ public class PatchView extends VarviewWindow {
                 try {
                     Patch patch = App.app().workspace().world().getPatchAt(i + minPxcor, j + minPycor);
                     Color c = org.nlogo.api.Color.getColor(patch.pcolor());
-                    double val = (Double)reporterTask.report(context, new Object[]{patch});
+                    double val = (Double)reporter.report(context, new Object[]{patch});
                     reporterValueMatrix[i][j] = new PatchValue(c, val);
                 } catch (AgentException e) {
                     e.printStackTrace();
@@ -119,7 +119,7 @@ public class PatchView extends VarviewWindow {
             AgentSet as = App.app().workspace().world().turtles();
             for (Agent a : as.agents() ) {
                 Turtle t = (Turtle)a;
-                double val = (Double)reporterTask.report(context, new Object[]{t});
+                double val = (Double)reporter.report(context, new Object[]{t});
                 Color c = org.nlogo.api.Color.getColor(t.color());
                 TurtleValue tv = new TurtleValue( t.shape(), c, t.size(), t.xcor(), t.ycor(), val );
                 tv.setHeading(t.heading());
