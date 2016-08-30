@@ -1,6 +1,8 @@
 
 # NetLogo View2.5D Extension
 
+The `view2.5d` extension allows you to visualize 2d models on a 3d surface, using height to represent agent properties.
+
 ## Building
 
 Use the netlogo.jar.url environment variable to tell sbt which NetLogo.jar to compile against (defaults to NetLogo 6.0). For example:
