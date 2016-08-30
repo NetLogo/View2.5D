@@ -9,7 +9,7 @@ import org.nlogo.api.Command;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.Patch;
-import org.nlogo.api.ReporterTask;
+import org.nlogo.api.AnonymousReporter;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.World;
@@ -22,7 +22,7 @@ public class MakePatchView implements Command {
 
     @Override
     public Syntax getSyntax() {
-       int[] argTypes = {Syntax.StringType(), Syntax.ReporterTaskType()};
+       int[] argTypes = {Syntax.StringType(), Syntax.ReporterType()};
        return  SyntaxJ.commandSyntax(argTypes, "O---");
     }
 
@@ -35,10 +35,10 @@ public class MakePatchView implements Command {
         }
 
         //test the patchReporter against patch 0,0 (throw away the result of report here)
-        final ReporterTask patchReporterTask = args[1].getReporterTask();
+        final AnonymousReporter patchReporter = args[1].getReporter();
         try {
             Patch patch = App.app().workspace().world().getPatchAt(0,0);
-            patchReporterTask.report(context, new Object[]{patch});
+            patchReporter.report(context, new Object[]{patch});
         } catch (AgentException e) {
             throw new ExtensionException("Error in accessing patches. " + e);
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class MakePatchView implements Command {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    PatchView manualPatchView = new PatchView(title, patchReporterTask );
+                    PatchView manualPatchView = new PatchView(title, patchReporter);
                     manualPatchView.postConstructor();
 
                     World w = App.app().workspace().world();
