@@ -3,13 +3,14 @@ package view25d.prims;
 import javax.swing.SwingUtilities;
 
 import org.nlogo.api.AgentException;
+import org.nlogo.api.AnonymousReporter;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.Command;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.Patch;
-import org.nlogo.api.AnonymousReporter;
+import org.nlogo.api.ReporterRunnable;
 import org.nlogo.core.Syntax;
 import org.nlogo.core.SyntaxJ;
 import org.nlogo.api.World;
@@ -45,29 +46,48 @@ public class MakePatchView implements Command {
             throw new ExtensionException("Error in processing your reporter. " + e);
         }
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    PatchView manualPatchView = new PatchView(title, patchReporter);
-                    manualPatchView.postConstructor();
+        context.workspace().updateUI();
+        PatchView newPatchView = context.workspace().waitForResult(new InitPatchView(context, title, patchReporter));
 
-                    World w = App.app().workspace().world();
-                    int worldWidth = w.worldWidth();
-                    int worldHeight = w.worldHeight();
-                    int minX = w.minPxcor();
-                    int minY = w.minPycor();
-                    int maxX = w.maxPxcor();
-                    int maxY = w.maxPycor();
+        if (newPatchView != null) {
+          View25DExtension.storePatchWindowWithTitle(title, newPatchView);
+        }
+    }
 
-                    manualPatchView.setupForRendering( worldWidth, worldHeight, minX, maxX, minY, maxY );
-                    manualPatchView.manuallyRefreshReporterView(context);
-                    manualPatchView.setVisible(true);
-                    View25DExtension.storePatchWindowWithTitle(title, manualPatchView);
+    class InitPatchView implements ReporterRunnable<PatchView> {
+      Context context;
+      String title;
+      AnonymousReporter patchReporter;
 
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
+      InitPatchView(Context context, String title, AnonymousReporter patchReporter) {
+        this.context = context;
+        this.title = title;
+        this.patchReporter = patchReporter;
+      }
+
+      @Override
+      public PatchView run() {
+        try {
+          PatchView manualPatchView = new PatchView(title, patchReporter);
+          manualPatchView.postConstructor();
+
+          World w = App.app().workspace().world();
+          int worldWidth = w.worldWidth();
+          int worldHeight = w.worldHeight();
+          int minX = w.minPxcor();
+          int minY = w.minPycor();
+          int maxX = w.maxPxcor();
+          int maxY = w.maxPycor();
+
+          manualPatchView.setupForRendering( worldWidth, worldHeight, minX, maxX, minY, maxY );
+          manualPatchView.manuallyRefreshReporterView(context);
+          manualPatchView.setVisible(true);
+
+          return manualPatchView;
+        } catch (Exception e1) {
+          e1.printStackTrace();
+          return null;
+        }
+      }
     }
 }
