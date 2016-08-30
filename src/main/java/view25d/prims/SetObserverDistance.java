@@ -32,10 +32,6 @@ public class SetObserverDistance implements Command {
             throw new ExtensionException("Cannot set observer distance below " + MIN_DISTANCE);
         }
 
-        if (newDistance < MAX_DISTANCE ) {
-            throw new ExtensionException("Cannot set observer distance above " + MAX_DISTANCE);
-        }
-
         VarviewWindow vvwp = View25DExtension.patchWindowMap.get(whichView);
         VarviewWindow vvwt = View25DExtension.turtleWindowMap.get(whichView);
 
