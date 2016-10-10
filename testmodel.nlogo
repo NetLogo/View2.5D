@@ -52,7 +52,7 @@ BUTTON
 189
 100
 Launch a Patch View
-view2.5d:patch-view \"test\" [[testvar] of ?]
+view2.5d:patch-view \"test\" [ [?1] -> [testvar] of ?1 ]
 NIL
 1
 T
@@ -473,7 +473,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.0-M8
+NetLogo 6.0-BETA1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
