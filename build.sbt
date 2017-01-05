@@ -22,4 +22,4 @@ libraryDependencies ++= Seq(
   "org.jogamp.gluegen" % "gluegen-rt" % "2.3.2"
 )
 
-netLogoVersion := "6.0.0-BETA2"
+netLogoVersion := "6.0.0"
