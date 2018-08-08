@@ -4,6 +4,8 @@ enablePlugins(NetLogoExtension, ExtensionDocumentationPlugin)
 
 name := "view2.5d"
 
+version := "1.1.0"
+
 netLogoClassManager := "view25d.View25DExtension"
 
 netLogoTarget :=
