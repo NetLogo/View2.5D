@@ -81,7 +81,7 @@ Specification of the Reporter uses the NetLogo anonymous procedure syntax, from 
 Example:
 
 ```NetLogo
-view2.5d:patch-view "Test" [ [the-turtle] -> [pxcor] of the-turtle]
+view2.5d:patch-view "Test" [ [the-patch] -> [pxcor] of the-patch ]
 ```
 
 
@@ -136,12 +136,12 @@ view2.5d:turtle-view Title Agents Reporter
 This command must be called from the Observer context.  (Attempting to call from another context causes an error)
 The Title is a string, which will be used to label the new Window and to call for subsequent updates.
 The turtle-set is any selector for turtles.
-Specification of the Reporter uses the NetLogo task syntax, from the Observer perspective.
+Reporter is an anonymous reporter that should take a turtle as input, and report some number from it.
 
 Example:
 
 ```
-view2.5d:turtle-view "Test" turtles with [color = red] [[energy] of ?1]
+view2.5d:turtle-view "Test" turtles with [color = red] [ the-turtle -> [energy] of the-turtle]
 ; This would create a new 2.5d window, plotting the ENERGY value of all turtles that are red.
 ```
 
@@ -332,4 +332,3 @@ view2.5d:count-windows
 
 
 This reporter returns the number of turtle and patch views that are currently active.
-
