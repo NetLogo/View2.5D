@@ -66,6 +66,7 @@ public class MakeTurtleView implements Command {
         this.agentSet = as;
         this.context = context;
         this.title = title;
+        this.turtleReporter = turtleReporter;
       }
 
       @Override
