@@ -2,6 +2,8 @@ import org.nlogo.build.{ ExtensionDocumentationPlugin, NetLogoExtension }
 
 enablePlugins(NetLogoExtension, ExtensionDocumentationPlugin)
 
+scalaVersion := "2.12.8"
+
 name := "view2.5d"
 
 version := "1.1.1"
