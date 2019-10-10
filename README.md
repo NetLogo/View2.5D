@@ -81,7 +81,7 @@ Specification of the Reporter uses the NetLogo anonymous procedure syntax, from 
 Example:
 
 ```NetLogo
-view2.5d:patch-view "Test" [ [the-patch] -> [pxcor] of the-patch ]
+view2.5d:patch-view "Test"  [ [the-patch] -> [pxcor] of the-patch ]
 ```
 
 
@@ -332,3 +332,8 @@ view2.5d:count-windows
 
 
 This reporter returns the number of turtle and patch views that are currently active.
+
+
+## Acknowledgement
+
+For development of the View 2.5D NetLogo Extension, we acknowledge financial support from Joshua M. Epstein's NIH Director's Pioneer Award (DP1).
