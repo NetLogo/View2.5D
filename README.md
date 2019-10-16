@@ -54,6 +54,7 @@ Send comments, bugs, or other feedback to [CCL Feedback](mailto:ccl-feedback@ccl
 [`view2.5d:get-z-scale`](#view2.5dget-z-scale)
 [`view2.5d:set-z-scale`](#view2.5dset-z-scale)
 [`view2.5d:set-turtle-stem-thickness`](#view2.5dset-turtle-stem-thickness)
+[`view2.5d:set-turtle-stem-color`](#view2.5dset-turtle-stem-color)
 [`view2.5d:get-observer-angles`](#view2.5dget-observer-angles)
 [`view2.5d:set-observer-angles`](#view2.5dset-observer-angles)
 [`view2.5d:get-observer-xy-focus`](#view2.5dget-observer-xy-focus)
@@ -212,7 +213,19 @@ view2.5d:set-turtle-stem-thickness Title thickness
 
 This command must be called from the Observer context.
 Updates only the turtle-view window with the specified title (if any).
-Turtles are now drawn with "pins" or "stems" that have the specified thickness (instead of the hairline default)
+Turtles are now drawn with "pins" or "stems" that have the specified thickness (instead of the hairline default).
+
+
+### `view2.5d:set-turtle-stem-color`
+
+```NetLogo
+view2.5d:set-turtle-stem-color Title color
+```
+
+
+This command must be called from the Observer context.
+Updates only the turtle-view window with the specified title (if any).
+Turtles are now drawn with "pins" or "stems" that have the specified color (instead of the grey default).
 
 
 ### `view2.5d:get-observer-angles`
