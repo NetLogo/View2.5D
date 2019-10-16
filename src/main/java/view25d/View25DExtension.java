@@ -23,6 +23,7 @@ import view25d.prims.SetObserverAngles;
 import view25d.prims.SetObserverDistance;
 import view25d.prims.SetObserverFocus;
 import view25d.prims.SetTurtleStemThickness;
+import view25d.prims.SetTurtleStemColor;
 import view25d.prims.SetZScale;
 import view25d.prims.UpdateAllViews;
 import view25d.prims.UpdateOnePatchView;
@@ -103,6 +104,7 @@ public class View25DExtension extends DefaultClassManager {
         primManager.addPrimitive("get-z-scale", new GetZScale() );
 
         primManager.addPrimitive("set-turtle-stem-thickness", new SetTurtleStemThickness() );
+        primManager.addPrimitive("set-turtle-stem-color", new SetTurtleStemColor() );
 
         primManager.addPrimitive("get-observer-angles", new GetObserverAngles() );
         primManager.addPrimitive("set-observer-angles", new SetObserverAngles() );
