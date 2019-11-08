@@ -11,16 +11,18 @@ public class TurtleValue {
 	public double size;
 	public double reporterValue;
 	public double heading = 0.0;
-
-	public TurtleValue( String sh, Color co, double sz, double x, double y, double val) {
+	public double stemColor;
+	public TurtleValue( String sh, Color co, double sz,
+						double x, double y, double val, double stc) {
 		this.shape = sh;
 		this.color = co;
 		this.xcor = x;
 		this.ycor = y;
 		this.size = sz;
 		this.reporterValue = val;
+		this.stemColor = stc;
 	}
-	
+
 	//heading is optional; only used for the decorated patch view.  
 	//all other turtles are viewed as sprites
 	public void setHeading( double head ) { 

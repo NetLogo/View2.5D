@@ -179,15 +179,17 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 
 
         double stemThickness = ((TurtleView)myViewer).viewOptions.getStemThickness();
-        double stemColor = ((TurtleView)myViewer).viewOptions.getStemColor();
-        Color c = org.nlogo.api.Color.getColor(stemColor);
-        float stemRed = c.getRed() / 255f;
-        float stemGreen = c.getGreen() / 255f;
-        float stemBlue = c.getBlue() / 255f;
+
         for (TurtleValue tv : ((TurtleView)myViewer).getCopyOfReporterValues()) {
             gl.glPushMatrix();
             double zval = myViewer.zScale * tv.reporterValue;
             gl.glTranslated(tv.xcor , tv.ycor, zval);
+
+			double stemColor = tv.stemColor;
+			Color c = org.nlogo.api.Color.getColor(stemColor);
+			float stemRed = c.getRed() / 255f;
+			float stemGreen = c.getGreen() / 255f;
+			float stemBlue = c.getBlue() / 255f;
             setColorAndStandardMaterial( gl, stemRed, stemGreen, stemBlue );
 
             if ( stemThickness == 0.0 ) {

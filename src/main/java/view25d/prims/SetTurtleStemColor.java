@@ -1,5 +1,6 @@
 package view25d.prims;
 
+import org.nlogo.api.AnonymousReporter;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.Command;
@@ -16,7 +17,7 @@ public class SetTurtleStemColor implements Command {
 
   @Override
   public Syntax getSyntax() {
-    int[] argTypes = { Syntax.StringType(), Syntax.NumberType() };
+    int[] argTypes = { Syntax.StringType(), Syntax.ReporterType() };
     return  SyntaxJ.commandSyntax(argTypes, "O---");
   }
 
@@ -27,8 +28,10 @@ public class SetTurtleStemColor implements Command {
     VarviewWindow vvwt = View25DExtension.turtleWindowMap.get(whichView);
     if (vvwt != null) {
       TurtleView view = (TurtleView) vvwt;
-      double newColor = args[1].getDoubleValue();
-      view.viewOptions.setStemColor(newColor);
+      AnonymousReporter newStemColorReporter = args[1].getReporter();
+
+      view.setStemColorReporter(newStemColorReporter);
+
       view.refresh();
     }
   }

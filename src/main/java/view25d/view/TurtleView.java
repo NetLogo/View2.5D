@@ -33,7 +33,9 @@ public class TurtleView extends VarviewWindow {
     public MouseableGLWindow getGLWindow() { return glManager; }
 
     private AnonymousReporter reporter;
-
+	private AnonymousReporter stemColorReporter = null;
+	private double defaultStemColor = 4.5f;
+	
     public ArrayList<TurtleValue> turtleReporterValues;
     public Color[][] patchColorMatrix;
 
@@ -99,12 +101,15 @@ public class TurtleView extends VarviewWindow {
     private void updateArrayList(Context context) {
         //turtleReporterValues.clear();
         turtleReporterValues = new ArrayList<TurtleValue>();
+		int i = 0;
         for (Agent a : myAgents.agents()) {
             Turtle turtle = (Turtle)a;
             Color c = org.nlogo.api.Color.getColor(turtle.color());
             double val = (Double)reporter.report(context, new Object[]{turtle});
-            TurtleValue tv = new TurtleValue( turtle.shape(), c, turtle.size(), turtle.xcor(), turtle.ycor(), val);
+			double stemColor = getStemColor(context, turtle);
+            TurtleValue tv = new TurtleValue( turtle.shape(), c, turtle.size(), turtle.xcor(), turtle.ycor(), val, stemColor);
             turtleReporterValues.add(tv);
+			i++;
         }
         if (viewOptions.usePColor()) {
             updatePColors();
@@ -173,4 +178,26 @@ public class TurtleView extends VarviewWindow {
         glManager.repaintCanvas();
     }
 
+	public double trimStemColor(double stemColor) {
+		if ( stemColor < 0 ) { stemColor = 0.0; }
+		if ( stemColor >= 140 ) { stemColor = 139.9; }
+		return stemColor;
+	}
+
+	public double getDefaultStemColor() { return defaultStemColor; }
+	
+	public double getStemColor(Context context, Turtle turtle) {
+		double stemColor;
+		if (stemColorReporter == null) {
+			stemColor = defaultStemColor;
+		} else {
+			stemColor = (Double)stemColorReporter.report(context, new Object[]{turtle});
+		}
+		return trimStemColor(stemColor); 
+	}
+
+	public AnonymousReporter getStemColorReporter() { return stemColorReporter; }
+	public void setStemColorReporter( AnonymousReporter reporter) {
+	    stemColorReporter = reporter;
+    }
 }
