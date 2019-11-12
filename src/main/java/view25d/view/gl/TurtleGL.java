@@ -179,7 +179,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 
 
         double stemThickness = ((TurtleView)myViewer).viewOptions.getStemThickness();
-
         for (TurtleValue tv : ((TurtleView)myViewer).getCopyOfReporterValues()) {
             gl.glPushMatrix();
             double zval = myViewer.zScale * tv.reporterValue;

@@ -101,7 +101,6 @@ public class TurtleView extends VarviewWindow {
     private void updateArrayList(Context context) {
         //turtleReporterValues.clear();
         turtleReporterValues = new ArrayList<TurtleValue>();
-		int i = 0;
         for (Agent a : myAgents.agents()) {
             Turtle turtle = (Turtle)a;
             Color c = org.nlogo.api.Color.getColor(turtle.color());
@@ -109,7 +108,6 @@ public class TurtleView extends VarviewWindow {
 			double stemColor = getStemColor(context, turtle);
             TurtleValue tv = new TurtleValue( turtle.shape(), c, turtle.size(), turtle.xcor(), turtle.ycor(), val, stemColor);
             turtleReporterValues.add(tv);
-			i++;
         }
         if (viewOptions.usePColor()) {
             updatePColors();
