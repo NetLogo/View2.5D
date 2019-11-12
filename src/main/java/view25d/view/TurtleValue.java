@@ -13,7 +13,7 @@ public class TurtleValue {
 	public double heading = 0.0;
 	public double stemColor;
 	public TurtleValue( String sh, Color co, double sz,
-						double x, double y, double val, double stc) {
+	                    double x, double y, double val, double stc) {
 		this.shape = sh;
 		this.color = co;
 		this.xcor = x;

@@ -34,9 +34,8 @@ public class TurtleView extends VarviewWindow {
     public MouseableGLWindow getGLWindow() { return glManager; }
 
     private AnonymousReporter reporter;
-	private AnonymousReporter stemColorReporter = null;
-	private double defaultStemColor = 4.5f;
-	
+    private AnonymousReporter stemColorReporter = null;
+    private double defaultStemColor = 4.5f;
     public ArrayList<TurtleValue> turtleReporterValues;
     public Color[][] patchColorMatrix;
 
@@ -106,7 +105,7 @@ public class TurtleView extends VarviewWindow {
             Turtle turtle = (Turtle)a;
             Color c = org.nlogo.api.Color.getColor(turtle.color());
             double val = (Double)reporter.report(context, new Object[]{turtle});
-			double stemColor = getStemColor(context, turtle);
+            double stemColor = getStemColor(context, turtle);
             TurtleValue tv = new TurtleValue( turtle.shape(), c, turtle.size(), turtle.xcor(), turtle.ycor(), val, stemColor);
             turtleReporterValues.add(tv);
         }
@@ -183,21 +182,19 @@ public class TurtleView extends VarviewWindow {
 		return stemColor;
 	}
 
-	public double getDefaultStemColor() { return defaultStemColor; }
-	
 	public double getStemColor(Context context, Turtle turtle) throws LogoException {
         double stemColor;
         if (stemColorReporter == null) {
             stemColor = defaultStemColor;
         } else {
             try {
-                stemColor = (Double)stemColorReporter.report(context, new Object[]{turtle});  }
+                stemColor = (Double)stemColorReporter.report(context, new Object[]{turtle});
+            }
             catch (Exception e1) {
-				throw new LogoException("Reporter did not generate a number. ",
-										e1) { };
-			}
+                throw new LogoException("Stem color reporter did not generate a number. ", e1) { };
+            }
         }
-		return trimStemColor(stemColor); 
+		return trimStemColor(stemColor);
 	}
 
 	public AnonymousReporter getStemColorReporter() { return stemColorReporter; }

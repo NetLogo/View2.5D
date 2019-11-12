@@ -31,8 +31,8 @@ public class SetTurtleStemColor implements Command {
       AnonymousReporter newStemColorReporter = args[1].getReporter();
 
       view.setStemColorReporter(newStemColorReporter);
-	  // Force update of the Array List
-	  view.manuallyRefreshReporterView(context);
+      // Force update of the Array List
+      view.manuallyRefreshReporterView(context);
       view.refresh();
     }
   }

@@ -121,7 +121,7 @@ public class PatchView extends VarviewWindow {
                 Turtle t = (Turtle)a;
                 double val = (Double)reporter.report(context, new Object[]{t});
                 Color c = org.nlogo.api.Color.getColor(t.color());
-	        	double stemColor = 4.5f;  // This will be ignored no stem in PatchView
+                double stemColor = 4.5f;  // This will be ignored no stem in PatchView
                 TurtleValue tv = new TurtleValue( t.shape(), c, t.size(), t.xcor(), t.ycor(), val, stemColor );
                 tv.setHeading(t.heading());
                 temp.add(tv);
