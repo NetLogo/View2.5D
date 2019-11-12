@@ -70,7 +70,7 @@ public class MakeTurtleView implements Command {
       }
 
       @Override
-      public TurtleView run() {
+      public TurtleView run() throws LogoException {
         TurtleView manualTurtleView = new TurtleView(title, agentSet, turtleReporter);
         manualTurtleView.postConstructor();
 

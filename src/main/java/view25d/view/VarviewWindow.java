@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.nlogo.api.Context;
+import org.nlogo.api.LogoException;
 
 import view25d.View25DExtension;
 
@@ -84,7 +85,7 @@ public abstract class VarviewWindow extends JFrame {
 
 	public abstract void resetPerspective();
 	
-	public abstract void manuallyRefreshReporterView( Context context );
+	public abstract void manuallyRefreshReporterView( Context context )  throws LogoException ;
 
 	protected void applySquareConstraint(int xBorder, int yBorder, JPanel inner) {
 		int chromeH = this.getHeight() - inner.getHeight();

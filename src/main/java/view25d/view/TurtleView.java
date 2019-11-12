@@ -15,9 +15,10 @@ import javax.swing.JFrame;
 import org.nlogo.api.Agent;
 import org.nlogo.api.AgentException;
 import org.nlogo.api.AgentSet;
-import org.nlogo.api.Context;
-import org.nlogo.api.Patch;
 import org.nlogo.api.AnonymousReporter;
+import org.nlogo.api.Context;
+import org.nlogo.api.LogoException;
+import org.nlogo.api.Patch;
 import org.nlogo.api.Turtle;
 import org.nlogo.app.App;
 
@@ -93,12 +94,12 @@ public class TurtleView extends VarviewWindow {
 
 
     @Override
-    public void manuallyRefreshReporterView(Context context) {
+    public void manuallyRefreshReporterView(Context context)  throws LogoException {
         updateArrayList(context);
         glManager.repaintCanvas();
     }
 
-    private void updateArrayList(Context context) {
+    private void updateArrayList(Context context) throws LogoException {
         //turtleReporterValues.clear();
         turtleReporterValues = new ArrayList<TurtleValue>();
         for (Agent a : myAgents.agents()) {
@@ -184,13 +185,18 @@ public class TurtleView extends VarviewWindow {
 
 	public double getDefaultStemColor() { return defaultStemColor; }
 	
-	public double getStemColor(Context context, Turtle turtle) {
-		double stemColor;
-		if (stemColorReporter == null) {
-			stemColor = defaultStemColor;
-		} else {
-			stemColor = (Double)stemColorReporter.report(context, new Object[]{turtle});
-		}
+	public double getStemColor(Context context, Turtle turtle) throws LogoException {
+        double stemColor;
+        if (stemColorReporter == null) {
+            stemColor = defaultStemColor;
+        } else {
+            try {
+                stemColor = (Double)stemColorReporter.report(context, new Object[]{turtle});  }
+            catch (Exception e1) {
+				throw new LogoException("Reporter did not generate a number. ",
+										e1) { };
+			}
+        }
 		return trimStemColor(stemColor); 
 	}
 
