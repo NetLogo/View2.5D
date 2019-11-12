@@ -219,13 +219,35 @@ Turtles are now drawn with "pins" or "stems" that have the specified thickness (
 ### `view2.5d:set-turtle-stem-color`
 
 ```NetLogo
-view2.5d:set-turtle-stem-color Title color
+view2.5d:set-turtle-stem-color Title colorReporter
 ```
 
 
 This command must be called from the Observer context.
 Updates only the turtle-view window with the specified title (if any).
+colorReporter is an anonymous reporter that should take a turtle as input, and report some number representing a color from it.
 Turtles are now drawn with "pins" or "stems" that have the specified color (instead of the grey default).
+
+Example:
+
+```
+;; setup view with 2 turtles
+crt 1 [ set color green  setxy 2 3]
+crt 1 [ set color red  setxy 5 4]
+view2.5d:turtle-view "Test" turtles [ the-turtle -> [ xcor] of the-turtle ]
+view2.5d:set-observer-distance "Test" 40
+view2.5d:set-z-scale "Test" 2
+view2.5d:set-observer-angles "Test" 25 30
+
+;; increase the stem thickness
+view2.5d:set-turtle-stem-thickness "Test" .2
+
+;; change the stem color to  match the turtle-color
+view2.5d:set-turtle-stem-color "Test" [ the-turtle -> [ color ] of the-turtle ]
+
+; now make the stems orange
+view2.5d:set-turtle-stem-color "Test" [ orange ]
+```
 
 
 ### `view2.5d:get-observer-angles`
