@@ -181,7 +181,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 
         // Draw links as lines
         for (LinkValue lv : ((TurtleView)myViewer).getCopyOfLinkValues()) {
-            gl.glPushMatrix();
             double zval1 = myViewer.zScale * lv.zcor1;
             double zval2 = myViewer.zScale * lv.zcor2;
 
@@ -202,7 +201,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
             gl.glVertex3d (lv.xcor2, lv.ycor2, zval2);
             gl.glEnd();
         }
-            gl.glPopMatrix();
 
         // Draw Turtle Stems
         double stemThickness = ((TurtleView)myViewer).viewOptions.getStemThickness();
