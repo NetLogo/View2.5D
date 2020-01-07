@@ -1,5 +1,8 @@
 package view25d.view;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,15 +15,20 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import javax.swing.JFrame;
 
+
 import org.nlogo.api.Agent;
 import org.nlogo.api.AgentException;
 import org.nlogo.api.AgentSet;
 import org.nlogo.api.AnonymousReporter;
 import org.nlogo.api.Context;
+import org.nlogo.api.Link;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.Patch;
 import org.nlogo.api.Turtle;
+import org.nlogo.api.World;
+import org.nlogo.agent.Turtle2D;
 import org.nlogo.app.App;
+import org.nlogo.nvm.ExtensionContext;
 
 import view25d.View25DExtension;
 import view25d.view.gl.TurtleGL;
@@ -37,6 +45,7 @@ public class TurtleView extends VarviewWindow {
     private AnonymousReporter stemColorReporter = null;
     private double defaultStemColor = 4.5f;
     public ArrayList<TurtleValue> turtleReporterValues;
+    public ArrayList<LinkValue> linkValues;
     public Color[][] patchColorMatrix;
 
     public TurtleViewOptions viewOptions;
@@ -100,19 +109,90 @@ public class TurtleView extends VarviewWindow {
 
     private void updateArrayList(Context context) throws LogoException {
         //turtleReporterValues.clear();
+
         turtleReporterValues = new ArrayList<TurtleValue>();
         for (Agent a : myAgents.agents()) {
-            Turtle turtle = (Turtle)a;
+            Turtle2D turtle = (Turtle2D)a;
             Color c = org.nlogo.api.Color.getColor(turtle.color());
             double val = (Double)reporter.report(context, new Object[]{turtle});
             double stemColor = getStemColor(context, turtle);
             TurtleValue tv = new TurtleValue( turtle.shape(), c, turtle.size(), turtle.xcor(), turtle.ycor(), val, stemColor);
             turtleReporterValues.add(tv);
         }
+
+        Link[] linkArray = getTurtleSetLinksArray(myAgents);
+
+        // Making it a set eliminates the duplicates
+        Set<Link> linkSet = new HashSet<>(Arrays.asList(linkArray));
+
+        // Store the info needed for link visualization
+
+        linkValues = new ArrayList<LinkValue>();
+        for (Link link : linkSet) {
+
+            Turtle end1 = link.end1();
+            Turtle end2 = link.end2();
+
+            Color c = org.nlogo.api.Color.getColor(link.color());
+            double zcor1 = (Double)reporter.report(context, new Object[]{end1});
+            double zcor2 = (Double)reporter.report(context, new Object[]{end2});
+            
+            LinkValue lv = new LinkValue(link.shape(), c, link.lineThickness(),
+                                         end1.xcor(), end1.ycor(), zcor1,
+                                         end2.xcor(), end2.ycor(), zcor2);
+            linkValues.add(lv);
+        }
+
         if (viewOptions.usePColor()) {
             updatePColors();
+        }  
+    }
+
+    public Link[] getTurtleSetLinksArray(AgentSet turtleSet) {
+        // no work to do if there are no links or no turtles
+        World world = App.app().workspace().world();
+        int totalLinks = world.links().count();
+        System.out.println("Total Links: " + totalLinks);
+        
+        if (totalLinks == 0 || turtleSet.count() == 0) {
+            return new Link[0];
+        }
+        
+        // We expect each link to appear twice
+        // Should add a check for that. Currently just remove duplicates
+        // Should check that it is set of turtles or state it is required
+        //     if (agent instanceof Turtle) {
+        // import org.nlogo.core.AgentKind;
+        // import org.nlogo.core.AgentKindJ;
+        //    if (agentKind == AgentKindJ.Turtle()) {
+        Link[] result = new Link[2 * totalLinks];
+        int writeTo = 0;
+        
+        for (Agent a : myAgents.agents()) {
+            Turtle2D turtle = (Turtle2D)a;
+            //System.out.println( turtle.toString());
+            //System.out.println(java.util.Arrays.toString(turtle.links()));
+            Link[] links = turtle.links();
+            if (links.length == 0) {
+                continue;
+            }
+            
+            // Add links to link array
+            for (Link link : links) {
+                result[writeTo] = link;
+                writeTo++;
+            }
+        }
+
+        // Array may have unused space, only return actual links
+        if (writeTo == result.length) {
+            return result;
+        } else {
+            return Arrays.copyOfRange(result, 0, writeTo);
         }
     }
+
+
 
     private void updatePColors() {
         for (int i = 0; i< worldWidth; i++){
@@ -133,6 +213,13 @@ public class TurtleView extends VarviewWindow {
         return rtn;
     }
 
+    
+    public ArrayList<LinkValue> getCopyOfLinkValues() {
+        ArrayList<LinkValue> rtn = new ArrayList<LinkValue>(linkValues.size() );
+        rtn.addAll( linkValues );
+        return rtn;
+    }
+    
     public void setupForRendering(  int wWidth, int wHeight, int minX, int maxX, int minY, int maxY ) {
         worldWidth = wWidth;
         worldHeight = wHeight;
