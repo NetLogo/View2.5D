@@ -1,4 +1,4 @@
-package view25d.view.gl;
+ package view25d.view.gl;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -68,27 +68,8 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 
         Set<String> names = scala.collection.JavaConversions.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
         for (String name : names) {
-            //System.out.println(name);
             int handle = gl.glGenLists(1);
             VectorShape vs = (VectorShape)App.app().workspace().world().turtleShapeList().shape( name );
-            compileShape(nlGLU, gl, glu, vs, handle, false );
-            compiledShapes.put(name, handle);
-        }
-
-        //./netlogo-gui/src/main/render/LinkDrawer.java:    LinkShape shape = (LinkShape) linkShapeTracker.shapeList().shape(link.shape());
-        //./netlogo-gui/src/main/gl/render/ShapeManager.java:            (org.nlogo.shape.LinkShape) linkShapeList.shape((String) req.data),
-
-        // netlogo-core/src/main/agent/
-
-
-        //netlogo-gui/src/main/window/View.java:              workspace.world().turtleShapeList().shape(turtle.shape());
-        
-        Set<String> linkNames = scala.collection.JavaConversions.setAsJavaSet(App.app().workspace().world().linkShapeList().names());
-        for (String name : linkNames) {
-            // System.out.println(name);
-            VectorShape vs = LinkShape.getDefaultLinkDirectionShape();
-            int handle = gl.glGenLists(1);
-            //LinkShape ls = (LinkShape)App.app().workspace().world().linkShapeList().shape( name );
             compileShape(nlGLU, gl, glu, vs, handle, false );
             compiledShapes.put(name, handle);
         }
@@ -198,13 +179,11 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
             }
         }
 
-
+        // Draw links as lines
         for (LinkValue lv : ((TurtleView)myViewer).getCopyOfLinkValues()) {
-            //System.out.println(lv.toString());
             gl.glPushMatrix();
             double zval1 = myViewer.zScale * lv.zcor1;
             double zval2 = myViewer.zScale * lv.zcor2;
-            // gl.glTranslated(lv.xcor , lv.ycor, zval);
 
             Color c = lv.color;
             float linkRed = c.getRed() / 255f;
@@ -212,23 +191,20 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
             float linkBlue = c.getBlue() / 255f;
             setColorAndStandardMaterial( gl, linkRed, linkGreen, linkBlue );
 
+            // lines for links need a minimum thickness to be visible
             if ( lv.thickness == 0.0 ) {
-                gl.glLineWidth(0.1f);
-                gl.glBegin (GL2.GL_LINES);
-                gl.glVertex3d (lv.xcor1, lv.ycor1, zval1);
-                gl.glVertex3d (lv.xcor2, lv.ycor2, zval2);
-                gl.glEnd();
-            } else {
-                gl.glBegin (GL2.GL_LINES);
-                gl.glLineWidth((float)lv.thickness);
-                gl.glVertex3d (lv.xcor1, lv.ycor1, zval1);
-                gl.glVertex3d (lv.xcor2, lv.ycor2, zval2);
-                gl.glEnd();
-
+                lv.thickness = 0.1f;
             }
-            gl.glPopMatrix();
-        }
 
+            gl.glLineWidth((float)lv.thickness);
+            gl.glBegin (GL2.GL_LINES);
+            gl.glVertex3d (lv.xcor1, lv.ycor1, zval1);
+            gl.glVertex3d (lv.xcor2, lv.ycor2, zval2);
+            gl.glEnd();
+        }
+            gl.glPopMatrix();
+
+        // Draw Turtle Stems
         double stemThickness = ((TurtleView)myViewer).viewOptions.getStemThickness();
         for (TurtleValue tv : ((TurtleView)myViewer).getCopyOfReporterValues()) {
             gl.glPushMatrix();
@@ -285,7 +261,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
         }
         drawAxesIfDragging( gl, axisHeadHandle );
         gl.glPopMatrix();
-
     }
 
     @Override

@@ -120,12 +120,10 @@ public class TurtleView extends VarviewWindow {
             turtleReporterValues.add(tv);
         }
 
-        Link[] linkArray = getTurtleSetLinksArray(myAgents);
+        // Get Set of Links associated with the Turtles
+        Set<Link> linkSet = getLinkSetFromTurtleSet(myAgents);
 
-        // Making it a set eliminates the duplicates
-        Set<Link> linkSet = new HashSet<>(Arrays.asList(linkArray));
-
-        // Store the info needed for link visualization
+        // Store the data needed for link visualization
 
         linkValues = new ArrayList<LinkValue>();
         for (Link link : linkSet) {
@@ -148,30 +146,42 @@ public class TurtleView extends VarviewWindow {
         }  
     }
 
-    public Link[] getTurtleSetLinksArray(AgentSet turtleSet) {
+
+    // Given an AgentSet of turtles, produce a Set of associated Links.
+    // Assumes check that AgentSet contains Turtles has already been made.
+    // Currently does not check
+    private  Set<Link>  getLinkSetFromTurtleSet(AgentSet turtleSet) {
+        
+        Link[] linkArray = getLinkArrayFromTurtleSet(myAgents);
+
+        // Making it a set eliminates the duplicates
+        Set<Link> linkSet = new HashSet<>(Arrays.asList(linkArray));
+
+        return linkSet;
+        
+    }
+        
+    // Given an AgentSet of Turtles, produce an Array of associated links
+    // Assumes check that AgentSet contains Turtles has already been made.
+    // Each link should appear twice. (To do: add a check for this.)
+    // 
+    private Link[] getLinkArrayFromTurtleSet(AgentSet turtleSet) {
+        
         // no work to do if there are no links or no turtles
+
         World world = App.app().workspace().world();
         int totalLinks = world.links().count();
-        System.out.println("Total Links: " + totalLinks);
         
         if (totalLinks == 0 || turtleSet.count() == 0) {
             return new Link[0];
         }
-        
-        // We expect each link to appear twice
-        // Should add a check for that. Currently just remove duplicates
-        // Should check that it is set of turtles or state it is required
-        //     if (agent instanceof Turtle) {
-        // import org.nlogo.core.AgentKind;
-        // import org.nlogo.core.AgentKindJ;
-        //    if (agentKind == AgentKindJ.Turtle()) {
+
+        // Allow space for each link to appear twice
         Link[] result = new Link[2 * totalLinks];
         int writeTo = 0;
         
         for (Agent a : myAgents.agents()) {
             Turtle2D turtle = (Turtle2D)a;
-            //System.out.println( turtle.toString());
-            //System.out.println(java.util.Arrays.toString(turtle.links()));
             Link[] links = turtle.links();
             if (links.length == 0) {
                 continue;
@@ -184,14 +194,13 @@ public class TurtleView extends VarviewWindow {
             }
         }
 
-        // Array may have unused space, only return actual links
+        // Eliminate unused Array space
         if (writeTo == result.length) {
             return result;
         } else {
             return Arrays.copyOfRange(result, 0, writeTo);
         }
     }
-
 
 
     private void updatePColors() {
@@ -263,13 +272,13 @@ public class TurtleView extends VarviewWindow {
         glManager.repaintCanvas();
     }
 
-	public double trimStemColor(double stemColor) {
-		if ( stemColor < 0 ) { stemColor = 0.0; }
-		if ( stemColor >= 140 ) { stemColor = 139.9; }
-		return stemColor;
-	}
+    public double trimStemColor(double stemColor) {
+        if ( stemColor < 0 ) { stemColor = 0.0; }
+        if ( stemColor >= 140 ) { stemColor = 139.9; }
+        return stemColor;
+    }
 
-	public double getStemColor(Context context, Turtle turtle) throws LogoException {
+    public double getStemColor(Context context, Turtle turtle) throws LogoException {
         double stemColor;
         if (stemColorReporter == null) {
             stemColor = defaultStemColor;
@@ -281,11 +290,11 @@ public class TurtleView extends VarviewWindow {
                 throw new LogoException("Stem color reporter did not generate a number. ", e1) { };
             }
         }
-		return trimStemColor(stemColor);
-	}
+        return trimStemColor(stemColor);
+    }
 
-	public AnonymousReporter getStemColorReporter() { return stemColorReporter; }
-	public void setStemColorReporter( AnonymousReporter reporter) {
-	    stemColorReporter = reporter;
+    public AnonymousReporter getStemColorReporter() { return stemColorReporter; }
+    public void setStemColorReporter( AnonymousReporter reporter) {
+        stemColorReporter = reporter;
     }
 }
