@@ -20,6 +20,7 @@ import org.nlogo.gl.render.Tessellator;
 import org.nlogo.shape.VectorShape;
 
 import view25d.view.MouseableGLWindow;
+import view25d.view.LinkValue;
 import view25d.view.PatchValue;
 import view25d.view.PatchView;
 import view25d.view.TurtleValue;
@@ -279,6 +280,29 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
                     throw npe;
                 }
                 gl.glPopMatrix();
+            }
+
+            // Draw links as lines
+            for (LinkValue lv : ((PatchView)myViewer).linkValues) {
+                double zval1 = myViewer.zScale * lv.zcor1;
+                double zval2 = myViewer.zScale * lv.zcor2;
+
+                Color c = lv.color;
+                float linkRed = c.getRed() / 255f;
+                float linkGreen = c.getGreen() / 255f;
+                float linkBlue = c.getBlue() / 255f;
+                setColorAndStandardMaterial( gl, linkRed, linkGreen, linkBlue );
+
+                // lines for links need a minimum thickness to be visible
+                if ( lv.thickness == 0.0 ) {
+                    lv.thickness = 0.1f;
+                }
+
+                gl.glLineWidth((float)lv.thickness);
+                gl.glBegin (GL2.GL_LINES);
+                gl.glVertex3d (lv.xcor1, lv.ycor1, zval1);
+                gl.glVertex3d (lv.xcor2, lv.ycor2, zval2);
+                gl.glEnd();
             }
         }
 

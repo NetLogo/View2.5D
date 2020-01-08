@@ -24,9 +24,8 @@ import org.nlogo.api.Context;
 import org.nlogo.api.Link;
 import org.nlogo.api.LogoException;
 import org.nlogo.api.Patch;
-import org.nlogo.api.Turtle;
+import org.nlogo.agent.Turtle;
 import org.nlogo.api.World;
-import org.nlogo.agent.Turtle2D;
 import org.nlogo.app.App;
 import org.nlogo.nvm.ExtensionContext;
 
@@ -112,7 +111,7 @@ public class TurtleView extends VarviewWindow {
 
         turtleReporterValues = new ArrayList<TurtleValue>();
         for (Agent a : myAgents.agents()) {
-            Turtle2D turtle = (Turtle2D)a;
+            Turtle turtle = (Turtle)a;
             Color c = org.nlogo.api.Color.getColor(turtle.color());
             double val = (Double)reporter.report(context, new Object[]{turtle});
             double stemColor = getStemColor(context, turtle);
@@ -128,8 +127,8 @@ public class TurtleView extends VarviewWindow {
         linkValues = new ArrayList<LinkValue>();
         for (Link link : linkSet) {
 
-            Turtle end1 = link.end1();
-            Turtle end2 = link.end2();
+            Turtle end1 = (Turtle)link.end1();
+            Turtle end2 = (Turtle)link.end2();
 
             Color c = org.nlogo.api.Color.getColor(link.color());
             double zcor1 = (Double)reporter.report(context, new Object[]{end1});
@@ -150,9 +149,9 @@ public class TurtleView extends VarviewWindow {
     // Given an AgentSet of turtles, produce a Set of associated Links.
     // Assumes check that AgentSet contains Turtles has already been made.
     // Currently does not check
-    private  Set<Link>  getLinkSetFromTurtleSet(AgentSet turtleSet) {
+    public static  Set<Link>  getLinkSetFromTurtleSet(AgentSet turtleSet) {
         
-        Link[] linkArray = getLinkArrayFromTurtleSet(myAgents);
+        Link[] linkArray = getLinkArrayFromTurtleSet(turtleSet);
 
         // Making it a set eliminates the duplicates
         Set<Link> linkSet = new HashSet<>(Arrays.asList(linkArray));
@@ -165,7 +164,7 @@ public class TurtleView extends VarviewWindow {
     // Assumes check that AgentSet contains Turtles has already been made.
     // Each link should appear twice. (To do: add a check for this.)
     // 
-    private Link[] getLinkArrayFromTurtleSet(AgentSet turtleSet) {
+    public static Link[] getLinkArrayFromTurtleSet(AgentSet turtleSet) {
         
         // no work to do if there are no links or no turtles
 
@@ -180,8 +179,8 @@ public class TurtleView extends VarviewWindow {
         Link[] result = new Link[2 * totalLinks];
         int writeTo = 0;
         
-        for (Agent a : myAgents.agents()) {
-            Turtle2D turtle = (Turtle2D)a;
+        for (Agent a : turtleSet.agents()) {
+            Turtle turtle = (Turtle)a;
             Link[] links = turtle.links();
             if (links.length == 0) {
                 continue;
