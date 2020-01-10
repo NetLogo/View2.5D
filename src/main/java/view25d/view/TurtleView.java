@@ -109,22 +109,25 @@ public class TurtleView extends VarviewWindow {
     private void updateArrayList(Context context) throws LogoException {
         //turtleReporterValues.clear();
 
-        turtleReporterValues = new ArrayList<TurtleValue>();
+        ArrayList<TurtleValue> temp = new ArrayList<TurtleValue>();
+        ArrayList<LinkValue> temp2 = new ArrayList<LinkValue>();
+
         for (Agent a : myAgents.agents()) {
             Turtle turtle = (Turtle)a;
+            if (turtle.hidden()) {
+                continue;
+            }
             Color c = org.nlogo.api.Color.getColor(turtle.color());
             double val = (Double)reporter.report(context, new Object[]{turtle});
             double stemColor = getStemColor(context, turtle);
             TurtleValue tv = new TurtleValue( turtle.shape(), c, turtle.size(), turtle.xcor(), turtle.ycor(), val, stemColor);
-            turtleReporterValues.add(tv);
+            temp.add(tv);
         }
 
         // Get Set of Links associated with the Turtles
         Set<Link> linkSet = getLinkSetFromTurtleSet(myAgents);
 
         // Store the data needed for link visualization
-
-        linkValues = new ArrayList<LinkValue>();
         for (Link link : linkSet) {
 
             Turtle end1 = (Turtle)link.end1();
@@ -137,9 +140,12 @@ public class TurtleView extends VarviewWindow {
             LinkValue lv = new LinkValue(link.shape(), c, link.lineThickness(),
                                          end1.xcor(), end1.ycor(), zcor1,
                                          end2.xcor(), end2.ycor(), zcor2);
-            linkValues.add(lv);
+            temp2.add(lv);
         }
 
+        turtleReporterValues = temp;
+        linkValues = temp2;
+            
         if (viewOptions.usePColor()) {
             updatePColors();
         }  
@@ -148,7 +154,7 @@ public class TurtleView extends VarviewWindow {
 
     // Given an AgentSet of turtles, produce a Set of associated Links.
     // Assumes check that AgentSet contains Turtles has already been made.
-    // Currently does not check
+    // Currently includes links for which only one end is in the AgentSet
     public static  Set<Link>  getLinkSetFromTurtleSet(AgentSet turtleSet) {
         
         Link[] linkArray = getLinkArrayFromTurtleSet(turtleSet);
@@ -162,7 +168,7 @@ public class TurtleView extends VarviewWindow {
         
     // Given an AgentSet of Turtles, produce an Array of associated links
     // Assumes check that AgentSet contains Turtles has already been made.
-    // Each link should appear twice. (To do: add a check for this.)
+    // Each link will appear twice if both ends of a link are in the AgentSet
     // 
     public static Link[] getLinkArrayFromTurtleSet(AgentSet turtleSet) {
         
@@ -180,14 +186,18 @@ public class TurtleView extends VarviewWindow {
         int writeTo = 0;
         
         for (Agent a : turtleSet.agents()) {
+
             Turtle turtle = (Turtle)a;
             Link[] links = turtle.links();
             if (links.length == 0) {
                 continue;
             }
-            
+
             // Add links to link array
             for (Link link : links) {
+                if (link.hidden()) {
+                    continue;
+                }
                 result[writeTo] = link;
                 writeTo++;
             }

@@ -125,6 +125,9 @@ public class PatchView extends VarviewWindow {
             AgentSet as = App.app().workspace().world().turtles();
             for (Agent a : as.agents() ) {
                 Turtle t = (Turtle)a;
+                if (t.hidden()) {
+                    continue;
+                }
                 double val = (Double)reporter.report(context, new Object[]{t});
                 Color c = org.nlogo.api.Color.getColor(t.color());
                 double stemColor = 4.5f;  // This will be ignored no stem in PatchView
