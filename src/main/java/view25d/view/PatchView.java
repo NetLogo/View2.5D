@@ -119,8 +119,8 @@ public class PatchView extends VarviewWindow {
             }
         }
 
-        ArrayList<TurtleValue> temp = new ArrayList<TurtleValue>();
-        ArrayList<LinkValue> temp2 = new ArrayList<LinkValue>();
+        ArrayList<TurtleValue> tempTurtles = new ArrayList<TurtleValue>();
+        ArrayList<LinkValue> tempLinks = new ArrayList<LinkValue>();
         if (doingTurtles) {
             AgentSet as = App.app().workspace().world().turtles();
             for (Agent a : as.agents() ) {
@@ -133,7 +133,7 @@ public class PatchView extends VarviewWindow {
                 double stemColor = 4.5f;  // This will be ignored no stem in PatchView
                 TurtleValue tv = new TurtleValue( t.shape(), c, t.size(), t.xcor(), t.ycor(), val, stemColor );
                 tv.setHeading(t.heading());
-                temp.add(tv);
+                tempTurtles.add(tv);
             }
             // Get Set of Links associated with the Turtles
             Set<Link> linkSet = TurtleView.getLinkSetFromTurtleSet(as);
@@ -149,12 +149,12 @@ public class PatchView extends VarviewWindow {
                 LinkValue lv = new LinkValue(link.shape(), c, link.lineThickness(),
                                              end1.xcor(), end1.ycor(), zcor1,
                                              end2.xcor(), end2.ycor(), zcor2);
-                temp2.add(lv);
+                tempLinks.add(lv);
             }
         }
         //copy over the new values in an atomic step to avoid concurrent access
-        turtleValues = temp;
-        linkValues = temp2;
+        turtleValues = tempTurtles;
+        linkValues = tempLinks;
     }
 
     @Override

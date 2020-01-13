@@ -109,8 +109,8 @@ public class TurtleView extends VarviewWindow {
     private void updateArrayList(Context context) throws LogoException {
         //turtleReporterValues.clear();
 
-        ArrayList<TurtleValue> temp = new ArrayList<TurtleValue>();
-        ArrayList<LinkValue> temp2 = new ArrayList<LinkValue>();
+        ArrayList<TurtleValue> tempTurtles = new ArrayList<TurtleValue>();
+        ArrayList<LinkValue> tempLinks = new ArrayList<LinkValue>();
 
         for (Agent a : myAgents.agents()) {
             Turtle turtle = (Turtle)a;
@@ -121,7 +121,7 @@ public class TurtleView extends VarviewWindow {
             double val = (Double)reporter.report(context, new Object[]{turtle});
             double stemColor = getStemColor(context, turtle);
             TurtleValue tv = new TurtleValue( turtle.shape(), c, turtle.size(), turtle.xcor(), turtle.ycor(), val, stemColor);
-            temp.add(tv);
+            tempTurtles.add(tv);
         }
 
         // Get Set of Links associated with the Turtles
@@ -140,11 +140,11 @@ public class TurtleView extends VarviewWindow {
             LinkValue lv = new LinkValue(link.shape(), c, link.lineThickness(),
                                          end1.xcor(), end1.ycor(), zcor1,
                                          end2.xcor(), end2.ycor(), zcor2);
-            temp2.add(lv);
+            tempLinks.add(lv);
         }
 
-        turtleReporterValues = temp;
-        linkValues = temp2;
+        turtleReporterValues = tempTurtles;
+        linkValues = tempLinks;
             
         if (viewOptions.usePColor()) {
             updatePColors();
