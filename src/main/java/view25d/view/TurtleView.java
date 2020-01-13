@@ -156,35 +156,17 @@ public class TurtleView extends VarviewWindow {
     // Assumes check that AgentSet contains Turtles has already been made.
     // Currently includes links for which only one end is in the AgentSet
     public static  Set<Link>  getLinkSetFromTurtleSet(AgentSet turtleSet) {
-        
-        Link[] linkArray = getLinkArrayFromTurtleSet(turtleSet);
 
-        // Making it a set eliminates the duplicates
-        Set<Link> linkSet = new HashSet<>(Arrays.asList(linkArray));
-
-        return linkSet;
-        
-    }
-        
-    // Given an AgentSet of Turtles, produce an Array of associated links
-    // Assumes check that AgentSet contains Turtles has already been made.
-    // Each link will appear twice if both ends of a link are in the AgentSet
-    // 
-    public static Link[] getLinkArrayFromTurtleSet(AgentSet turtleSet) {
+        Set<Link> linkSet = new HashSet<>();
         
         // no work to do if there are no links or no turtles
 
         World world = App.app().workspace().world();
-        int totalLinks = world.links().count();
         
-        if (totalLinks == 0 || turtleSet.count() == 0) {
-            return new Link[0];
+        if (world.links().count() == 0 || turtleSet.count() == 0) {
+            return linkSet];
         }
 
-        // Allow space for each link to appear twice
-        Link[] result = new Link[2 * totalLinks];
-        int writeTo = 0;
-        
         for (Agent a : turtleSet.agents()) {
 
             Turtle turtle = (Turtle)a;
@@ -193,22 +175,16 @@ public class TurtleView extends VarviewWindow {
                 continue;
             }
 
-            // Add links to link array
+            // Add links to set
             for (Link link : links) {
                 if (link.hidden()) {
                     continue;
                 }
-                result[writeTo] = link;
-                writeTo++;
+                linkSet.add(link);
             }
         }
 
-        // Eliminate unused Array space
-        if (writeTo == result.length) {
-            return result;
-        } else {
-            return Arrays.copyOfRange(result, 0, writeTo);
-        }
+        return linkSet;
     }
 
 
