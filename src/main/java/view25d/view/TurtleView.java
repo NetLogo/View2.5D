@@ -136,7 +136,7 @@ public class TurtleView extends VarviewWindow {
             Color c = org.nlogo.api.Color.getColor(link.color());
             double zcor1 = (Double)reporter.report(context, new Object[]{end1});
             double zcor2 = (Double)reporter.report(context, new Object[]{end2});
-            
+
             LinkValue lv = new LinkValue(link.shape(), c, link.lineThickness(),
                                          end1.xcor(), end1.ycor(), zcor1,
                                          end2.xcor(), end2.ycor(), zcor2);
@@ -145,10 +145,10 @@ public class TurtleView extends VarviewWindow {
 
         turtleReporterValues = tempTurtles;
         linkValues = tempLinks;
-            
+
         if (viewOptions.usePColor()) {
             updatePColors();
-        }  
+        }
     }
 
 
@@ -158,11 +158,11 @@ public class TurtleView extends VarviewWindow {
     public static  Set<Link>  getLinkSetFromTurtleSet(AgentSet turtleSet) {
 
         Set<Link> linkSet = new HashSet<>();
-        
+
         // no work to do if there are no links or no turtles
 
         World world = App.app().workspace().world();
-        
+
         if (world.links().count() == 0 || turtleSet.count() == 0) {
             return linkSet;
         }
@@ -207,13 +207,13 @@ public class TurtleView extends VarviewWindow {
         return rtn;
     }
 
-    
+
     public ArrayList<LinkValue> getCopyOfLinkValues() {
         ArrayList<LinkValue> rtn = new ArrayList<LinkValue>(linkValues.size() );
         rtn.addAll( linkValues );
         return rtn;
     }
-    
+
     public void setupForRendering(  int wWidth, int wHeight, int minX, int maxX, int minY, int maxY ) {
         worldWidth = wWidth;
         worldHeight = wHeight;

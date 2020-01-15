@@ -6,7 +6,6 @@ import java.awt.Color;
 // view25d.
 
 public class LinkValue {
-    
     public String shape;      // the link shape is currently always a line
     public Color color;       // link color
     public double thickness;  // link thickness
@@ -18,7 +17,7 @@ public class LinkValue {
     public double zcor2;      // z coordinate of end2 turtle
 
     // Note that when turtles and links are displayed, their z coordinates are multiplied by the zScale associated with the view
-    
+
     public LinkValue( String sh, Color co, double th,
                       double x1, double y1, double z1,
                       double x2, double y2, double z2) {
@@ -33,7 +32,6 @@ public class LinkValue {
         this.zcor2 = z2;
     }
 
-    
     @Override
     public String toString() {
        return "End1: [" +  this.xcor1 + " " +  this.ycor1 + " " + this.zcor1 + "], " +
