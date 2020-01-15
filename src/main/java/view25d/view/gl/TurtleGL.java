@@ -1,4 +1,4 @@
-package view25d.view.gl;
+ package view25d.view.gl;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -16,9 +16,11 @@ import com.jogamp.opengl.glu.GLUtessellator;
 import org.nlogo.app.App;
 import org.nlogo.gl.render.Polygons;
 import org.nlogo.gl.render.Tessellator;
+import org.nlogo.shape.LinkShape;
 import org.nlogo.shape.VectorShape;
 
 import view25d.view.MouseableGLWindow;
+import view25d.view.LinkValue;
 import view25d.view.TurtleValue;
 import view25d.view.TurtleView;
 
@@ -177,7 +179,30 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
             }
         }
 
+        // Draw links as lines
+        for (LinkValue lv : ((TurtleView)myViewer).getCopyOfLinkValues()) {
+            double zval1 = myViewer.zScale * lv.zcor1;
+            double zval2 = myViewer.zScale * lv.zcor2;
 
+            Color c = lv.color;
+            float linkRed = c.getRed() / 255f;
+            float linkGreen = c.getGreen() / 255f;
+            float linkBlue = c.getBlue() / 255f;
+            setColorAndStandardMaterial( gl, linkRed, linkGreen, linkBlue );
+
+            // lines for links need a minimum thickness to be visible
+            if ( lv.thickness == 0.0 ) {
+                lv.thickness = 0.1f;
+            }
+
+            gl.glLineWidth((float)lv.thickness);
+            gl.glBegin (GL2.GL_LINES);
+            gl.glVertex3d (lv.xcor1, lv.ycor1, zval1);
+            gl.glVertex3d (lv.xcor2, lv.ycor2, zval2);
+            gl.glEnd();
+        }
+
+        // Draw Turtle Stems
         double stemThickness = ((TurtleView)myViewer).viewOptions.getStemThickness();
         for (TurtleValue tv : ((TurtleView)myViewer).getCopyOfReporterValues()) {
             gl.glPushMatrix();
@@ -234,7 +259,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
         }
         drawAxesIfDragging( gl, axisHeadHandle );
         gl.glPopMatrix();
-
     }
 
     @Override

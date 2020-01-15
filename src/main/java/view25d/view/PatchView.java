@@ -6,6 +6,9 @@ import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.GLCapabilities;
@@ -17,6 +20,7 @@ import org.nlogo.agent.Turtle;
 import org.nlogo.api.Agent;
 import org.nlogo.api.AgentException;
 import org.nlogo.api.Context;
+import org.nlogo.api.Link;
 import org.nlogo.api.Patch;
 import org.nlogo.api.AnonymousReporter;
 import org.nlogo.app.App;
@@ -38,6 +42,7 @@ public class PatchView extends VarviewWindow {
 
     public boolean doingTurtles = false;
     public ArrayList<TurtleValue> turtleValues = new ArrayList<TurtleValue>();
+    public ArrayList<LinkValue> linkValues;
 
     public PatchView(String title, AnonymousReporter rt) {
         super(title);
@@ -114,21 +119,42 @@ public class PatchView extends VarviewWindow {
             }
         }
 
-        ArrayList<TurtleValue> temp = new ArrayList<TurtleValue>();
+        ArrayList<TurtleValue> tempTurtles = new ArrayList<TurtleValue>();
+        ArrayList<LinkValue> tempLinks = new ArrayList<LinkValue>();
         if (doingTurtles) {
             AgentSet as = App.app().workspace().world().turtles();
             for (Agent a : as.agents() ) {
                 Turtle t = (Turtle)a;
+                if (t.hidden()) {
+                    continue;
+                }
                 double val = (Double)reporter.report(context, new Object[]{t});
                 Color c = org.nlogo.api.Color.getColor(t.color());
                 double stemColor = 4.5f;  // This will be ignored no stem in PatchView
                 TurtleValue tv = new TurtleValue( t.shape(), c, t.size(), t.xcor(), t.ycor(), val, stemColor );
                 tv.setHeading(t.heading());
-                temp.add(tv);
+                tempTurtles.add(tv);
+            }
+            // Get Set of Links associated with the Turtles
+            Set<Link> linkSet = TurtleView.getLinkSetFromTurtleSet(as);
+            for (Link link : linkSet) {
+
+                Turtle end1 = (Turtle)link.end1();
+                Turtle end2 = (Turtle)link.end2();
+
+                Color c = org.nlogo.api.Color.getColor(link.color());
+                double zcor1 = (Double)reporter.report(context, new Object[]{end1});
+                double zcor2 = (Double)reporter.report(context, new Object[]{end2});
+
+                LinkValue lv = new LinkValue(link.shape(), c, link.lineThickness(),
+                                             end1.xcor(), end1.ycor(), zcor1,
+                                             end2.xcor(), end2.ycor(), zcor2);
+                tempLinks.add(lv);
             }
         }
         //copy over the new values in an atomic step to avoid concurrent access
-        turtleValues = temp;
+        turtleValues = tempTurtles;
+        linkValues = tempLinks;
     }
 
     @Override
