@@ -164,7 +164,7 @@ public class TurtleView extends VarviewWindow {
         World world = App.app().workspace().world();
         
         if (world.links().count() == 0 || turtleSet.count() == 0) {
-            return linkSet];
+            return linkSet;
         }
 
         for (Agent a : turtleSet.agents()) {
