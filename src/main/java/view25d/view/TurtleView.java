@@ -82,7 +82,7 @@ public class TurtleView extends VarviewWindow {
         glManager.setCanvas( glCanvas );
         mainPanel.add(glCanvas, BorderLayout.CENTER);
 
-        viewOptions = new TurtleViewOptions(this, true, true, true, false );
+        viewOptions = new TurtleViewOptions(this, true, true, true, false, true, false );
         mainPanel.add(viewOptions, BorderLayout.NORTH);
 
         //change if re-add scalemanipulator

@@ -19,6 +19,7 @@ import view25d.prims.GetObserverFocus;
 import view25d.prims.GetZScale;
 import view25d.prims.MakePatchView;
 import view25d.prims.MakeTurtleView;
+import view25d.prims.SetLinkDisplayMode;
 import view25d.prims.SetObserverAngles;
 import view25d.prims.SetObserverDistance;
 import view25d.prims.SetObserverFocus;
@@ -114,6 +115,8 @@ public class View25DExtension extends DefaultClassManager {
         primManager.addPrimitive("get-observer-xy-focus", new GetObserverFocus() );
         primManager.addPrimitive("set-observer-xy-focus", new SetObserverFocus() );
 
+        primManager.addPrimitive("show-links-xy-plane", new SetLinkDisplayMode(true) );
+        primManager.addPrimitive("show-links-xyz", new SetLinkDisplayMode(false) );
     }
 
     /*public static class DecoratedPatchView extends DefaultCommand {
