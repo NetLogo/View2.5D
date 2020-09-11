@@ -77,7 +77,7 @@ public class PatchView extends VarviewWindow {
         glManager.setCanvas( glCanvas );
         mainPanel.add(glCanvas, BorderLayout.CENTER);
 
-        viewOptions = new PatchViewOptions( this, true, false, false);
+        viewOptions = new PatchViewOptions( this, true, false, false, true, false);
         mainPanel.add(viewOptions, BorderLayout.NORTH);
 
         setSize(new Dimension(600, 650));

@@ -281,31 +281,33 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
                 }
                 gl.glPopMatrix();
             }
-
             // Draw links as lines
             for (LinkValue lv : ((PatchView)myViewer).linkValues) {
-                double zval1 = myViewer.zScale * lv.zcor1;
-                double zval2 = myViewer.zScale * lv.zcor2;
+              double zval1 = 0.0;
+              double zval2 = 0.0;
+              if (((PatchView)myViewer).viewOptions.linksAreThreeD()) {
+                zval1 = myViewer.zScale * lv.zcor1;
+                zval2 = myViewer.zScale * lv.zcor2;
+              }
 
-                Color c = lv.color;
-                float linkRed = c.getRed() / 255f;
-                float linkGreen = c.getGreen() / 255f;
-                float linkBlue = c.getBlue() / 255f;
-                setColorAndStandardMaterial( gl, linkRed, linkGreen, linkBlue );
+              Color c = lv.color;
+              float linkRed = c.getRed() / 255f;
+              float linkGreen = c.getGreen() / 255f;
+              float linkBlue = c.getBlue() / 255f;
+              setColorAndStandardMaterial( gl, linkRed, linkGreen, linkBlue );
 
-                // lines for links need a minimum thickness to be visible
-                if ( lv.thickness == 0.0 ) {
-                    lv.thickness = 0.1f;
-                }
+              // lines for links need a minimum thickness to be visible
+              if ( lv.thickness == 0.0 ) {
+                lv.thickness = 0.1f;
+              }
 
-                gl.glLineWidth((float)lv.thickness);
-                gl.glBegin (GL2.GL_LINES);
-                gl.glVertex3d (lv.xcor1, lv.ycor1, zval1);
-                gl.glVertex3d (lv.xcor2, lv.ycor2, zval2);
-                gl.glEnd();
+              gl.glLineWidth((float)lv.thickness);
+              gl.glBegin (GL2.GL_LINES);
+              gl.glVertex3d (lv.xcor1, lv.ycor1, zval1);
+              gl.glVertex3d (lv.xcor2, lv.ycor2, zval2);
+              gl.glEnd();
             }
         }
-
 
         drawAxesIfDragging(gl, axisHeadHandle);
 

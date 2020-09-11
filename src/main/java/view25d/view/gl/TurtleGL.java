@@ -179,29 +179,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
             }
         }
 
-        // Draw links as lines
-        for (LinkValue lv : ((TurtleView)myViewer).getCopyOfLinkValues()) {
-            double zval1 = myViewer.zScale * lv.zcor1;
-            double zval2 = myViewer.zScale * lv.zcor2;
-
-            Color c = lv.color;
-            float linkRed = c.getRed() / 255f;
-            float linkGreen = c.getGreen() / 255f;
-            float linkBlue = c.getBlue() / 255f;
-            setColorAndStandardMaterial( gl, linkRed, linkGreen, linkBlue );
-
-            // lines for links need a minimum thickness to be visible
-            if ( lv.thickness == 0.0 ) {
-                lv.thickness = 0.1f;
-            }
-
-            gl.glLineWidth((float)lv.thickness);
-            gl.glBegin (GL2.GL_LINES);
-            gl.glVertex3d (lv.xcor1, lv.ycor1, zval1);
-            gl.glVertex3d (lv.xcor2, lv.ycor2, zval2);
-            gl.glEnd();
-        }
-
         // Draw Turtle Stems
         double stemThickness = ((TurtleView)myViewer).viewOptions.getStemThickness();
         for (TurtleValue tv : ((TurtleView)myViewer).getCopyOfReporterValues()) {
@@ -237,7 +214,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
             if ( ((TurtleView)myViewer).viewOptions.showSize() )
                 gl.glScaled(tv.size, tv.size, tv.size);
 
-
             if ( ((TurtleView)myViewer).viewOptions.showColor() ) {
                 red = (tv.color.getRed()/255f);
                 green = (tv.color.getGreen()/255f);
@@ -257,6 +233,34 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 
             gl.glPopMatrix();
         }
+
+        // Draw links as lines
+        for (LinkValue lv : ((TurtleView)myViewer).linkValues) {
+          double zval1 = 0.0;
+          double zval2 = 0.0;
+          if (((TurtleView)myViewer).viewOptions.linksAreThreeD()) {
+            zval1 = myViewer.zScale * lv.zcor1;
+            zval2 = myViewer.zScale * lv.zcor2;
+          }
+
+          Color c = lv.color;
+          float linkRed = c.getRed() / 255f;
+          float linkGreen = c.getGreen() / 255f;
+          float linkBlue = c.getBlue() / 255f;
+          setColorAndStandardMaterial( gl, linkRed, linkGreen, linkBlue );
+
+          // lines for links need a minimum thickness to be visible
+          if ( lv.thickness == 0.0 ) {
+            lv.thickness = 0.1f;
+          }
+
+          gl.glLineWidth((float)lv.thickness);
+          gl.glBegin (GL2.GL_LINES);
+          gl.glVertex3d (lv.xcor1, lv.ycor1, zval1);
+          gl.glVertex3d (lv.xcor2, lv.ycor2, zval2);
+          gl.glEnd();
+        }
+
         drawAxesIfDragging( gl, axisHeadHandle );
         gl.glPopMatrix();
     }
