@@ -6,9 +6,7 @@ scalaVersion := "2.12.8"
 
 name := "view2.5d"
 
-version := "1.1.5"
-
-isSnapshot := true
+version := "1.1.6"
 
 netLogoClassManager := "view25d.View25DExtension"
 
@@ -28,4 +26,4 @@ libraryDependencies ++= Seq(
   "org.jogamp.gluegen" % "gluegen-rt" % "2.3.2"
 )
 
-netLogoVersion := "6.1.0-RC1"
+netLogoVersion := "6.1.1"
