@@ -53,7 +53,6 @@ public class TurtleViewOptions extends JPanel implements ChangeListener {
 		group2.add(threeDButton);
 		group2.add(twoDButton);
 
-		//Register a listener (myself) for the radio buttons.
 		threeDButton.addChangeListener(this);
 		twoDButton.addChangeListener(this);
 
@@ -62,7 +61,6 @@ public class TurtleViewOptions extends JPanel implements ChangeListener {
 		this.add( twoDButton );
 		this.add( new JLabel( "") );
 		this.add( new JLabel( "") );
-		//this.setSize( new Dimension (600, 60));
 	}
 
 	public boolean showColor() { return color.isSelected(); }
@@ -83,7 +81,7 @@ public class TurtleViewOptions extends JPanel implements ChangeListener {
 			threeDButton.setSelected(true);
 		}
 	}
-	
+
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
 		//System.err.println("state.  now usepcolor selection is: " + usePColor() );

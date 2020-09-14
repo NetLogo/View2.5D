@@ -58,7 +58,6 @@ public class PatchViewOptions extends JPanel implements ChangeListener {
 		group2.add(threeDButton);
 		group2.add(twoDButton);
 
-		//Register a listener (myself) for the radio buttons.
 		structuresButton.addChangeListener(this);
 		sheetButton.addChangeListener(this);
 		pinsButton.addChangeListener(this);
@@ -71,7 +70,6 @@ public class PatchViewOptions extends JPanel implements ChangeListener {
 		this.add( sheetButton );
 		this.add( pinsButton );
 		this.add( new JLabel( "  Link Options:") );
-		//this.add( new JLabel("(Structures)"));
 		this.add( threeDButton );
 		this.add( twoDButton );
 		this.setSize( new Dimension (600, 60));
