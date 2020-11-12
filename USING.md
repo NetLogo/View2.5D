@@ -27,4 +27,4 @@ See the View2.5d Code Examples in the NetLogo models library.
 
 ### Feedback
 
-Send comments, bugs, or other feedback to [CCL Feedback](mailto:ccl-feedback@ccl.northwestern.edu) and/or [Corey Brady](mailto:cbrady@northwestern.edu).
+Send comments, bugs, or other feedback to [CCL Feedback](mailto:ccl-feedback@ccl.northwestern.edu).

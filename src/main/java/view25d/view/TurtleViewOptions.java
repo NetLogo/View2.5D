@@ -41,12 +41,12 @@ public class TurtleViewOptions extends JPanel implements ChangeListener {
 		this.add(shape);
 		this.add(pcolor);
 
-		threeDButton = new JRadioButton("ThreeD");
-		threeDButton.setActionCommand("threeD");
+		threeDButton = new JRadioButton("xyz");
+		threeDButton.setActionCommand("xyz");
 		if (threeD) { threeDButton.setSelected(true); }
 
-		twoDButton = new JRadioButton("TwoD");
-		twoDButton.setActionCommand("TwoD");
+		twoDButton = new JRadioButton("xy-plane");
+		twoDButton.setActionCommand("xy-plane");
 		if (twoD) { twoDButton.setSelected(true); }
 
 		ButtonGroup group2 = new ButtonGroup();

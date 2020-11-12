@@ -2,7 +2,7 @@ import org.nlogo.build.{ ExtensionDocumentationPlugin, NetLogoExtension }
 
 enablePlugins(NetLogoExtension, ExtensionDocumentationPlugin)
 
-scalaVersion := "2.12.8"
+scalaVersion := "2.12.12"
 
 name := "view2.5d"
 
@@ -26,4 +26,4 @@ libraryDependencies ++= Seq(
   "org.jogamp.gluegen" % "gluegen-rt" % "2.3.2"
 )
 
-netLogoVersion := "6.1.1"
+netLogoVersion := "6.1.1-c82c397"
