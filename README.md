@@ -40,7 +40,7 @@ See the View2.5d Code Examples in the NetLogo models library.
 
 ### Feedback
 
-Send comments, bugs, or other feedback to [CCL Feedback](mailto:ccl-feedback@ccl.northwestern.edu) and/or [Corey Brady](mailto:cbrady@northwestern.edu).
+Send comments, bugs, or other feedback to [CCL Feedback](mailto:ccl-feedback@ccl.northwestern.edu).
 
 ## Primitives
 
@@ -55,6 +55,8 @@ Send comments, bugs, or other feedback to [CCL Feedback](mailto:ccl-feedback@ccl
 [`view2.5d:set-z-scale`](#view2.5dset-z-scale)
 [`view2.5d:set-turtle-stem-thickness`](#view2.5dset-turtle-stem-thickness)
 [`view2.5d:set-turtle-stem-color`](#view2.5dset-turtle-stem-color)
+[`view2.5d:show-links-xy-plane`](#view2.5dshow-links-xy-plane)
+[`view2.5d:show-links-xyz`](#view2.5dshow-links-xyz)
 [`view2.5d:get-observer-angles`](#view2.5dget-observer-angles)
 [`view2.5d:set-observer-angles`](#view2.5dset-observer-angles)
 [`view2.5d:get-observer-xy-focus`](#view2.5dget-observer-xy-focus)
@@ -249,6 +251,32 @@ view2.5d:set-turtle-stem-color "Test" [ the-turtle -> [ color ] of the-turtle ]
 view2.5d:set-turtle-stem-color "Test" [ orange ]
 ```
 
+
+### `view2.5d:show-links-xy-plane`
+
+```NetLogo
+view2.5d:show-links-xy-plane Title
+```
+
+
+  This command must be called from the Observer context.
+  Updates only the turtle-view  or patch-view window with the specified title (if any).
+  Links are drawn in the xy-plane (instead of the turtle to turtle default).
+  This option can be selected using the Link Options xy-plane radio Button in the 3D view.
+  
+
+### `view2.5d:show-links-xyz`
+
+```NetLogo
+view2.5d:show-links-xyz Title
+```
+
+
+  This command must be called from the Observer context.
+  Updates only the turtle-view  or patch-view window with the specified title (if any).
+  Links are drawn from turtle to turtle (this is the default way links are displayed).
+  This option can be selected using the Link Options xyz radio Button in the 3D view.
+  
 
 ### `view2.5d:get-observer-angles`
 
