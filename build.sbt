@@ -6,7 +6,7 @@ scalaVersion := "2.12.12"
 
 name := "view2.5d"
 
-version := "1.1.6"
+version := "1.1.7"
 
 netLogoClassManager := "view25d.View25DExtension"
 
