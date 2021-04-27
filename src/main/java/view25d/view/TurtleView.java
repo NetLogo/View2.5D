@@ -101,9 +101,14 @@ public class TurtleView extends VarviewWindow {
 
 
     @Override
-    public void manuallyRefreshReporterView(Context context)  throws LogoException {
+    public void manuallyRefreshReporterView(Context context) throws LogoException {
         updateArrayList(context);
         glManager.repaintCanvas();
+    }
+
+    public void updateTurtleShapes() throws LogoException {
+      System.out.println("turtleView.updateTurtleShapes");
+      glManager.updateTurtleDisplayList();
     }
 
     private void updateArrayList(Context context) throws LogoException {

@@ -29,6 +29,7 @@ import view25d.prims.SetZScale;
 import view25d.prims.UpdateAllViews;
 import view25d.prims.UpdateOnePatchView;
 import view25d.prims.UpdateOneTurtleView;
+import view25d.view.View25DShapeChangeListener;
 import view25d.view.TurtleView;
 import view25d.view.VarviewWindow;
 
@@ -60,7 +61,7 @@ public class View25DExtension extends DefaultClassManager {
     }
 
 
-    //Add a window to the indexed set. Remove any existing t view.
+    //Add a window to the indexed set. Remove any existing turtle view.
     public static void storeTurtleWindowWithTitle( String s, TurtleView win ){
         removeTurtleWindowWithTitle(s);
         turtleWindowMap.put(s,win);
@@ -74,11 +75,20 @@ public class View25DExtension extends DefaultClassManager {
             tvw.dispose();
         }
     }
-
+//throws ExtensionException, LogoException
+    public static void updateTurtleShapesAllTurtleViews(){
+            ArrayList<String> names =  new ArrayList<String>();
+            names.addAll( turtleWindowMap.keySet() );
+            for ( String name : names ) {
+                TurtleView tv = turtleWindowMap.get(name);
+                tv.updateTurtleShapes();
+            }
+    }
 
     //run at extension startup.  ensure that the NetLogo native JOGL is loaded.
     @Override
     public void runOnce(ExtensionManager em) throws ExtensionException {
+      View25DShapeChangeListener.listen();
     }
 
     @Override

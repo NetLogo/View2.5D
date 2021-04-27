@@ -80,6 +80,9 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
         gl.glEndList();
     }
 
+    public void updateTurtleDisplayList() {
+      System.out.println("TurtleGL.updateTurtleDisplayList");
+    }
 
     public void compileShape(NetLogoGLU nlGLU, GL2 gl, GLU glu,
             VectorShape vShape,
