@@ -27,7 +27,7 @@ import view25d.view.TurtleView;
 public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 
     GLU glu;
-
+    boolean recompileShapes = false;
     //handles for compiled GL shapes
     int patchTileListHandle, stemSkyscraperHandle, pinHeadListHandle, axisHeadHandle;
     HashMap<String,Integer> compiledShapes = new HashMap<String, Integer>();
@@ -80,10 +80,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
         gl.glEndList();
     }
 
-    public void updateTurtleDisplayList() {
-      System.out.println("TurtleGL.updateTurtleDisplayList");
-    }
-
     public void compileShape(NetLogoGLU nlGLU, GL2 gl, GLU glu,
             VectorShape vShape,
             int index, boolean rotatable) {
@@ -133,7 +129,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
         gl.glEndList();
     }
 
-
     @Override
     public void init(GLAutoDrawable drawable) {
         GL2 gl = (GL2)drawable.getGL();
@@ -143,10 +138,22 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
         setupLightingAndViewPort(gl, glu);
     }
 
-
     @Override
     public void display(GLAutoDrawable drawable) {
         GL2 gl = (GL2)drawable.getGL();
+
+        if (recompileShapes) {
+          NetLogoGLU nlGLU = new NetLogoGLU();
+          nlGLU.setQuadric(quadric);
+          Set<String> names = scala.collection.JavaConversions.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
+          for (String name : names) {
+              int handle = gl.glGenLists(1);
+              VectorShape vs = (VectorShape)App.app().workspace().world().turtleShapeList().shape( name );
+              compileShape(nlGLU, gl, glu, vs, handle, false );
+              compiledShapes.put(name, handle);
+          }
+          recompileShapes = false;
+        }
         gl.glMatrixMode( GL2.GL_MODELVIEW );
         gl.glLoadIdentity();
 
@@ -275,5 +282,8 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 
     @Override
     public void dispose(GLAutoDrawable drawable) {}
-
+    public void updateTurtleDisplayList() {
+        System.out.println("TurtleGL.updateTurtleDisplayList");
+        recompileShapes = true;
+    }
 }
