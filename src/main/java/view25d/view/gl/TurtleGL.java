@@ -2,6 +2,7 @@
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.glu.GLUtessellator;
 
 import org.nlogo.app.App;
+import org.nlogo.core.ShapeList;
 import org.nlogo.gl.render.Polygons;
 import org.nlogo.gl.render.Tessellator;
 import org.nlogo.shape.LinkShape;
@@ -66,7 +68,7 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
         Compilables.PinHead(gl, glu, quadric, radius, slices );
         gl.glEndList();
 
-        Set<String> names = scala.collection.JavaConversions.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
+        Set<String> names = scala.collection.JavaConverters.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
         for (String name : names) {
             int handle = gl.glGenLists(1);
             VectorShape vs = (VectorShape)App.app().workspace().world().turtleShapeList().shape( name );
@@ -143,14 +145,23 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
         GL2 gl = (GL2)drawable.getGL();
 
         if (recompileShapes) {
+          //compiledShapes.clear();
           NetLogoGLU nlGLU = new NetLogoGLU();
           nlGLU.setQuadric(quadric);
-          Set<String> names = scala.collection.JavaConversions.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
+          Set<String> names = scala.collection.JavaConverters.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
+
           for (String name : names) {
+            if (names.contains(name)) {
               int handle = gl.glGenLists(1);
               VectorShape vs = (VectorShape)App.app().workspace().world().turtleShapeList().shape( name );
               compileShape(nlGLU, gl, glu, vs, handle, false );
               compiledShapes.put(name, handle);
+            }
+          }
+          Set<String> lostKeys = new HashSet<String>(compiledShapes.keySet());
+          lostKeys.removeAll(names);
+          for (String name: lostKeys) {
+            compiledShapes.put(name, compiledShapes.get(ShapeList.DefaultShapeName()));
           }
           recompileShapes = false;
         }
