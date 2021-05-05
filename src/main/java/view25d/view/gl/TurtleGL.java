@@ -27,16 +27,15 @@ import view25d.view.TurtleValue;
 import view25d.view.TurtleView;
 
 public class TurtleGL extends MouseableGLWindow implements GLEventListener {
-
-    GLU glu;
-    boolean recompileShapes = false;
     //handles for compiled GL shapes
     int patchTileListHandle, stemSkyscraperHandle, pinHeadListHandle, axisHeadHandle;
     HashMap<String,Integer> compiledShapes = new HashMap<String, Integer>();
 
+    boolean recompileShapes = false;
+    GLU glu;
+    NetLogoGLU nlGLU = new NetLogoGLU();
     //GLU quadric for use in making spheres and in setting up NLGLU helper class for turtle shapes
     private GLUquadric quadric;
-
 
     public TurtleGL(TurtleView parent) {
         super(parent);
@@ -51,7 +50,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
         quadric = glu.gluNewQuadric();
         glu.gluQuadricDrawStyle(quadric, GLU.GLU_FILL);
         glu.gluQuadricNormals(quadric, GLU.GLU_SMOOTH);
-        NetLogoGLU nlGLU = new NetLogoGLU();
         nlGLU.setQuadric(quadric);
 
         stemSkyscraperHandle = gl.glGenLists(1);
@@ -145,9 +143,6 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
         GL2 gl = (GL2)drawable.getGL();
 
         if (recompileShapes) {
-          //compiledShapes.clear();
-          NetLogoGLU nlGLU = new NetLogoGLU();
-          nlGLU.setQuadric(quadric);
           Set<String> names = scala.collection.JavaConverters.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
 
           for (String name : names) {
@@ -293,8 +288,8 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
 
     @Override
     public void dispose(GLAutoDrawable drawable) {}
+
     public void updateTurtleDisplayList() {
-        System.out.println("TurtleGL.updateTurtleDisplayList");
-        recompileShapes = true;
+      recompileShapes = true;
     }
 }

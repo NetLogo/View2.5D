@@ -29,16 +29,17 @@ import view25d.prims.SetZScale;
 import view25d.prims.UpdateAllViews;
 import view25d.prims.UpdateOnePatchView;
 import view25d.prims.UpdateOneTurtleView;
-import view25d.view.View25DShapeChangeListener;
+import view25d.view.PatchView;
 import view25d.view.TurtleView;
 import view25d.view.VarviewWindow;
+import view25d.view.View25DShapeChangeListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class View25DExtension extends DefaultClassManager {
 
-    static public HashMap<String, VarviewWindow> patchWindowMap = new HashMap<String, VarviewWindow>();
+    static public HashMap<String, PatchView> patchWindowMap = new HashMap<String, PatchView>();
     static public HashMap<String, TurtleView> turtleWindowMap = new HashMap<String, TurtleView>();
 
     public static int numWindows() {
@@ -46,7 +47,7 @@ public class View25DExtension extends DefaultClassManager {
     }
 
     //Add a window to the indexed set. Get rid of any existing window with that name
-    public static void storePatchWindowWithTitle( String s, VarviewWindow win ){
+    public static void storePatchWindowWithTitle( String s, PatchView win ){
         removePatchWindowWithTitle(s);
         patchWindowMap.put(s,win);
     }
@@ -75,15 +76,23 @@ public class View25DExtension extends DefaultClassManager {
             tvw.dispose();
         }
     }
-//throws ExtensionException, LogoException
-    public static void updateTurtleShapesAllTurtleViews(){
-            ArrayList<String> names =  new ArrayList<String>();
-            names.addAll( turtleWindowMap.keySet() );
-            for ( String name : names ) {
-                TurtleView tv = turtleWindowMap.get(name);
-                tv.updateTurtleShapes();
-            }
+
+  // When a turtle shape is deleted or added notify all views
+  public static void updateTurtleShapesAllViews() {
+    ArrayList<String> names =  new ArrayList<String>();
+    names.addAll( turtleWindowMap.keySet() );
+    for ( String name : names ) {
+      TurtleView tv = turtleWindowMap.get(name);
+      tv.updateTurtleShapes();
     }
+
+    names.clear();
+    names.addAll( patchWindowMap.keySet() );
+    for ( String name : names ) {
+      PatchView pv = patchWindowMap.get(name);
+      pv.updateTurtleShapes();
+    }
+  }
 
     //run at extension startup.  ensure that the NetLogo native JOGL is loaded.
     @Override

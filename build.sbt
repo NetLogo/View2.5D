@@ -8,8 +8,6 @@ name := "view2.5d"
 
 version := "1.1.7"
 
-isSnapshot := true
-
 netLogoClassManager := "view25d.View25DExtension"
 
 netLogoTarget :=

@@ -106,9 +106,9 @@ public class TurtleView extends VarviewWindow {
         glManager.repaintCanvas();
     }
 
-    public void updateTurtleShapes() throws LogoException {
-      System.out.println("turtleView.updateTurtleShapes");
+    public void updateTurtleShapes() {
       glManager.updateTurtleDisplayList();
+      glManager.repaintCanvas();
     }
 
     private void updateArrayList(Context context) throws LogoException {

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.glu.GLUtessellator;
 
 import org.nlogo.app.App;
+import org.nlogo.core.ShapeList;
 import org.nlogo.gl.render.Polygons;
 import org.nlogo.gl.render.Tessellator;
 import org.nlogo.shape.VectorShape;
@@ -26,13 +28,18 @@ import view25d.view.PatchView;
 import view25d.view.TurtleValue;
 
 public class PatchGL extends MouseableGLWindow implements GLEventListener {
-    GLU glu;
-
     //handles for compiled GL shapes
     int patchTileListHandle, patchThickTileListHandle, patchStickListHandle, sphereDotListHandle, altThickPatchHandle, axisHeadHandle, patchDiskTileHandle, patchSkyscraperHandle, pinHeadListHandle;
 
     //for turtle shapes (when we decorate the patch view)
     HashMap<String,Integer> compiledShapes = new HashMap<String, Integer>();
+
+    boolean recompileShapes = false;
+    GLU glu;
+    NetLogoGLU nlGLU = new NetLogoGLU();
+    //GLU quadric for use in making spheres and in setting up NLGLU helper class for turtle shapes
+    private GLUquadric quadric;
+
     // boolean sticks = false;
     // boolean tangents = true;
     boolean colors = true;
@@ -93,9 +100,8 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
         Compilables.PinHead(gl, glu, quadr, 0.6f, slices );
         gl.glEndList();
 
-        NetLogoGLU nlGLU = new NetLogoGLU();
         nlGLU.setQuadric(quadr);
-        Set<String> names = scala.collection.JavaConversions.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
+        Set<String> names = scala.collection.JavaConverters.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
         for (String name : names) {
             int handle = gl.glGenLists(1);
             VectorShape vs = (VectorShape)App.app().workspace().world().turtleShapeList().shape( name );
@@ -166,6 +172,25 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
     @Override
     public void display(GLAutoDrawable drawable) {
         GL2 gl = (GL2)drawable.getGL();
+        if (recompileShapes) {
+          Set<String> names = scala.collection.JavaConverters.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
+
+          for (String name : names) {
+            if (names.contains(name)) {
+              int handle = gl.glGenLists(1);
+              VectorShape vs = (VectorShape)App.app().workspace().world().turtleShapeList().shape( name );
+              compileShape(nlGLU, gl, glu, vs, handle, false );
+              compiledShapes.put(name, handle);
+            }
+          }
+          Set<String> lostKeys = new HashSet<String>(compiledShapes.keySet());
+          lostKeys.removeAll(names);
+          for (String name: lostKeys) {
+            compiledShapes.put(name, compiledShapes.get(ShapeList.DefaultShapeName()));
+          }
+          recompileShapes = false;
+        }
+
         gl.glMatrixMode( GL2.GL_MODELVIEW );
         gl.glLoadIdentity();
 
@@ -321,4 +346,8 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
 
     @Override
     public void dispose(GLAutoDrawable drawable) {}
+
+    public void updateTurtleDisplayList() {
+      recompileShapes = true;
+   }
 }
