@@ -167,6 +167,11 @@ public class PatchView extends VarviewWindow {
         glManager.repaintCanvas();
     }
 
+    public void updateTurtleShapes() {
+      glManager.updateTurtleDisplayList();
+      glManager.repaintCanvas();
+    }
+
     @Override
     public void resetPerspective() {
         glManager.observer.goHome(this);
