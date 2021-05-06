@@ -9,7 +9,26 @@ import java.nio.IntBuffer;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.awt.GLCanvas;
+import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.glu.GLUtessellator;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.nlogo.app.App;
+import org.nlogo.core.ShapeList;
+import org.nlogo.gl.render.Polygons;
+import org.nlogo.gl.render.Tessellator;
+import org.nlogo.shape.VectorShape;
+
+import view25d.view.gl.NetLogoGLU;
+
+
+
 
 
 public abstract class MouseableGLWindow extends MouseAdapter {
@@ -248,4 +267,93 @@ public abstract class MouseableGLWindow extends MouseAdapter {
         dragging = false;
         myCanvas.repaint();
     }
+
+    // These are variables and methods shared by PatchGL and TurtleGL
+
+    //for turtle shapes
+    public HashMap<String,Integer> compiledShapes;
+
+    public NetLogoGLU nlGLU = new NetLogoGLU();
+    public boolean areShapesStale = false;
+    public GLU glu;
+
+    public void compileShape(NetLogoGLU nlGLU, GL2 gl, GLU glu,
+            VectorShape vShape,
+            int index, boolean rotatable) {
+
+        Tessellator tessellator = new Tessellator();
+        GLUtessellator tess = GLU.gluNewTess();
+        GLU.gluTessCallback(tess, GLU.GLU_TESS_BEGIN_DATA, tessellator);
+        GLU.gluTessCallback(tess, GLU.GLU_TESS_EDGE_FLAG_DATA, tessellator);
+        GLU.gluTessCallback(tess, GLU.GLU_TESS_VERTEX_DATA, tessellator);
+        GLU.gluTessCallback(tess, GLU.GLU_TESS_END_DATA, tessellator);
+        GLU.gluTessCallback(tess, GLU.GLU_TESS_COMBINE_DATA, tessellator);
+        GLU.gluTessCallback(tess, GLU.GLU_TESS_ERROR_DATA, tessellator);
+        GLU.gluTessProperty(tess, GLU.GLU_TESS_WINDING_RULE, GLU.GLU_TESS_WINDING_ODD);
+        gl.glNewList(index, GL2.GL_COMPILE);
+
+        if (!rotatable) {
+            gl.glDisable(GL2.GL_LIGHTING);
+        }
+
+        // render each element in this shape
+        List<org.nlogo.shape.Element> elements = vShape.getElements();
+        for (int i = 0; i < elements.size(); i++) {
+            org.nlogo.shape.Element element = elements.get(i);
+
+            if (element instanceof org.nlogo.shape.Rectangle) {
+                nlGLU.renderRectangle
+                    (gl, i, (org.nlogo.shape.Rectangle) element, rotatable);
+            } else if (element instanceof org.nlogo.shape.Polygon) {
+                Polygons.renderPolygon(gl, glu, tessellator, tess, i,
+                        (org.nlogo.shape.Polygon) element, rotatable, false);  //is3D = false
+            } else if (element instanceof org.nlogo.shape.Circle) {
+                nlGLU.renderCircle(gl, glu, i,
+                        (org.nlogo.shape.Circle) element, rotatable);
+            } else if (element instanceof org.nlogo.shape.Line) {
+                nlGLU.renderLine(gl, i,
+                        (org.nlogo.shape.Line) element);
+            } else if (element instanceof org.nlogo.shape.Curve) {
+                throw new IllegalStateException();
+            }
+        }
+
+        if (!rotatable) {
+            gl.glEnable(GL2.GL_LIGHTING);
+        }
+        gl.glDisable(GL2.GL_CULL_FACE);
+        gl.glEndList();
+    }
+
+    // Compile all the turtle shapes
+    public void compileShapes(GL2 gl, HashMap<String,Integer> compiledShapes, boolean isRotatable) {
+      Set<String> names = scala.collection.JavaConverters.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
+
+      for (String name : names) {
+        if (names.contains(name)) {
+          int handle = gl.glGenLists(1);
+          VectorShape vs = (VectorShape)App.app().workspace().world().turtleShapeList().shape( name );
+          compileShape(nlGLU, gl, glu, vs, handle, false );
+          compiledShapes.put(name, handle);
+        }
+      }
+    }
+
+    // Replace deleted shapes in compiled shape map with the compiled default shape
+    public void setDeletedShapesToDefaultShape(HashMap<String,Integer> compiledShapes) {
+      // If a shape was deleted its name will still be a key for the compiled shapes,
+      // but it will not have a name among the turtle shapes.
+      // Hence it gets the default shape. Fortunately the default shape cannot be deleted or edited.
+      // aab 05/06/2021
+      Set<String> names = scala.collection.JavaConverters.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
+      Set<String> lostKeys = new HashSet<String>(compiledShapes.keySet());
+      lostKeys.removeAll(names);
+      for (String name: lostKeys) {
+        compiledShapes.put(name, compiledShapes.get(ShapeList.DefaultShapeName()));
+      }
+    }
+
+      public void updateTurtleDisplayList() {
+        areShapesStale = true;
+      }
 }

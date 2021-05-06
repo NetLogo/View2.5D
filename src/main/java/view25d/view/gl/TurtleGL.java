@@ -2,7 +2,6 @@
 
 import java.awt.Color;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -12,14 +11,6 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
-import com.jogamp.opengl.glu.GLUtessellator;
-
-import org.nlogo.app.App;
-import org.nlogo.core.ShapeList;
-import org.nlogo.gl.render.Polygons;
-import org.nlogo.gl.render.Tessellator;
-import org.nlogo.shape.LinkShape;
-import org.nlogo.shape.VectorShape;
 
 import view25d.view.MouseableGLWindow;
 import view25d.view.LinkValue;
@@ -29,13 +20,9 @@ import view25d.view.TurtleView;
 public class TurtleGL extends MouseableGLWindow implements GLEventListener {
     //handles for compiled GL shapes
     int patchTileListHandle, stemSkyscraperHandle, pinHeadListHandle, axisHeadHandle;
-    HashMap<String,Integer> compiledShapes = new HashMap<String, Integer>();
 
-    boolean areShapesStale = false;
-    GLU glu;
-    NetLogoGLU nlGLU = new NetLogoGLU();
     //GLU quadric for use in making spheres and in setting up NLGLU helper class for turtle shapes
-    private GLUquadric quadric;
+    protected GLUquadric quadric;
 
     public TurtleGL(TurtleView parent) {
         super(parent);
@@ -66,7 +53,7 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
         Compilables.PinHead(gl, glu, quadric, radius, slices );
         gl.glEndList();
 
-        compileShapes(gl, false);
+        compileShapes(gl, compiledShapes, false);
 
         axisHeadHandle = gl.glGenLists(1);
         gl.glNewList(axisHeadHandle, GL2.GL_COMPILE);
@@ -74,70 +61,12 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
         gl.glEndList();
     }
 
-    public void compileShape(NetLogoGLU nlGLU, GL2 gl, GLU glu,
-            VectorShape vShape,
-            int index, boolean rotatable) {
-
-        Tessellator tessellator = new Tessellator();
-        GLUtessellator tess = GLU.gluNewTess();
-        GLU.gluTessCallback(tess, GLU.GLU_TESS_BEGIN_DATA, tessellator);
-        GLU.gluTessCallback(tess, GLU.GLU_TESS_EDGE_FLAG_DATA, tessellator);
-        GLU.gluTessCallback(tess, GLU.GLU_TESS_VERTEX_DATA, tessellator);
-        GLU.gluTessCallback(tess, GLU.GLU_TESS_END_DATA, tessellator);
-        GLU.gluTessCallback(tess, GLU.GLU_TESS_COMBINE_DATA, tessellator);
-        GLU.gluTessCallback(tess, GLU.GLU_TESS_ERROR_DATA, tessellator);
-        GLU.gluTessProperty
-            (tess, GLU.GLU_TESS_WINDING_RULE, GLU.GLU_TESS_WINDING_ODD);
-        gl.glNewList(index, GL2.GL_COMPILE);
-
-        if (!rotatable) {
-            gl.glDisable(GL2.GL_LIGHTING);
-        }
-
-        // render each element in this shape
-        List<org.nlogo.shape.Element> elements = vShape.getElements();
-        for (int i = 0; i < elements.size(); i++) {
-            org.nlogo.shape.Element element = elements.get(i);
-
-            if (element instanceof org.nlogo.shape.Rectangle) {
-                nlGLU.renderRectangle
-                    (gl, i, (org.nlogo.shape.Rectangle) element, rotatable);
-            } else if (element instanceof org.nlogo.shape.Polygon) {
-                Polygons.renderPolygon(gl, glu, tessellator, tess, i,
-                        (org.nlogo.shape.Polygon) element, rotatable, false);  //is3D = false
-            } else if (element instanceof org.nlogo.shape.Circle) {
-                nlGLU.renderCircle(gl, glu, i,
-                        (org.nlogo.shape.Circle) element, rotatable);
-            } else if (element instanceof org.nlogo.shape.Line) {
-                nlGLU.renderLine(gl, i,
-                        (org.nlogo.shape.Line) element);
-            } else if (element instanceof org.nlogo.shape.Curve) {
-                throw new IllegalStateException();
-            }
-        }
-
-        if (!rotatable) {
-            gl.glEnable(GL2.GL_LIGHTING);
-        }
-        gl.glDisable(GL2.GL_CULL_FACE);
-        gl.glEndList();
-    }
-
-    @Override
-    public void init(GLAutoDrawable drawable) {
-        GL2 gl = (GL2)drawable.getGL();
-        glu = new GLU();
-        setupCompiledDisplayLists( gl );
-
-        setupLightingAndViewPort(gl, glu);
-    }
-
     @Override
     public void display(GLAutoDrawable drawable) {
         GL2 gl = (GL2)drawable.getGL();
         if (areShapesStale) {
-          compileShapes(gl, false);
-          setDeletedShapesToDefaultShape();
+          compileShapes(gl, compiledShapes, false);
+          setDeletedShapesToDefaultShape(compiledShapes);
           areShapesStale = false;
         }
 
@@ -262,43 +191,22 @@ public class TurtleGL extends MouseableGLWindow implements GLEventListener {
         gl.glPopMatrix();
     }
 
-    // Compile all the turtle shapes
-    void compileShapes(GL2 gl, boolean isRotatable) {
-      Set<String> names = scala.collection.JavaConverters.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
-
-      for (String name : names) {
-        if (names.contains(name)) {
-          int handle = gl.glGenLists(1);
-          VectorShape vs = (VectorShape)App.app().workspace().world().turtleShapeList().shape( name );
-          compileShape(nlGLU, gl, glu, vs, handle, false );
-          compiledShapes.put(name, handle);
-        }
-      }
-    }
-
-    // Replace deleted shapes in compiled shape map with the compiled default shape
-    void setDeletedShapesToDefaultShape() {
-      // If a shape was deleted its name will still be a key for the compiled shapes,
-      // but it will not have a name among the turtle shapes.
-      // Hence it gets the default shape. Fortunately the default shape cannot be deleted or edited.
-      // aab 05/06/2021
-      Set<String> names = scala.collection.JavaConverters.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
-      Set<String> lostKeys = new HashSet<String>(compiledShapes.keySet());
-      lostKeys.removeAll(names);
-      for (String name: lostKeys) {
-        compiledShapes.put(name, compiledShapes.get(ShapeList.DefaultShapeName()));
-      }
+    @Override
+    // required by Interface GLEventListener
+    public void init(GLAutoDrawable drawable) {
+      compiledShapes = new HashMap<String, Integer>();
+      GL2 gl = (GL2)drawable.getGL();
+      glu = new GLU();
+      setupCompiledDisplayLists( gl );
+      setupLightingAndViewPort(gl, glu);
     }
 
     @Override
-    public void reshape(GLAutoDrawable drawable, int x, int y, int width,
-            int height) {
-    }
-
-    @Override
+    // required by Interface GLEventListener
     public void dispose(GLAutoDrawable drawable) {}
 
-    public void updateTurtleDisplayList() {
-      areShapesStale = true;
+    // required by Interface GLEventListener
+    @Override
+    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
     }
 }
