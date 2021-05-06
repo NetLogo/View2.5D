@@ -34,7 +34,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
     //for turtle shapes (when we decorate the patch view)
     HashMap<String,Integer> compiledShapes = new HashMap<String, Integer>();
 
-    boolean recompileShapes = false;
+    boolean areShapesStale = false;
     GLU glu;
     NetLogoGLU nlGLU = new NetLogoGLU();
     //GLU quadric for use in making spheres and in setting up NLGLU helper class for turtle shapes
@@ -48,7 +48,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
         super(parent);
     }
 
-    private void setupCompiliedDisplayLists(GL2 gl) {
+    private void setupCompiledDisplayLists(GL2 gl) {
         patchTileListHandle = gl.glGenLists(1);
         gl.glNewList(patchTileListHandle, GL2.GL_COMPILE);
         Compilables.PatchTile(gl);
@@ -101,14 +101,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
         gl.glEndList();
 
         nlGLU.setQuadric(quadr);
-        Set<String> names = scala.collection.JavaConverters.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
-        for (String name : names) {
-            int handle = gl.glGenLists(1);
-            VectorShape vs = (VectorShape)App.app().workspace().world().turtleShapeList().shape( name );
-            compileShape(nlGLU, gl, glu, vs, handle, true ); //rotatable is false in sprite case.
-            compiledShapes.put(name, handle);
-        }
-
+        compileShapes(gl, false);
         glu.gluDeleteQuadric(quadr);
     }
 
@@ -164,7 +157,7 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
     public void init(GLAutoDrawable drawable) {
         GL2 gl = (GL2)drawable.getGL();
         glu = new GLU();
-        setupCompiliedDisplayLists( gl );
+        setupCompiledDisplayLists( gl );
         setupLightingAndViewPort(gl, glu);
     }
 
@@ -172,23 +165,10 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
     @Override
     public void display(GLAutoDrawable drawable) {
         GL2 gl = (GL2)drawable.getGL();
-        if (recompileShapes) {
-          Set<String> names = scala.collection.JavaConverters.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
-
-          for (String name : names) {
-            if (names.contains(name)) {
-              int handle = gl.glGenLists(1);
-              VectorShape vs = (VectorShape)App.app().workspace().world().turtleShapeList().shape( name );
-              compileShape(nlGLU, gl, glu, vs, handle, false );
-              compiledShapes.put(name, handle);
-            }
-          }
-          Set<String> lostKeys = new HashSet<String>(compiledShapes.keySet());
-          lostKeys.removeAll(names);
-          for (String name: lostKeys) {
-            compiledShapes.put(name, compiledShapes.get(ShapeList.DefaultShapeName()));
-          }
-          recompileShapes = false;
+        if (areShapesStale) {
+          compileShapes(gl, false);
+          setDeletedShapesToDefaultShape();
+          areShapesStale = false;
         }
 
         gl.glMatrixMode( GL2.GL_MODELVIEW );
@@ -203,7 +183,6 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
         setColorAndStandardMaterial(gl, 0f, 0.1f, 0.9f);
         gl.glPushMatrix();
         observer.applyPerspective(gl);
-
 
         if (  ((PatchView)myViewer).viewOptions.tangents() || !colors) {
             for (int i=0; i<myViewer.worldWidth; i++) {
@@ -339,6 +318,34 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
         gl.glPopMatrix();
     }
 
+    // Compile all the turtle shapes
+    void compileShapes(GL2 gl, boolean isRotatable) {
+      Set<String> names = scala.collection.JavaConverters.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
+
+      for (String name : names) {
+        if (names.contains(name)) {
+          int handle = gl.glGenLists(1);
+          VectorShape vs = (VectorShape)App.app().workspace().world().turtleShapeList().shape( name );
+          compileShape(nlGLU, gl, glu, vs, handle, false );
+          compiledShapes.put(name, handle);
+        }
+      }
+    }
+
+    // Replace deleted shapes in compiled shape map with the compiled default shape
+    void setDeletedShapesToDefaultShape() {
+      // If a shape was deleted its name will still be a key for the compiled shapes,
+      // but it will not have a name among the turtle shapes.
+      // Hence it gets the default shape. Fortunately the default shape cannot be deleted or edited.
+      // aab 05/06/2021
+      Set<String> names = scala.collection.JavaConverters.setAsJavaSet(App.app().workspace().world().turtleShapeList().names());
+      Set<String> lostKeys = new HashSet<String>(compiledShapes.keySet());
+      lostKeys.removeAll(names);
+      for (String name: lostKeys) {
+        compiledShapes.put(name, compiledShapes.get(ShapeList.DefaultShapeName()));
+      }
+    }
+
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width,
             int height) {
@@ -348,6 +355,6 @@ public class PatchGL extends MouseableGLWindow implements GLEventListener {
     public void dispose(GLAutoDrawable drawable) {}
 
     public void updateTurtleDisplayList() {
-      recompileShapes = true;
+      areShapesStale = true;
    }
 }
