@@ -38,7 +38,7 @@ public class GetZScale implements Reporter {
             scale = vvwt.zScale;
         }
 
-        return new Double(scale);
+        return Double.valueOf(scale);
     }
 
 }

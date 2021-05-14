@@ -161,7 +161,7 @@ public class View25DExtension extends DefaultClassManager {
         @Override
         public Object report(Argument[] arg0, Context arg1)
                 throws ExtensionException, LogoException {
-            return new Double(numWindows());
+            return Double.valueOf(numWindows());
         }
     }
 
