@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Extension-Name: view2.5d
-Class-Manager: view25d.View25DExtension
-NetLogo-Extension-API-Version: 5.0

@@ -1,6 +1,7 @@
-target
-project/project
-project/target
-*.jar
-.DS_Store
 .bundledFiles
+target/
+extensions/
+/*.jar
+/*.zip
+
+.DS_Store
