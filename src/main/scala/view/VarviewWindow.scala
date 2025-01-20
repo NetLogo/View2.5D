@@ -7,6 +7,7 @@ import javax.swing.{ JFrame, JPanel }
 import org.nlogo.agent.Turtle
 import org.nlogo.api.{ AgentSet, Context, Link }
 import org.nlogo.app.App
+import org.nlogo.swing.NetLogoIcon
 
 import scala.collection.JavaConverters._
 
@@ -20,7 +21,7 @@ object VarviewWindow {
   val SCALEZ = 3
 }
 
-abstract class VarviewWindow(title: String) extends JFrame(title) {
+abstract class VarviewWindow(title: String) extends JFrame(title) with NetLogoIcon {
   var worldWidth = 0
   var worldHeight = 0
   var minPxcor = 0
