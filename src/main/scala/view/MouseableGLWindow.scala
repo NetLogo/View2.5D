@@ -246,7 +246,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
       gl.glDisable(GLLightingFunc.GL_LIGHTING)
 
     // render each element in this shape
-    val elements = shape.getElements
+    val elements = shape.getElementsJ
 
     for (i <- 0 until elements.size) {
       elements.get(i) match {
