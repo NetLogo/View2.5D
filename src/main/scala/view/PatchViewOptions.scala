@@ -121,10 +121,10 @@ class PatchViewOptions(window: PatchView, str: Boolean, she: Boolean, pin: Boole
   }
 
   def syncTheme() {
-    setBackground(InterfaceColors.TOOLBAR_BACKGROUND)
+    setBackground(InterfaceColors.toolbarBackground)
 
-    displayLabel.setForeground(InterfaceColors.TOOLBAR_TEXT)
-    linkLabel.setForeground(InterfaceColors.TOOLBAR_TEXT)
+    displayLabel.setForeground(InterfaceColors.toolbarText)
+    linkLabel.setForeground(InterfaceColors.toolbarText)
 
     structuresButton.syncTheme()
     sheetButton.syncTheme()

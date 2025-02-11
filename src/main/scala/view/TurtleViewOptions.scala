@@ -115,14 +115,14 @@ class TurtleViewOptions(window: TurtleView, co: Boolean, sz: Boolean, sh: Boolea
   }
 
   def syncTheme() {
-    setBackground(InterfaceColors.TOOLBAR_BACKGROUND)
+    setBackground(InterfaceColors.toolbarBackground)
 
-    viewLabel.setForeground(InterfaceColors.TOOLBAR_TEXT)
-    linkLabel.setForeground(InterfaceColors.TOOLBAR_TEXT)
-    color.setForeground(InterfaceColors.TOOLBAR_TEXT)
-    sizeBox.setForeground(InterfaceColors.TOOLBAR_TEXT)
-    shape.setForeground(InterfaceColors.TOOLBAR_TEXT)
-    pcolor.setForeground(InterfaceColors.TOOLBAR_TEXT)
+    viewLabel.setForeground(InterfaceColors.toolbarText)
+    linkLabel.setForeground(InterfaceColors.toolbarText)
+    color.setForeground(InterfaceColors.toolbarText)
+    sizeBox.setForeground(InterfaceColors.toolbarText)
+    shape.setForeground(InterfaceColors.toolbarText)
+    pcolor.setForeground(InterfaceColors.toolbarText)
 
     threeDButton.syncTheme()
     twoDButton.syncTheme()
