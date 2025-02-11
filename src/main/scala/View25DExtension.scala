@@ -64,6 +64,9 @@ class View25DExtension extends DefaultClassManager with ThemeSync {
   // run at extension startup.  ensure that the NetLogo native JOGL is loaded.
   override def runOnce(manager: ExtensionManager) {
     View25DShapeChangeListener.listen()
+
+    if (App.app != null)
+      App.app.addSyncComponent(this)
   }
 
   override def load(manager: PrimitiveManager) {
@@ -101,8 +104,6 @@ class View25DExtension extends DefaultClassManager with ThemeSync {
 
     manager.addPrimitive("show-links-xy-plane", new SetLinkDisplayMode(true))
     manager.addPrimitive("show-links-xyz", new SetLinkDisplayMode(false))
-
-    App.app.addSyncComponent(this)
   }
 
   /// utility (or less user-facing) primitives
@@ -174,7 +175,8 @@ class View25DExtension extends DefaultClassManager with ThemeSync {
     disposeAllPatchViews()
     disposeAllTurtleViews()
 
-    App.app.removeSyncComponent(this)
+    if (App.app != null)
+      App.app.removeSyncComponent(this)
   }
 
   def syncTheme() {
