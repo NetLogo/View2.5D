@@ -11,22 +11,22 @@ class TurtleViewOptions(window: TurtleView, co: Boolean, sz: Boolean, sh: Boolea
 
 	private var stemThickness = 0.0
 
-  private val color = new CheckBox("Color", window.refresh) {
+  private val color = new CheckBox("Color", (selected) => window.refresh) {
     if (co)
       setSelected(true)
   }
 
-  private val sizeBox = new CheckBox("Size", window.refresh) {
+  private val sizeBox = new CheckBox("Size", (selected) => window.refresh) {
     if (sz)
       setSelected(true)
   }
 
-  private val shape = new CheckBox("Shape", window.refresh) {
+  private val shape = new CheckBox("Shape", (selected) => window.refresh) {
     if (sh)
       setSelected(true)
   }
 
-  private val pcolor = new CheckBox("PColor", window.refresh) {
+  private val pcolor = new CheckBox("PColor", (selected) => window.refresh) {
     if (pco)
       setSelected(true)
   }
