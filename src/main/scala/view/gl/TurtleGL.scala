@@ -18,7 +18,7 @@ class TurtleGL(viewer: TurtleView) extends MouseableGLWindow(viewer) with GLEven
   // GLU quadric for use in making spheres and in setting up NLGLU helper class for turtle shapes
   protected var quadric: GLUquadric = null
 
-  private def setupCompiledDisplayLists(gl: GL2) {
+  private def setupCompiledDisplayLists(gl: GL2): Unit = {
     patchTileListHandle = gl.glGenLists(1)
     gl.glNewList(patchTileListHandle, GL2.GL_COMPILE)
     Compilables.PatchTile(gl)
@@ -51,7 +51,7 @@ class TurtleGL(viewer: TurtleView) extends MouseableGLWindow(viewer) with GLEven
     gl.glEndList()
   }
 
-  override def display(drawable: GLAutoDrawable) {
+  override def display(drawable: GLAutoDrawable): Unit = {
     val gl = drawable.getGL.asInstanceOf[GL2]
 
     if (areShapesStale) {
@@ -179,7 +179,7 @@ class TurtleGL(viewer: TurtleView) extends MouseableGLWindow(viewer) with GLEven
   }
 
   // required by Interface GLEventListener
-  override def init(drawable: GLAutoDrawable) {
+  override def init(drawable: GLAutoDrawable): Unit = {
     compiledShapes.clear()
 
     val gl = drawable.getGL.asInstanceOf[GL2]
@@ -191,8 +191,8 @@ class TurtleGL(viewer: TurtleView) extends MouseableGLWindow(viewer) with GLEven
   }
 
   // required by Interface GLEventListener
-  override def dispose(drawable: GLAutoDrawable) {}
+  override def dispose(drawable: GLAutoDrawable): Unit = {}
 
   // required by Interface GLEventListener
-  override def reshape(drawable: GLAutoDrawable, x: Int, y: Int, width: Int, height: Int) {}
+  override def reshape(drawable: GLAutoDrawable, x: Int, y: Int, width: Int, height: Int): Unit = {}
 }

@@ -9,7 +9,7 @@ class UpdateOnePatchView extends Command {
   override def getSyntax: Syntax =
     Syntax.commandSyntax(right = List(Syntax.StringType), agentClassString = "O---")
 
-  override def perform(args: Array[Argument], context: Context) {
+  override def perform(args: Array[Argument], context: Context): Unit = {
     val title = args(0).getString
 
     View25DExtension.patchWindowMap.get(title) match {

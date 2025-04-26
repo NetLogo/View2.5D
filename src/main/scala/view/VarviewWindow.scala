@@ -9,7 +9,7 @@ import org.nlogo.api.{ AgentSet, Context, Link }
 import org.nlogo.app.App
 import org.nlogo.swing.NetLogoIcon
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters.IterableHasAsScala
 
 import view25d.View25DExtension
 
@@ -41,7 +41,7 @@ abstract class VarviewWindow(title: String) extends JFrame(title) with NetLogoIc
 
   private var mode = VarviewWindow.ORBIT
 
-  def setMode(newMode: Int) {
+  def setMode(newMode: Int): Unit = {
     mode = newMode
   }
 
@@ -56,7 +56,7 @@ abstract class VarviewWindow(title: String) extends JFrame(title) with NetLogoIc
 
   getContentPane.add(mainPanel)
 
-  protected def centerWindow(frame: Component) {
+  protected def centerWindow(frame: Component): Unit = {
     val screenSize = Toolkit.getDefaultToolkit.getScreenSize
     val frameSize = new Dimension(frame.getWidth.min(screenSize.width), frame.getHeight.min(screenSize.height))
 
@@ -76,7 +76,7 @@ abstract class VarviewWindow(title: String) extends JFrame(title) with NetLogoIc
   def resetPerspective(): Unit
   def manuallyRefreshReporterView(context: Context): Unit
 
-  protected def applySquareConstraint(xBorder: Int, yBorder: Int, inner: JPanel) {
+  protected def applySquareConstraint(xBorder: Int, yBorder: Int, inner: JPanel): Unit = {
     val constraint = (inner.getWidth - xBorder).min(inner.getHeight - yBorder)
 
     inner.setPreferredSize(new Dimension(constraint + xBorder, constraint + yBorder))

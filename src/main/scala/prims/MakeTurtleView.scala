@@ -5,7 +5,7 @@ import org.nlogo.api.{ AgentSet, AnonymousReporter, Argument, Command, Context, 
 import org.nlogo.app.App
 import org.nlogo.core.Syntax
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters.IterableHasAsScala
 
 import view25d.View25DExtension
 import view25d.view.TurtleView
@@ -15,7 +15,7 @@ class MakeTurtleView extends Command {
     Syntax.commandSyntax(right = List(Syntax.StringType, Syntax.AgentsetType, Syntax.ReporterType),
                          agentClassString = "O---")
 
-  override def perform(args: Array[Argument], context: Context) {
+  override def perform(args: Array[Argument], context: Context): Unit = {
     val title =  args(0).getString.trim
 
     if (title.isEmpty)

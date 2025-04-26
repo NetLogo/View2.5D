@@ -10,7 +10,7 @@ class SetObserverFocus extends Command {
     Syntax.commandSyntax(right = List(Syntax.StringType, Syntax.NumberType, Syntax.NumberType),
                          agentClassString = "O---")
 
-  override def perform(args: Array[Argument], context: Context) {
+  override def perform(args: Array[Argument], context: Context): Unit = {
     val title = args(0).getString
     val x = args(1).getDoubleValue
     val y = args(2).getDoubleValue

@@ -11,32 +11,32 @@ class TurtleViewOptions(window: TurtleView, co: Boolean, sz: Boolean, sh: Boolea
 
 	private var stemThickness = 0.0
 
-  private val color = new CheckBox("Color", (selected) => window.refresh) {
+  private val color = new CheckBox("Color", (selected) => window.refresh()) {
     if (co)
       setSelected(true)
   }
 
-  private val sizeBox = new CheckBox("Size", (selected) => window.refresh) {
+  private val sizeBox = new CheckBox("Size", (selected) => window.refresh()) {
     if (sz)
       setSelected(true)
   }
 
-  private val shape = new CheckBox("Shape", (selected) => window.refresh) {
+  private val shape = new CheckBox("Shape", (selected) => window.refresh()) {
     if (sh)
       setSelected(true)
   }
 
-  private val pcolor = new CheckBox("PColor", (selected) => window.refresh) {
+  private val pcolor = new CheckBox("PColor", (selected) => window.refresh()) {
     if (pco)
       setSelected(true)
   }
 
-  private val threeDButton = new RadioButton("xyz", window.refresh) {
+  private val threeDButton = new RadioButton("xyz", window.refresh _) {
     if (threeD)
       setSelected(true)
   }
 
-  private val twoDButton = new RadioButton("xy-plane", window.refresh) {
+  private val twoDButton = new RadioButton("xy-plane", window.refresh _) {
     if (twoD)
       setSelected(true)
   }
@@ -97,7 +97,7 @@ class TurtleViewOptions(window: TurtleView, co: Boolean, sz: Boolean, sh: Boolea
   def getStemThickness: Double =
     stemThickness
 
-  def setStemThickness(value: Double) {
+  def setStemThickness(value: Double): Unit = {
     stemThickness = value.max(0)
   }
 
@@ -107,14 +107,14 @@ class TurtleViewOptions(window: TurtleView, co: Boolean, sz: Boolean, sh: Boolea
   def linksAreTwoD: Boolean =
     twoDButton.isSelected
 
-  def setLinksDisplayMode(linksInXYPlane: Boolean) {
+  def setLinksDisplayMode(linksInXYPlane: Boolean): Unit = {
     if (linksInXYPlane)
       twoDButton.setSelected(true)
     else
       threeDButton.setSelected(true)
   }
 
-  def syncTheme() {
+  def syncTheme(): Unit = {
     setBackground(InterfaceColors.toolbarBackground)
 
     viewLabel.setForeground(InterfaceColors.toolbarText)

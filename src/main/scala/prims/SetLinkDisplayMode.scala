@@ -9,7 +9,7 @@ class SetLinkDisplayMode(inXYPlane: Boolean) extends Command {
   override def getSyntax: Syntax =
     Syntax.commandSyntax(right = List(Syntax.StringType))
 
-  override def perform(args: Array[Argument], context: Context) {
+  override def perform(args: Array[Argument], context: Context): Unit = {
     val title = args(0).getString
 
     View25DExtension.patchWindowMap.get(title).foreach(_.viewOptions.setLinksDisplayMode(inXYPlane))

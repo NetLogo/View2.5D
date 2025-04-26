@@ -16,7 +16,7 @@ class Observer(xs: Double, ys: Double, zs: Double) {
   var roty = 0.0
   var rotz = 0.0
 
-  def goHome(world: VarviewWindow) {
+  def goHome(world: VarviewWindow): Unit = {
     x = world.minPxcor + (world.maxPxcor - world.minPxcor) / 2.0
     y = world.minPycor + (world.maxPycor - world.minPycor) / 2.0
     z = world.worldWidth.max(world.worldHeight) * 1.5
@@ -29,25 +29,25 @@ class Observer(xs: Double, ys: Double, zs: Double) {
     rotz = 0
   }
 
-  def applyPerspective(gl: GL2) {
+  def applyPerspective(gl: GL2): Unit = {
     gl.glRotated(90, -1.0, 0.0, 0.0)
     gl.glRotated(heading, 0.0, 0.0, 1.0)
     gl.glRotated(pitch, Math.cos(Math.toRadians(heading)), -Math.sin(Math.toRadians(heading)), 0.0)
     gl.glTranslated(-x, -y, -z)
   }
 
-  def applyNormal(gl: GL2) {
+  def applyNormal(gl: GL2): Unit = {
     // cross product of x, y, z and 0, 0, 1
     gl.glRotated(-heading, x, y, z)
     gl.glRotated(pitch - 90, y, -x, 0)
   }
 
-  def updatePerspectiveAngles(delthetax: Double, delthetay: Double) {
+  def updatePerspectiveAngles(delthetax: Double, delthetay: Double): Unit = {
     orbitRight(delthetax)
     orbitUp(delthetay)
   }
 
-  private def orbitRight(delta: Double) {
+  private def orbitRight(delta: Double): Unit = {
     heading = heading + delta
 
     if (heading > 360)
@@ -61,7 +61,7 @@ class Observer(xs: Double, ys: Double, zs: Double) {
     y = roty - dxy * Math.cos(Math.toRadians(heading))
   }
 
-  private def orbitUp(delta: Double) {
+  private def orbitUp(delta: Double): Unit = {
     val newPitch = pitch - delta
 
     val dxy = dist * Math.cos(Math.toRadians(newPitch))
@@ -77,14 +77,14 @@ class Observer(xs: Double, ys: Double, zs: Double) {
     }
   }
 
-  def shift(deltax: Double, deltay: Double) {
+  def shift(deltax: Double, deltay: Double): Unit = {
     val sinH = Math.sin(Math.toRadians(heading))
     val cosH = Math.cos(Math.toRadians(heading))
 
     objectiveShift(-(cosH * deltax + sinH * deltay) * 0.1, (sinH * deltax - cosH * deltay) * 0.1)
   }
 
-  def objectiveShift(delx: Double, dely: Double) {
+  def objectiveShift(delx: Double, dely: Double): Unit = {
     x += delx
     y += dely
 
@@ -92,7 +92,7 @@ class Observer(xs: Double, ys: Double, zs: Double) {
     roty += dely
   }
 
-  def zoomToDistance(distance: Double) {
+  def zoomToDistance(distance: Double): Unit = {
     val ratio = distance / dist
 
     x = rotx + ratio * (x - rotx)
@@ -100,7 +100,7 @@ class Observer(xs: Double, ys: Double, zs: Double) {
     z = rotz + ratio * (z - rotz)
   }
 
-  def zoomby(deltavert: Double) {
+  def zoomby(deltavert: Double): Unit = {
     if (deltavert < dist) {
       x += deltavert * dx
       y += deltavert * dy

@@ -47,12 +47,12 @@ class PatchViewOptions(window: PatchView, str: Boolean, she: Boolean, pin: Boole
     group.add(pinsButton)
   }
 
-  private val threeDButton = new RadioButton("xyz", window.refresh) {
+  private val threeDButton = new RadioButton("xyz", window.refresh _) {
     if (threeD)
       setSelected(true)
   }
 
-  private val twoDButton = new RadioButton("xy-plane", window.refresh) {
+  private val twoDButton = new RadioButton("xy-plane", window.refresh _) {
     if (twoD)
       setSelected(true)
   }
@@ -113,14 +113,14 @@ class PatchViewOptions(window: PatchView, str: Boolean, she: Boolean, pin: Boole
   def linksAreTwoD: Boolean =
     twoDButton.isSelected
 
-  def setLinksDisplayMode(linksInXYPlane: Boolean) {
+  def setLinksDisplayMode(linksInXYPlane: Boolean): Unit = {
     if (linksInXYPlane)
       twoDButton.setSelected(true)
     else
       threeDButton.setSelected(true)
   }
 
-  def syncTheme() {
+  def syncTheme(): Unit = {
     setBackground(InterfaceColors.toolbarBackground)
 
     displayLabel.setForeground(InterfaceColors.toolbarText)

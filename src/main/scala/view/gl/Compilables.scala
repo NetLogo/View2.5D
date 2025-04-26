@@ -4,7 +4,7 @@ import com.jogamp.opengl.{ GL, GL2 }
 import com.jogamp.opengl.glu.{ GLU, GLUquadric }
 
 object Compilables {
-  def PatchTile(gl: GL2) {
+  def PatchTile(gl: GL2): Unit = {
     gl.glBegin(GL2.GL_POLYGON)
     gl.glVertex2d(-0.4, 0.4)
     gl.glVertex2d(0.4, 0.4)
@@ -14,7 +14,7 @@ object Compilables {
     gl.glEnd()
   }
 
-  def PatchStickTile(gl: GL2, stickHeight: Int) {
+  def PatchStickTile(gl: GL2, stickHeight: Int): Unit = {
     gl.glColor3f(1.0f, 0.6f, 5.9f)
     gl.glBegin(GL2.GL_POLYGON)
     gl.glVertex2d(-0.4, 0.4)
@@ -34,7 +34,7 @@ object Compilables {
 
   // sz should be greater than 0 and less than or equal to 0.5
   // depth controls the z-size of the tile
-  def ThickPatchTile(gl: GL2, sz: Float, depth: Float) {
+  def ThickPatchTile(gl: GL2, sz: Float, depth: Float): Unit = {
     gl.glBegin(GL2.GL_POLYGON) // f1: front
     gl.glNormal3f(0, sz, 0)
     gl.glVertex3f(-sz, sz, depth)
@@ -79,7 +79,7 @@ object Compilables {
     gl.glEnd()
   }
 
-  def box(gl: GL2, baseHalf: Float, height: Float) {
+  def box(gl: GL2, baseHalf: Float, height: Float): Unit = {
     gl.glBegin(GL2.GL_POLYGON) // f1: front
     gl.glNormal3f(0, 1, 0)
     gl.glVertex3f(-baseHalf, baseHalf, height)
@@ -124,7 +124,7 @@ object Compilables {
     gl.glEnd()
   }
 
-  def PinHead(gl: GL2, glu: GLU, quadr: GLUquadric, radius: Float, slices: Int) {
+  def PinHead(gl: GL2, glu: GLU, quadr: GLUquadric, radius: Float, slices: Int): Unit = {
     // glu.gluSphere(quadr, radius, slices, stacks)
     gl.glTranslated(0, 0, -radius / 4)
     glu.gluCylinder(quadr, radius, radius, radius / 2, slices, slices)
@@ -134,17 +134,17 @@ object Compilables {
     glu.gluDisk(quadr, 0f, radius, slices, 1)
   }
 
-  def DiskPatchTile(gl: GL2, glu: GLU, quadr: GLUquadric, sz: Double, smoothness: Int) {
+  def DiskPatchTile(gl: GL2, glu: GLU, quadr: GLUquadric, sz: Double, smoothness: Int): Unit = {
     glu.gluDisk(quadr, 0f, sz, smoothness, 1)
   }
 
-  def AxisHead(gl: GL2, glu: GLU, quadr: GLUquadric, sz: Double, smoothness: Int) {
+  def AxisHead(gl: GL2, glu: GLU, quadr: GLUquadric, sz: Double, smoothness: Int): Unit = {
     glu.gluCylinder(quadr, sz / 2.0, 0, sz, smoothness, smoothness)
     gl.glRotatef(180f, 1f, 0f, 0f)
     glu.gluDisk(quadr, 0f, sz / 2, smoothness, 1)
   }
 
-  def ThickStem(gl: GL2, glu: GLU, quadr: GLUquadric, sz: Double, smoothness: Int) {
+  def ThickStem(gl: GL2, glu: GLU, quadr: GLUquadric, sz: Double, smoothness: Int): Unit = {
     glu.gluCylinder(quadr, sz / 2.0, sz / 2.0, sz, smoothness, smoothness)
     // gl.glTranslated(0, 0, 0.8 * sz)
     // glu.gluCylinder(quadr, sz / 2.0, 0.0, 0.2 * sz, smoothness, smoothness)

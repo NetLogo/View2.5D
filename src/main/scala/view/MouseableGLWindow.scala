@@ -21,7 +21,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
   // initial values are overwritten immediately - this is the correct initial value for the default model
   val observer = new Observer(0, 0, 49.5)
 
-  def updateObserverPerspectiveAnglesWithDeltas(thetax: Double, thetay: Double) {
+  def updateObserverPerspectiveAnglesWithDeltas(thetax: Double, thetay: Double): Unit = {
     observer.updatePerspectiveAngles(thetax, thetay)
     canvas.repaint()
   }
@@ -29,7 +29,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
   def getObserverPerspectiveAngles: Array[Double] =
     Array(observer.heading, observer.pitch)
 
-  def shiftObserverFocusPoint(deltax: Double, deltay: Double) {
+  def shiftObserverFocusPoint(deltax: Double, deltay: Double): Unit = {
     observer.objectiveShift(deltax, deltay)
     canvas.repaint()
   }
@@ -37,7 +37,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
   def getObserverPerspectiveFocusPoint: Array[Double] =
     Array(observer.rotx, observer.roty)
 
-  def zoomToDistance(dist: Double) {
+  def zoomToDistance(dist: Double): Unit = {
     observer.zoomToDistance(dist)
     canvas.repaint()
   }
@@ -52,15 +52,15 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
 
   var dragging = false
 
-  def setCanvas(glCanvas: GLCanvas) {
+  def setCanvas(glCanvas: GLCanvas): Unit = {
     canvas = glCanvas
   }
 
-  def repaintCanvas() {
+  def repaintCanvas(): Unit = {
     canvas.repaint()
   }
 
-  protected def setupLightingAndViewPort(gl: GL2, glu: GLU) {
+  protected def setupLightingAndViewPort(gl: GL2, glu: GLU): Unit = {
     gl.glShadeModel(GLLightingFunc.GL_SMOOTH) // Enable Smooth Shading
     gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f)   // Black Background
     gl.glClearDepth(1.0f)                     // Depth Buffer Setup
@@ -111,7 +111,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
     mainViewport(gl, glu)
   }
 
-  protected def mainViewport(gl: GL2, glu: GLU) {
+  protected def mainViewport(gl: GL2, glu: GLU): Unit = {
     val worldWidth = viewer.worldWidth
     val worldHeight = viewer.worldHeight
 
@@ -132,7 +132,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
     observer.goHome(viewer)
   }
 
-  protected def setColorAndStandardMaterial(gl: GL2, red: Float, green: Float, blue: Float) {
+  protected def setColorAndStandardMaterial(gl: GL2, red: Float, green: Float, blue: Float): Unit = {
     val rgb = Array(red, green, blue)
 
     gl.glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_AMBIENT, rgb, 0)
@@ -141,7 +141,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
     gl.glColor3f(red, green, blue)
   }
 
-  protected def drawAxesIfDragging(gl: GL2, axisHeadHandle: Int) {
+  protected def drawAxesIfDragging(gl: GL2, axisHeadHandle: Int): Unit = {
     if (dragging) {
       val zmax = 10.0 * viewer.zScale + 1
 
@@ -177,7 +177,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
     }
   }
 
-  override def mouseDragged(e: MouseEvent) {
+  override def mouseDragged(e: MouseEvent): Unit = {
     val nx = e.getX
     val ny = e.getY
 
@@ -190,6 +190,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
         observer.zoomby(oldy - ny)
       case VarviewWindow.SCALEZ =>
         viewer.zoomZby((oldy - ny) / 30.0)
+      case _ =>
     }
 
     oldx = nx
@@ -198,13 +199,13 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
     canvas.repaint()
   }
 
-  override def mouseWheelMoved(e: MouseWheelEvent) {
+  override def mouseWheelMoved(e: MouseWheelEvent): Unit = {
     observer.zoomby(e.getPreciseWheelRotation)
 
     canvas.repaint()
   }
 
-  override def mousePressed(e: MouseEvent) {
+  override def mousePressed(e: MouseEvent): Unit = {
     oldx = e.getX
     oldy = e.getY
 
@@ -213,7 +214,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
     canvas.repaint()
   }
 
-  override def mouseReleased(e: MouseEvent) {
+  override def mouseReleased(e: MouseEvent): Unit = {
     dragging = false
 
     canvas.repaint()
@@ -228,7 +229,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
 
   var areShapesStale = false
 
-  def compileShape(nlGLU: NetLogoGLU, gl: GL2, glu: GLU, shape: VectorShape, index: Int, rotatable: Boolean) {
+  def compileShape(nlGLU: NetLogoGLU, gl: GL2, glu: GLU, shape: VectorShape, index: Int, rotatable: Boolean): Unit = {
     val tessellator = new Tessellator
     val tess = GLU.gluNewTess()
 
@@ -260,6 +261,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
           nlGLU.renderLine(gl, i, line)
         case curve: Curve =>
           throw new IllegalStateException
+        case _ =>
       }
     }
 
@@ -271,7 +273,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
   }
 
   // Compile all the turtle shapes
-  def compileShapes(gl: GL2, compiledShapes: Map[String, Int], rotatable: Boolean) {
+  def compileShapes(gl: GL2, compiledShapes: Map[String, Int], rotatable: Boolean): Unit = {
     App.app.workspace.world.turtleShapeList.names.foreach(name => {
       val handle = gl.glGenLists(1)
       val shape = App.app.workspace.world.turtleShapeList.shape(name).asInstanceOf[VectorShape]
@@ -282,17 +284,17 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
   }
 
   // Replace deleted shapes in compiled shape map with the compiled default shape
-  def setDeletedShapesToDefaultShape(compiledShapes: Map[String, Int]) {
+  def setDeletedShapesToDefaultShape(compiledShapes: Map[String, Int]): Unit = {
     // If a shape was deleted its name will still be a key for the compiled shapes,
     // but it will not have a name among the turtle shapes.
     // Hence it gets the default shape. Fortunately the default shape cannot be deleted or edited.
     // aab 05/06/2021
-    (compiledShapes.keySet -- App.app.workspace.world.turtleShapeList.names).foreach(name => {
+    (compiledShapes.keysIterator.toSet -- App.app.workspace.world.turtleShapeList.names).foreach(name => {
       compiledShapes += ((name, compiledShapes(ShapeList.DefaultShapeName)))
     })
   }
 
-  def updateTurtleDisplayList() {
+  def updateTurtleDisplayList(): Unit = {
     areShapesStale = true
   }
 }

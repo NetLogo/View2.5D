@@ -13,11 +13,11 @@ class NetLogoGLU {
 
   private var quadric: GLUquadric = null
 
-  def setQuadric(quad: GLUquadric) {
+  def setQuadric(quad: GLUquadric): Unit = {
     quadric = quad
   }
 
-  def renderRectangle(gl: GL2, offset: Int, rect: Rectangle, rotatable: Boolean) {
+  def renderRectangle(gl: GL2, offset: Int, rect: Rectangle, rotatable: Boolean): Unit = {
     val zDepth = 0.01f + offset * 0.0001f
 
     if (!rect.marked) {
@@ -37,12 +37,12 @@ class NetLogoGLU {
   }
 
   def renderRectangle(gl: GL2, x0: Float, x1: Float, y0: Float, y1: Float, z0: Float, z1: Float, filled: Boolean,
-                      rotatable: Boolean) {
+                      rotatable: Boolean): Unit = {
     renderRectangularPrism(gl, x0, x1, y0, y1, z0, z1, filled, false, rotatable)
   }
 
   def renderRectangularPrism(gl: GL2, left: Float, right: Float, back: Float, front: Float, bottom: Float, top: Float,
-                             hollow: Boolean, hasBottom: Boolean, hasSides: Boolean) {
+                             hollow: Boolean, hasBottom: Boolean, hasSides: Boolean): Unit = {
     if (hollow)
       gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE)
 
@@ -109,7 +109,7 @@ class NetLogoGLU {
       gl.glEnable(GL.GL_CULL_FACE)
   }
 
-  def renderCircle(gl: GL2, glu: GLU, offset: Int, circle: Circle, rotatable: Boolean) {
+  def renderCircle(gl: GL2, glu: GLU, offset: Int, circle: Circle, rotatable: Boolean): Unit = {
     val zDepth = 0.01f + offset * 0.0001f
 
     if (!circle.marked) {
@@ -160,7 +160,7 @@ class NetLogoGLU {
       gl.glPopAttrib()
   }
 
-  def renderCircle(gl: GL2, glu: GLU, innerRadius: Float, outerRadius: Float, zDepth: Float, rotatable: Boolean) {
+  def renderCircle(gl: GL2, glu: GLU, innerRadius: Float, outerRadius: Float, zDepth: Float, rotatable: Boolean): Unit = {
     glu.gluDisk(quadric, innerRadius, outerRadius, smoothness, 1)
 
     if (is3D && rotatable) {
@@ -170,7 +170,7 @@ class NetLogoGLU {
     }
   }
 
-  def renderLine(gl: GL2, offset: Int, line: Line) {
+  def renderLine(gl: GL2, offset: Int, line: Line): Unit = {
     val zDepth = offset * 0.0001f
 
     if (!line.marked) {

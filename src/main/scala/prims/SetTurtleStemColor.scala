@@ -9,7 +9,7 @@ class SetTurtleStemColor extends Command {
   override def getSyntax: Syntax =
     Syntax.commandSyntax(right = List(Syntax.StringType, Syntax.ReporterType), agentClassString = "O---")
 
-  override def perform(args: Array[Argument], context: Context) {
+  override def perform(args: Array[Argument], context: Context): Unit = {
     View25DExtension.turtleWindowMap.get(args(0).getString).foreach(window => {
       window.setStemColorReporter(args(1).getReporter)
       // Force update of the Array List

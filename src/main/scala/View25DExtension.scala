@@ -24,13 +24,13 @@ object View25DExtension {
     patchWindowMap.size + turtleWindowMap.size
 
   // Add a window to the indexed set. Get rid of any existing window with that name
-  def storePatchWindowWithTitle(title: String, window: PatchView) {
+  def storePatchWindowWithTitle(title: String, window: PatchView): Unit = {
     removePatchWindowWithTitle(title)
     patchWindowMap += ((title, window))
   }
 
   // remove a patch window with given name, if any exists
-  def removePatchWindowWithTitle(title: String) {
+  def removePatchWindowWithTitle(title: String): Unit = {
     patchWindowMap.get(title).foreach(window => {
       patchWindowMap -= title
       window.dispose()
@@ -38,13 +38,13 @@ object View25DExtension {
   }
 
   // Add a window to the indexed set. Remove any existing turtle view.
-  def storeTurtleWindowWithTitle(title: String, window: TurtleView) {
+  def storeTurtleWindowWithTitle(title: String, window: TurtleView): Unit = {
     removeTurtleWindowWithTitle(title)
     turtleWindowMap += ((title, window))
   }
 
   // remove a turtle window with given name, if any exists
-  def removeTurtleWindowWithTitle(title: String) {
+  def removeTurtleWindowWithTitle(title: String): Unit = {
     turtleWindowMap.get(title).foreach(window => {
       turtleWindowMap -= title
       window.dispose()
@@ -52,7 +52,7 @@ object View25DExtension {
   }
 
   // When a turtle shape is deleted or added notify all views
-  def updateTurtleShapesAllViews() {
+  def updateTurtleShapesAllViews(): Unit = {
     turtleWindowMap.values.foreach(_.updateTurtleShapes())
     patchWindowMap.values.foreach(_.updateTurtleShapes())
   }
@@ -62,14 +62,14 @@ class View25DExtension extends DefaultClassManager with ThemeSync {
   import View25DExtension._
 
   // run at extension startup.  ensure that the NetLogo native JOGL is loaded.
-  override def runOnce(manager: ExtensionManager) {
+  override def runOnce(manager: ExtensionManager): Unit = {
     View25DShapeChangeListener.listen()
 
     if (App.app != null)
       App.app.addSyncComponent(this)
   }
 
-  override def load(manager: PrimitiveManager) {
+  override def load(manager: PrimitiveManager): Unit = {
     manager.addPrimitive("patch-view", new MakePatchView())
     manager.addPrimitive("decorate-patch-view", new DecoratePatchView(true))
     manager.addPrimitive("undecorate-patch-view", new DecoratePatchView(false))
@@ -120,7 +120,7 @@ class View25DExtension extends DefaultClassManager with ThemeSync {
     override def getSyntax: Syntax =
       Syntax.commandSyntax(right = List(Syntax.StringType));
 
-    override def perform(args: Array[Argument], context: Context) {
+    override def perform(args: Array[Argument], context: Context): Unit = {
       removePatchWindowWithTitle(args(0).getString)
     }
   }
@@ -129,7 +129,7 @@ class View25DExtension extends DefaultClassManager with ThemeSync {
     override def getSyntax: Syntax =
       Syntax.commandSyntax(right = List(Syntax.StringType))
 
-    override def perform(args: Array[Argument], context: Context) {
+    override def perform(args: Array[Argument], context: Context): Unit = {
       removeTurtleWindowWithTitle(args(0).getString)
     }
   }
@@ -138,7 +138,7 @@ class View25DExtension extends DefaultClassManager with ThemeSync {
     override def getSyntax: Syntax =
       Syntax.commandSyntax()
 
-    override def perform(args: Array[Argument], context: Context) {
+    override def perform(args: Array[Argument], context: Context): Unit = {
       turtleWindowMap.values.foreach(_.dispose())
       turtleWindowMap.clear()
     }
@@ -148,7 +148,7 @@ class View25DExtension extends DefaultClassManager with ThemeSync {
     override def getSyntax: Syntax =
       Syntax.commandSyntax()
 
-    override def perform(args: Array[Argument], context: Context) {
+    override def perform(args: Array[Argument], context: Context): Unit = {
       patchWindowMap.values.foreach(_.dispose())
       patchWindowMap.clear()
     }
@@ -156,14 +156,14 @@ class View25DExtension extends DefaultClassManager with ThemeSync {
 
   /// end utility primitives
 
-  private def disposeAllPatchViews() {
+  private def disposeAllPatchViews(): Unit = {
     patchWindowMap.values.foreach(window => {
       if (window != null)
         window.dispose()
     })
   }
 
-  private def disposeAllTurtleViews() {
+  private def disposeAllTurtleViews(): Unit = {
     turtleWindowMap.values.foreach(window => {
       if (window != null)
         window.dispose()
@@ -171,7 +171,7 @@ class View25DExtension extends DefaultClassManager with ThemeSync {
   }
 
   // ensure that the windows are cleaned up when we unload the extension
-  override def unload(manager: ExtensionManager) {
+  override def unload(manager: ExtensionManager): Unit = {
     disposeAllPatchViews()
     disposeAllTurtleViews()
 
@@ -179,7 +179,7 @@ class View25DExtension extends DefaultClassManager with ThemeSync {
       App.app.removeSyncComponent(this)
   }
 
-  def syncTheme() {
+  def syncTheme(): Unit = {
     patchWindowMap.values.foreach(_.syncTheme())
     turtleWindowMap.values.foreach(_.syncTheme())
   }

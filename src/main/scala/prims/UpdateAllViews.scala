@@ -9,7 +9,7 @@ class UpdateAllViews extends Command {
   override def getSyntax: Syntax =
     Syntax.commandSyntax(agentClassString = "O---")
 
-  override def perform(args: Array[Argument], context: Context) {
+  override def perform(args: Array[Argument], context: Context): Unit = {
     View25DExtension.patchWindowMap.values.foreach(_.manuallyRefreshReporterView(context))
   }
 }

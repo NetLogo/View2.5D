@@ -12,7 +12,7 @@ import org.nlogo.api.{ AgentException, AnonymousReporter, Color, Context }
 import org.nlogo.app.App
 import org.nlogo.theme.ThemeSync
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters.IterableHasAsScala
 
 import view25d.View25DExtension
 import view25d.view.gl.PatchGL
@@ -36,7 +36,7 @@ class PatchView(title: String, reporter: AnonymousReporter) extends VarviewWindo
 
   // window listener to ensure that the Map gets cleaned up.
   addWindowListener(new WindowAdapter {
-    override def windowClosing(e: WindowEvent) {
+    override def windowClosing(e: WindowEvent): Unit = {
       View25DExtension.removePatchWindowWithTitle(title)
     }
   })
@@ -59,7 +59,7 @@ class PatchView(title: String, reporter: AnonymousReporter) extends VarviewWindo
 
   syncTheme()
 
-  def setupForRendering(wWidth: Int, wHeight: Int, minX: Int, maxX: Int, minY: Int, maxY: Int) {
+  def setupForRendering(wWidth: Int, wHeight: Int, minX: Int, maxX: Int, minY: Int, maxY: Int): Unit = {
     worldWidth = wWidth
     worldHeight = wHeight
     minPxcor = minX
@@ -70,7 +70,7 @@ class PatchView(title: String, reporter: AnonymousReporter) extends VarviewWindo
     reporterValueMatrix = Array.fill(worldWidth) { new Array[PatchValue](worldHeight) }
   }
 
-  def updateValueArray(context: Context) {
+  def updateValueArray(context: Context): Unit = {
     for (i <- 0 until worldWidth){
       for (j <- 0 until worldHeight) {
         try {
@@ -113,33 +113,33 @@ class PatchView(title: String, reporter: AnonymousReporter) extends VarviewWindo
     }
   }
 
-  override def manuallyRefreshReporterView(context: Context) {
+  override def manuallyRefreshReporterView(context: Context): Unit = {
     updateValueArray(context)
     glManager.repaintCanvas()
   }
 
-  def refresh() {
+  def refresh(): Unit = {
     glManager.repaintCanvas()
   }
 
-  def updateTurtleShapes() {
+  def updateTurtleShapes(): Unit = {
     glManager.updateTurtleDisplayList()
     glManager.repaintCanvas()
   }
 
-  override def resetPerspective() {
+  override def resetPerspective(): Unit = {
     glManager.observer.goHome(this)
     glManager.repaintCanvas()
   }
 
-  def zoomZby(change: Double) {
+  def zoomZby(change: Double): Unit = {
     if (-change < zScale)
       zScale += change
 
     glManager.repaintCanvas()
   }
 
-  def syncTheme() {
+  def syncTheme(): Unit = {
     dashboard.syncTheme()
     viewOptions.syncTheme()
   }

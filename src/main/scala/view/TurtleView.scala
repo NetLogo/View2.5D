@@ -11,7 +11,7 @@ import org.nlogo.api.{ AgentException, AgentSet, AnonymousReporter, LogoExceptio
 import org.nlogo.app.App
 import org.nlogo.theme.ThemeSync
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters.IterableHasAsScala
 
 import view25d.View25DExtension
 import view25d.view.gl.TurtleGL
@@ -36,7 +36,7 @@ class TurtleView(title: String, var agents: AgentSet, reporter: AnonymousReporte
   setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE)
 
   addWindowListener(new WindowAdapter {
-    override def windowClosing(e: WindowEvent) {
+    override def windowClosing(e: WindowEvent): Unit = {
       View25DExtension.removeTurtleWindowWithTitle(title)
     }
   })
@@ -60,17 +60,17 @@ class TurtleView(title: String, var agents: AgentSet, reporter: AnonymousReporte
 
   syncTheme()
 
-  override def manuallyRefreshReporterView(context: Context) {
+  override def manuallyRefreshReporterView(context: Context): Unit = {
     updateArrayList(context)
     glManager.repaintCanvas()
   }
 
-  def updateTurtleShapes() {
+  def updateTurtleShapes(): Unit = {
     glManager.updateTurtleDisplayList()
     glManager.repaintCanvas()
   }
 
-  private def updateArrayList(context: Context) {
+  private def updateArrayList(context: Context): Unit = {
     turtleReporterValues = agents.agents.asScala.toArray.collect {
       case turtle: Turtle if !turtle.hidden =>
         TurtleValue(turtle.shape, NLColor.getColor(turtle.color), turtle.xcor, turtle.ycor, turtle.size,
@@ -91,7 +91,7 @@ class TurtleView(title: String, var agents: AgentSet, reporter: AnonymousReporte
       updatePColors()
   }
 
-  private def updatePColors() {
+  private def updatePColors(): Unit = {
     for (i <- 0 until worldWidth){
       for (j <- 0 until worldHeight) {
         try {
@@ -106,7 +106,7 @@ class TurtleView(title: String, var agents: AgentSet, reporter: AnonymousReporte
     }
   }
 
-  def setupForRendering(wWidth: Int, wHeight: Int, minX: Int, maxX: Int, minY: Int, maxY: Int) {
+  def setupForRendering(wWidth: Int, wHeight: Int, minX: Int, maxX: Int, minY: Int, maxY: Int): Unit = {
     worldWidth = wWidth
     worldHeight = wHeight
     minPxcor = minX
@@ -120,23 +120,23 @@ class TurtleView(title: String, var agents: AgentSet, reporter: AnonymousReporte
     patchColorMatrix = Array.fill(worldWidth) { Array.fill(worldHeight) { Color.BLUE } }
   }
 
-  def setAgentSet(as: AgentSet) {
+  def setAgentSet(as: AgentSet): Unit = {
     agents = as
   }
 
-  override def resetPerspective() {
+  override def resetPerspective(): Unit = {
     glManager.observer.goHome(this)
     refresh()
   }
 
-  def refresh() {
+  def refresh(): Unit = {
     glManager.repaintCanvas()
 
     if (viewOptions.usePColor)
       updatePColors()
   }
 
-  def zoomZby(change: Double) {
+  def zoomZby(change: Double): Unit = {
     if (-change < zScale)
       zScale += change
 
@@ -164,11 +164,11 @@ class TurtleView(title: String, var agents: AgentSet, reporter: AnonymousReporte
   def getStemColorReporter: AnonymousReporter =
     stemColorReporter
 
-  def setStemColorReporter(reporter: AnonymousReporter) {
+  def setStemColorReporter(reporter: AnonymousReporter): Unit = {
     stemColorReporter = reporter
   }
 
-  def syncTheme() {
+  def syncTheme(): Unit = {
     dashboard.syncTheme()
     viewOptions.syncTheme()
   }

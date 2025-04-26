@@ -13,7 +13,7 @@ class SetObserverDistance extends Command {
     Syntax.commandSyntax(right = List(Syntax.StringType, Syntax.NumberType),
                          agentClassString = "O---")
 
-  override def perform(args: Array[Argument], context: Context) {
+  override def perform(args: Array[Argument], context: Context): Unit = {
     val title = args(0).getString
     val distance = args(1).getDoubleValue
 

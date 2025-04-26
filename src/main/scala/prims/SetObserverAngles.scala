@@ -10,7 +10,7 @@ class SetObserverAngles extends Command {
     Syntax.commandSyntax(right = List(Syntax.StringType, Syntax.NumberType, Syntax.NumberType),
                          agentClassString = "O---")
 
-  override def perform(args: Array[Argument], context: Context) {
+  override def perform(args: Array[Argument], context: Context): Unit = {
     val title = args(0).getString
     val heading = args(1).getDoubleValue
     val pitch = args(2).getDoubleValue
