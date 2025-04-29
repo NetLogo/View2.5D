@@ -54,7 +54,7 @@ class VarviewDashboard(window: VarviewWindow) extends JPanel(new GridBagLayout) 
   setSize(new Dimension(600, 40))
 
   def syncTheme(): Unit = {
-    setBackground(InterfaceColors.toolbarBackground)
+    setBackground(InterfaceColors.toolbarBackground())
 
     orbitButton.syncTheme()
     zoomButton.syncTheme()
