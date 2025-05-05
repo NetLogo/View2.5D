@@ -11,7 +11,7 @@ javacOptions ++= Seq("-g", "-deprecation", "-Xlint:all", "-Xlint:-serial", "-Xli
 scalaVersion := "2.13.16"
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xlint", "-Xfatal-warnings", "-encoding", "us-ascii", "-release", "11")
 
-netLogoVersion := "7.0.0-internal1-6784458"
+netLogoVersion := "7.0.0-internal1-df97144"
 netLogoClassManager := "view25d.View25DExtension"
 
 libraryDependencies ++= Seq(
