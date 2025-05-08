@@ -14,9 +14,9 @@ class UpdateOneTurtleView extends Command {
 
     View25DExtension.turtleWindowMap.get(title) match {
       case Some(window) =>
-	  	window.setAgentSet(args(1).getAgentSet)
-	  	window.manuallyRefreshReporterView(context)
-      case None => throw new ExtensionException(s"No Variable Visualization window with title $title");
+        window.setAgentSet(args(1).getAgentSet)
+        window.manuallyRefreshReporterView(context)
+      case None => throw new ExtensionException(s"No Variable Visualization window with title $title")
     }
   }
 }

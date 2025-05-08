@@ -7,7 +7,7 @@ import org.nlogo.swing.{ Button, RadioButton }
 import org.nlogo.theme.{ InterfaceColors, ThemeSync }
 
 class VarviewDashboard(window: VarviewWindow) extends JPanel(new GridBagLayout) with ThemeSync {
-	private val orbitButton = new RadioButton("orbit", () => window.setMode(VarviewWindow.ORBIT)) {
+  private val orbitButton = new RadioButton("orbit", () => window.setMode(VarviewWindow.ORBIT)) {
     setSelected(true)
   }
 

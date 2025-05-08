@@ -9,7 +9,7 @@ import org.nlogo.theme.{ InterfaceColors, ThemeSync }
 class TurtleViewOptions(window: TurtleView, co: Boolean, sz: Boolean, sh: Boolean, pco: Boolean, threeD: Boolean,
                         twoD: Boolean) extends JPanel(new GridBagLayout) with ThemeSync {
 
-	private var stemThickness = 0.0
+  private var stemThickness = 0.0
 
   private val color = new CheckBox("Color", (selected) => window.refresh()) {
     if (co)
@@ -31,12 +31,12 @@ class TurtleViewOptions(window: TurtleView, co: Boolean, sz: Boolean, sh: Boolea
       setSelected(true)
   }
 
-  private val threeDButton = new RadioButton("xyz", window.refresh _) {
+  private val threeDButton = new RadioButton("xyz", window.refresh) {
     if (threeD)
       setSelected(true)
   }
 
-  private val twoDButton = new RadioButton("xy-plane", window.refresh _) {
+  private val twoDButton = new RadioButton("xy-plane", window.refresh) {
     if (twoD)
       setSelected(true)
   }

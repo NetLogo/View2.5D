@@ -47,12 +47,12 @@ class PatchViewOptions(window: PatchView, str: Boolean, she: Boolean, pin: Boole
     group.add(pinsButton)
   }
 
-  private val threeDButton = new RadioButton("xyz", window.refresh _) {
+  private val threeDButton = new RadioButton("xyz", window.refresh) {
     if (threeD)
       setSelected(true)
   }
 
-  private val twoDButton = new RadioButton("xy-plane", window.refresh _) {
+  private val twoDButton = new RadioButton("xy-plane", window.refresh) {
     if (twoD)
       setSelected(true)
   }

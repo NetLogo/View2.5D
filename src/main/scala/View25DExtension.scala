@@ -113,7 +113,7 @@ class View25DExtension extends DefaultClassManager with ThemeSync {
       Syntax.reporterSyntax(ret = Syntax.NumberType)
 
     override def report(args: Array[Argument], context: Context): Double =
-      numWindows
+      numWindows.toDouble
   }
 
   private class RemoveOnePatchView extends Command {
