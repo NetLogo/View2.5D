@@ -1,6 +1,6 @@
 package view25d.view.gl
 
-import com.jogamp.opengl.{ GL, GL2, GLAutoDrawable, GLEventListener }
+import com.jogamp.opengl.{ GL, GL2, GLAutoDrawable }
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc
 import com.jogamp.opengl.glu.{ GLU, GLUquadric }
 
@@ -8,7 +8,7 @@ import org.nlogo.api.Color
 
 import view25d.view.{ MouseableGLWindow, TurtleView }
 
-class TurtleGL(viewer: TurtleView) extends MouseableGLWindow(viewer) with GLEventListener {
+class TurtleGL(viewer: TurtleView) extends MouseableGLWindow(viewer) {
   // handles for compiled GL shapes
   var patchTileListHandle = 0
   var stemSkyscraperHandle = 0
@@ -18,7 +18,7 @@ class TurtleGL(viewer: TurtleView) extends MouseableGLWindow(viewer) with GLEven
   // GLU quadric for use in making spheres and in setting up NLGLU helper class for turtle shapes
   protected var quadric: GLUquadric = null
 
-  private def setupCompiledDisplayLists(gl: GL2): Unit = {
+  override def setupCompiledDisplayLists(gl: GL2): Unit = {
     patchTileListHandle = gl.glGenLists(1)
     gl.glNewList(patchTileListHandle, GL2.GL_COMPILE)
     Compilables.PatchTile(gl)
@@ -177,22 +177,4 @@ class TurtleGL(viewer: TurtleView) extends MouseableGLWindow(viewer) with GLEven
     drawAxesIfDragging(gl, axisHeadHandle)
     gl.glPopMatrix()
   }
-
-  // required by Interface GLEventListener
-  override def init(drawable: GLAutoDrawable): Unit = {
-    compiledShapes.clear()
-
-    val gl = drawable.getGL.asInstanceOf[GL2]
-
-    glu = new GLU
-
-    setupCompiledDisplayLists(gl)
-    setupLightingAndViewPort(gl, glu)
-  }
-
-  // required by Interface GLEventListener
-  override def dispose(drawable: GLAutoDrawable): Unit = {}
-
-  // required by Interface GLEventListener
-  override def reshape(drawable: GLAutoDrawable, x: Int, y: Int, width: Int, height: Int): Unit = {}
 }

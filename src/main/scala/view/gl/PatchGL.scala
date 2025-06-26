@@ -2,13 +2,13 @@ package view25d.view.gl
 
 import java.util.ConcurrentModificationException
 
-import com.jogamp.opengl.{ GL, GL2, GLAutoDrawable, GLEventListener }
+import com.jogamp.opengl.{ GL, GL2, GLAutoDrawable }
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc
 import com.jogamp.opengl.glu.{ GLU, GLUquadric }
 
 import view25d.view.{ MouseableGLWindow, PatchView }
 
-class PatchGL(viewer: PatchView) extends MouseableGLWindow(viewer) with GLEventListener {
+class PatchGL(viewer: PatchView) extends MouseableGLWindow(viewer) {
   // handles for compiled GL shapes
   private var patchTileListHandle = 0
   private var patchThickTileListHandle = 0
@@ -23,7 +23,7 @@ class PatchGL(viewer: PatchView) extends MouseableGLWindow(viewer) with GLEventL
   // GLU quadric for use in making spheres and in setting up NLGLU helper class for turtle shapes
   protected var quadric: GLUquadric = null
 
-  private def setupCompiledDisplayLists(gl: GL2): Unit = {
+  override def setupCompiledDisplayLists(gl: GL2): Unit = {
     patchTileListHandle = gl.glGenLists(1)
     gl.glNewList(patchTileListHandle, GL2.GL_COMPILE)
     Compilables.PatchTile(gl)
@@ -236,22 +236,4 @@ class PatchGL(viewer: PatchView) extends MouseableGLWindow(viewer) with GLEventL
 
     gl.glPopMatrix()
   }
-
-  // required by Interface GLEventListener
-  override def init(drawable: GLAutoDrawable): Unit = {
-    compiledShapes.clear()
-
-    val gl = drawable.getGL.asInstanceOf[GL2]
-
-    glu = new GLU()
-
-    setupCompiledDisplayLists(gl)
-    setupLightingAndViewPort(gl, glu)
-  }
-
-  // required by Interface GLEventListener
-  override def dispose(drawable: GLAutoDrawable): Unit = {}
-
-  // required by Interface GLEventListener
-  override def reshape(drawable: GLAutoDrawable, x: Int, y: Int, width: Int, height: Int): Unit = {}
 }

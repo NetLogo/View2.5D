@@ -3,7 +3,7 @@ package view25d.view
 import java.awt.event.{ MouseAdapter, MouseEvent, MouseWheelEvent }
 import java.nio.{ FloatBuffer, IntBuffer }
 
-import com.jogamp.opengl.{ GL, GL2, GL2ES1 }
+import com.jogamp.opengl.{ GL, GL2, GL2ES1, GLAutoDrawable, GLEventListener }
 import com.jogamp.opengl.awt.GLCanvas
 import com.jogamp.opengl.fixedfunc.{ GLLightingFunc, GLMatrixFunc }
 import com.jogamp.opengl.glu.GLU
@@ -18,7 +18,7 @@ import scala.collection.mutable.Map
 
 import view25d.view.gl.NetLogoGLU
 
-abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
+abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter with GLEventListener {
   private val uiScale = if (System.getProperty("os.name").toLowerCase.contains("linux")) {
     Utils.getUIScale
   } else {
@@ -66,6 +66,8 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
   def repaintCanvas(): Unit = {
     canvas.repaint()
   }
+
+  protected def setupCompiledDisplayLists(gl: GL2): Unit
 
   protected def setupLightingAndViewPort(gl: GL2, glu: GLU): Unit = {
     gl.glShadeModel(GLLightingFunc.GL_SMOOTH) // Enable Smooth Shading
@@ -116,27 +118,24 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
     gl.glGetIntegerv(GL.GL_STENCIL_BITS, IntBuffer.wrap(Array(1)))
 
     mainViewport(gl, glu)
+
+    observer.goHome(viewer)
   }
 
-  protected def mainViewport(gl: GL2, glu: GLU): Unit = {
-    val worldWidth = viewer.worldWidth
-    val worldHeight = viewer.worldHeight
-
-    // TODO: recheck the logic here, especially on the viewport.
-    gl.glViewport(0, 0, (worldWidth * uiScale).toInt, (worldHeight * uiScale).toInt)
+  private def mainViewport(gl: GL2, glu: GLU): Unit = {
+    gl.glViewport(0, 0, viewer.viewWidth, viewer.viewHeight)
 
     gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION)
     gl.glLoadIdentity()
 
     // It's nice to be able to zoom way, so large zClip
-    val zClip = worldWidth.max(worldHeight) * 40
+    val zClip = viewer.worldWidth.max(viewer.worldHeight) * 40
 
-    // setting ratio to 1 because we really don't want non-square GL windows.
-    glu.gluPerspective(45.0f, 1.0, 0.1, zClip)
+    // rectangular viewport with a ratio of width / height prevents the view from stretching while still allowing
+    // the graphics inside the view to extend into the rectangular margins (Isaac B 6/26/25)
+    glu.gluPerspective(45.0f, viewer.viewWidth.toFloat / viewer.viewHeight, 0.1, zClip)
     gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW)
     gl.glLoadIdentity()
-
-    observer.goHome(viewer)
   }
 
   protected def setColorAndStandardMaterial(gl: GL2, red: Float, green: Float, blue: Float): Unit = {
@@ -303,5 +302,28 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
 
   def updateTurtleDisplayList(): Unit = {
     areShapesStale = true
+  }
+
+  // required by Interface GLEventListener
+  override def init(drawable: GLAutoDrawable): Unit = {
+    compiledShapes.clear()
+
+    val gl = drawable.getGL.asInstanceOf[GL2]
+
+    glu = new GLU()
+
+    setupCompiledDisplayLists(gl)
+    setupLightingAndViewPort(gl, glu)
+  }
+
+  // required by Interface GLEventListener
+  override def dispose(drawable: GLAutoDrawable): Unit = {}
+
+  // required by Interface GLEventListener
+  override def reshape(drawable: GLAutoDrawable, x: Int, y: Int, width: Int, height: Int): Unit = {
+    viewer.viewWidth = (width * uiScale).toInt
+    viewer.viewHeight = (height * uiScale).toInt
+
+    mainViewport(drawable.getGL.asInstanceOf[GL2], glu)
   }
 }

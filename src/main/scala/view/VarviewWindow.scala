@@ -24,6 +24,8 @@ object VarviewWindow {
 abstract class VarviewWindow(title: String) extends JFrame(title) with NetLogoIcon {
   var worldWidth = 0
   var worldHeight = 0
+  var viewWidth = 0
+  var viewHeight = 0
   var minPxcor = 0
   var minPycor = 0
   var maxPxcor = 0
@@ -75,15 +77,6 @@ abstract class VarviewWindow(title: String) extends JFrame(title) with NetLogoIc
 
   def resetPerspective(): Unit
   def manuallyRefreshReporterView(context: Context): Unit
-
-  protected def applySquareConstraint(xBorder: Int, yBorder: Int, inner: JPanel): Unit = {
-    val constraint = (inner.getWidth - xBorder).min(inner.getHeight - yBorder)
-
-    inner.setPreferredSize(new Dimension(constraint + xBorder, constraint + yBorder))
-
-    setSize(new Dimension(constraint + xBorder, constraint + yBorder + getHeight - inner.getHeight))
-    invalidate()
-  }
 
   // Given an AgentSet of turtles, produce a Set of associated Links.
   // Assumes check that AgentSet contains Turtles has already been made.
