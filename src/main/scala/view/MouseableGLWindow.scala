@@ -206,7 +206,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter wit
   }
 
   override def mouseWheelMoved(e: MouseWheelEvent): Unit = {
-    observer.zoomby(e.getPreciseWheelRotation)
+    observer.zoomby(-e.getPreciseWheelRotation)
 
     canvas.repaint()
   }
