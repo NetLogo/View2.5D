@@ -12,12 +12,19 @@ import org.nlogo.app.App
 import org.nlogo.core.ShapeList
 import org.nlogo.gl.render.{ Polygons, Tessellator }
 import org.nlogo.shape.{ Circle, Curve, Line, Polygon, Rectangle, VectorShape }
+import org.nlogo.swing.Utils
 
 import scala.collection.mutable.Map
 
 import view25d.view.gl.NetLogoGLU
 
 abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
+  private val uiScale = if (System.getProperty("os.name").toLowerCase.contains("linux")) {
+    Utils.getUIScale
+  } else {
+    1
+  }
+
   // initial values are overwritten immediately - this is the correct initial value for the default model
   val observer = new Observer(0, 0, 49.5)
 
@@ -116,7 +123,7 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter {
     val worldHeight = viewer.worldHeight
 
     // TODO: recheck the logic here, especially on the viewport.
-    gl.glViewport(0, 0, worldWidth, worldHeight)
+    gl.glViewport(0, 0, (worldWidth * uiScale).toInt, (worldHeight * uiScale).toInt)
 
     gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION)
     gl.glLoadIdentity()
