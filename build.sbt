@@ -3,7 +3,7 @@ import org.nlogo.build.{ ExtensionDocumentationPlugin, NetLogoExtension }
 enablePlugins(NetLogoExtension, ExtensionDocumentationPlugin)
 
 name := "view2.5d"
-version := "1.1.9"
+version := "1.1.10"
 isSnapshot := true
 
 javacOptions ++= Seq("-g", "-deprecation", "-Xlint:all", "-Xlint:-serial", "-Xlint:-path", "-encoding", "us-ascii", "--release", "11")
