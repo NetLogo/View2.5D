@@ -16,15 +16,15 @@ class SetObserverAngles extends Command {
     val pitch = args(2).getDoubleValue
 
     View25DExtension.patchWindowMap.get(title).foreach(window => {
-      val angles = window.getGLWindow.getObserverPerspectiveAngles
+      val angles = window.getObserverPerspectiveAngles
 
-      window.getGLWindow.updateObserverPerspectiveAnglesWithDeltas(heading - angles(0), angles(1) - pitch)
+      window.updateObserverPerspectiveAnglesWithDeltas(heading - angles(0), angles(1) - pitch)
     })
 
     View25DExtension.turtleWindowMap.get(title).foreach(window => {
-      val angles = window.getGLWindow.getObserverPerspectiveAngles
+      val angles = window.getObserverPerspectiveAngles
 
-      window.getGLWindow.updateObserverPerspectiveAnglesWithDeltas(heading - angles(0), angles(1) - pitch)
+      window.updateObserverPerspectiveAnglesWithDeltas(heading - angles(0), angles(1) - pitch)
     })
   }
 }

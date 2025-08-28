@@ -11,7 +11,7 @@ class SetTurtleStemThickness extends Command {
 
   override def perform(args: Array[Argument], context: Context): Unit = {
     View25DExtension.turtleWindowMap.get(args(0).getString).foreach(window => {
-      window.viewOptions.setStemThickness(args(1).getDoubleValue.max(0).min(1))
+      window.setStemThickness(args(1).getDoubleValue.max(0).min(1))
       window.refresh()
     })
   }

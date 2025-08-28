@@ -21,11 +21,11 @@ class SetObserverDistance extends Command {
       throw new ExtensionException(s"Cannot set observer distance below $MinDistance")
 
     View25DExtension.patchWindowMap.get(title).foreach(window => {
-      window.getGLWindow.zoomToDistance(distance)
+      window.zoomToDistance(distance)
     })
 
     View25DExtension.turtleWindowMap.get(title).foreach(window => {
-      window.getGLWindow.zoomToDistance(distance)
+      window.zoomToDistance(distance)
     })
   }
 }

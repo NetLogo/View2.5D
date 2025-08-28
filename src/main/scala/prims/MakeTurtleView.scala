@@ -8,7 +8,7 @@ import org.nlogo.core.Syntax
 import scala.jdk.CollectionConverters.IterableHasAsScala
 
 import view25d.View25DExtension
-import view25d.view.TurtleView
+import view25d.view.{ TurtleView, TurtleViewGUI, TurtleViewHeadless }
 
 class MakeTurtleView extends Command {
   override def getSyntax: Syntax =
@@ -45,9 +45,14 @@ class MakeTurtleView extends Command {
     extends ReporterRunnable[TurtleView] {
 
     override def run(): TurtleView = {
-      val manualTurtleView = new TurtleView(title, as, turtleReporter)
 
-      val world = App.app.workspace.world
+      val manualTurtleView =
+        if (!context.workspace.isHeadless)
+          new TurtleViewGUI(title, as, turtleReporter)
+        else
+          new TurtleViewHeadless(title, as, turtleReporter)
+
+      val world = context.world
 
       manualTurtleView.setupForRendering(world.worldWidth, world.worldHeight, world.minPxcor, world.maxPxcor,
                                          world.minPycor, world.maxPycor)

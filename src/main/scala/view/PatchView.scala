@@ -17,7 +17,24 @@ import scala.jdk.CollectionConverters.IterableHasAsScala
 import view25d.View25DExtension
 import view25d.view.gl.PatchGL
 
-class PatchView(title: String, reporter: AnonymousReporter) extends VarviewWindow(title) with ThemeSync {
+trait PatchView extends Varview {
+
+  var doingTurtles = false
+
+  // Don't define here; `PatchViewGUI` with mix in an implementation from `VarviewWindow` --Jason B. (8/28/25)
+  def dispose(): Unit
+
+  def updateTurtleShapes(): Unit = ()
+
+}
+
+class PatchViewHeadless(override val title: String, reporter: AnonymousReporter) extends PatchView with Varview {
+  override def dispose(): Unit                                                                                = ()
+  override def setupForRendering(wWidth: Int, wHeight: Int, minX: Int, maxX: Int, minY: Int, maxY: Int): Unit = ()
+  override def setVisible(isVisible: Boolean): Unit                                                           = ()
+}
+
+class PatchViewGUI(title: String, reporter: AnonymousReporter) extends VarviewWindow(title) with PatchView with ThemeSync {
   private val glManager = new PatchGL(this)
 
   def getGLWindow: MouseableGLWindow =
@@ -26,8 +43,6 @@ class PatchView(title: String, reporter: AnonymousReporter) extends VarviewWindo
   var viewOptions = new PatchViewOptions(this, true, false, false, true, false)
 
   var reporterValueMatrix = Array[Array[PatchValue]]()
-
-  var doingTurtles = false
 
   var turtleValues = Array[TurtleValue]()
   var linkValues = Array[LinkValue]()
@@ -122,7 +137,7 @@ class PatchView(title: String, reporter: AnonymousReporter) extends VarviewWindo
     glManager.repaintCanvas()
   }
 
-  def updateTurtleShapes(): Unit = {
+  override def updateTurtleShapes(): Unit = {
     glManager.updateTurtleDisplayList()
     glManager.repaintCanvas()
   }
@@ -132,15 +147,16 @@ class PatchView(title: String, reporter: AnonymousReporter) extends VarviewWindo
     glManager.repaintCanvas()
   }
 
-  def zoomZby(change: Double): Unit = {
+  override def zoomZby(change: Double): Unit = {
     if (-change < zScale)
       zScale += change
 
     glManager.repaintCanvas()
   }
 
-  def syncTheme(): Unit = {
+  override def syncTheme(): Unit = {
     dashboard.syncTheme()
     viewOptions.syncTheme()
   }
+
 }

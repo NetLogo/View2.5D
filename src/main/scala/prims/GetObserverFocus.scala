@@ -17,9 +17,9 @@ class GetObserverFocus extends Reporter {
 
     LogoList(
       if (View25DExtension.turtleWindowMap.contains(title))
-        View25DExtension.turtleWindowMap(title).getGLWindow.getObserverPerspectiveFocusPoint
+        View25DExtension.turtleWindowMap(title).getObserverPerspectiveFocusPoint
       else if (View25DExtension.patchWindowMap.contains(title))
-        View25DExtension.patchWindowMap(title).getGLWindow.getObserverPerspectiveFocusPoint
+        View25DExtension.patchWindowMap(title).getObserverPerspectiveFocusPoint
       else
         Array(0.0, 0.0)
     )

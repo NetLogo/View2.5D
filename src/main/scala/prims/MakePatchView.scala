@@ -6,7 +6,7 @@ import org.nlogo.app.App
 import org.nlogo.core.Syntax
 
 import view25d.View25DExtension
-import view25d.view.PatchView
+import view25d.view.{ PatchView, PatchViewGUI, PatchViewHeadless }
 
 class MakePatchView extends Command {
   override def getSyntax: Syntax =
@@ -45,9 +45,14 @@ class MakePatchView extends Command {
 
     override def run(): PatchView = {
       try {
-        val manualPatchView = new PatchView(title, patchReporter)
 
-        val world = App.app.workspace.world
+        val manualPatchView =
+          if (!context.workspace.isHeadless)
+            new PatchViewGUI(title, patchReporter)
+          else
+            new PatchViewHeadless(title, patchReporter)
+
+        val world = context.world
 
         manualPatchView.setupForRendering(world.worldWidth, world.worldHeight, world.minPxcor, world.maxPxcor,
                                           world.minPycor, world.maxPycor)

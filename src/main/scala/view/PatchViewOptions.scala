@@ -6,7 +6,7 @@ import javax.swing.{ ButtonGroup, JLabel, JPanel }
 import org.nlogo.swing.{ RadioButton, Transparent }
 import org.nlogo.theme.{ InterfaceColors, ThemeSync }
 
-class PatchViewOptions(window: PatchView, str: Boolean, she: Boolean, pin: Boolean, threeD: Boolean, twoD: Boolean)
+class PatchViewOptions(window: PatchViewGUI, str: Boolean, she: Boolean, pin: Boolean, threeD: Boolean, twoD: Boolean)
   extends JPanel(new GridBagLayout) with ThemeSync {
 
   private val structuresButton = new RadioButton("Structures", () => {

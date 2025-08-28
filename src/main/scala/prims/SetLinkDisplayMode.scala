@@ -12,7 +12,7 @@ class SetLinkDisplayMode(inXYPlane: Boolean) extends Command {
   override def perform(args: Array[Argument], context: Context): Unit = {
     val title = args(0).getString
 
-    View25DExtension.patchWindowMap.get(title).foreach(_.viewOptions.setLinksDisplayMode(inXYPlane))
-    View25DExtension.turtleWindowMap.get(title).foreach(_.viewOptions.setLinksDisplayMode(inXYPlane))
+    View25DExtension.patchWindowMap.get(title).foreach(_.setLinksDisplayMode(inXYPlane))
+    View25DExtension.turtleWindowMap.get(title).foreach(_.setLinksDisplayMode(inXYPlane))
   }
 }

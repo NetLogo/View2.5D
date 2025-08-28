@@ -6,7 +6,7 @@ import javax.swing.{ ButtonGroup, JLabel, JPanel }
 import org.nlogo.swing.{ CheckBox, RadioButton, Transparent }
 import org.nlogo.theme.{ InterfaceColors, ThemeSync }
 
-class TurtleViewOptions(window: TurtleView, co: Boolean, sz: Boolean, sh: Boolean, pco: Boolean, threeD: Boolean,
+class TurtleViewOptions(window: TurtleViewGUI, co: Boolean, sz: Boolean, sh: Boolean, pco: Boolean, threeD: Boolean,
                         twoD: Boolean) extends JPanel(new GridBagLayout) with ThemeSync {
 
   private var stemThickness = 0.0

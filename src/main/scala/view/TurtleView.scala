@@ -16,15 +16,46 @@ import scala.jdk.CollectionConverters.IterableHasAsScala
 import view25d.View25DExtension
 import view25d.view.gl.TurtleGL
 
-class TurtleView(title: String, var agents: AgentSet, reporter: AnonymousReporter)
-  extends VarviewWindow(title) with ThemeSync {
+trait TurtleView extends Varview {
+
+  protected val initialAgents: AgentSet
+
+  protected var stemColorReporterOpt: Option[AnonymousReporter] = None
+  protected var agents: AgentSet                                = initialAgents
+
+  // Don't define here; `PatchViewGUI` with mix in an implementation from `VarviewWindow` --Jason B. (8/28/25)
+  def dispose(): Unit
+
+  def refresh(): Unit                       = ()
+  def setStemThickness(value: Double): Unit = ()
+  def updateTurtleShapes(): Unit            = ()
+
+  def setAgentSet(as: AgentSet): Unit = {
+    agents = as
+  }
+
+  def setStemColorReporter(reporter: AnonymousReporter): Unit = {
+    stemColorReporterOpt = Option(reporter)
+  }
+
+}
+
+class TurtleViewHeadless(override val title: String, override protected val initialAgents: AgentSet, reporter: AnonymousReporter)
+  extends TurtleView {
+
+  override def dispose(): Unit                                                                                = ()
+  override def setupForRendering(wWidth: Int, wHeight: Int, minX: Int, maxX: Int, minY: Int, maxY: Int): Unit = ()
+  override def setVisible(isVisible: Boolean): Unit                                                           = ()
+
+}
+
+class TurtleViewGUI(title: String, override protected val initialAgents: AgentSet, reporter: AnonymousReporter)
+  extends VarviewWindow(title) with TurtleView with ThemeSync {
 
   private val glManager = new TurtleGL(this)
 
   def getGLWindow: MouseableGLWindow =
     glManager
-
-  private var stemColorReporter: AnonymousReporter = null
 
   var turtleReporterValues = Array[TurtleValue]()
   var linkValues = Array[LinkValue]()
@@ -65,7 +96,7 @@ class TurtleView(title: String, var agents: AgentSet, reporter: AnonymousReporte
     glManager.repaintCanvas()
   }
 
-  def updateTurtleShapes(): Unit = {
+  override def updateTurtleShapes(): Unit = {
     glManager.updateTurtleDisplayList()
     glManager.repaintCanvas()
   }
@@ -120,23 +151,19 @@ class TurtleView(title: String, var agents: AgentSet, reporter: AnonymousReporte
     patchColorMatrix = Array.fill(worldWidth) { Array.fill(worldHeight) { Color.BLUE } }
   }
 
-  def setAgentSet(as: AgentSet): Unit = {
-    agents = as
-  }
-
   override def resetPerspective(): Unit = {
     glManager.observer.goHome(this)
     refresh()
   }
 
-  def refresh(): Unit = {
+  override def refresh(): Unit = {
     glManager.repaintCanvas()
 
     if (viewOptions.usePColor)
       updatePColors()
   }
 
-  def zoomZby(change: Double): Unit = {
+  override def zoomZby(change: Double): Unit = {
     if (-change < zScale)
       zScale += change
 
@@ -147,28 +174,18 @@ class TurtleView(title: String, var agents: AgentSet, reporter: AnonymousReporte
     stemColor.max(0).min(139.9)
 
   def getStemColor(context: Context, turtle: Turtle): Double = {
-    if (stemColorReporter == null)
-      4.5f
-    else {
-      try {
-        trimStemColor(stemColorReporter.report(context, Array(turtle)).asInstanceOf[Double])
-      }
-
-      catch {
-        case t: Throwable =>
-          throw new LogoException("Stem color reporter did not generate a number. ", t) {}
-      }
-    }
+    stemColorReporterOpt.map {
+      stemColorReporter =>
+        try {
+          trimStemColor(stemColorReporter.report(context, Array(turtle)).asInstanceOf[Double])
+        } catch {
+          case t: Throwable =>
+            throw new LogoException("Stem color reporter did not generate a number. ", t) {}
+        }
+    }.getOrElse(4.5f)
   }
 
-  def getStemColorReporter: AnonymousReporter =
-    stemColorReporter
-
-  def setStemColorReporter(reporter: AnonymousReporter): Unit = {
-    stemColorReporter = reporter
-  }
-
-  def syncTheme(): Unit = {
+  override def syncTheme(): Unit = {
     dashboard.syncTheme()
     viewOptions.syncTheme()
   }

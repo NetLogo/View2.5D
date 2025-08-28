@@ -21,7 +21,32 @@ object VarviewWindow {
   val SCALEZ = 3
 }
 
-abstract class VarviewWindow(title: String) extends JFrame(title) with NetLogoIcon {
+trait Varview {
+
+  // scale factor for the rendered turtle/patch variable.
+  var zScale = 1.0
+
+  def title: String
+
+  def setupForRendering(wWidth: Int, wHeight: Int, minX: Int, maxX: Int, minY: Int, maxY: Int): Unit
+  def setVisible(isVisible: Boolean): Unit
+
+  def manuallyRefreshReporterView(context: Context): Unit = ()
+  def resetPerspective(): Unit                            = ()
+  def setLinksDisplayMode(linksInXYPlane: Boolean): Unit  = ()
+  def syncTheme(): Unit                                   = ()
+  def zoomZby(num: Double): Unit                          = ()
+
+  def getObserverDistance: Double                                                     = 0
+  def getObserverPerspectiveAngles: Array[Double]                                     = Array(0, 0)
+  def getObserverPerspectiveFocusPoint: Array[Double]                                 = Array(0, 0)
+  def shiftObserverFocusPoint(deltax: Double, deltay: Double): Unit                   = ()
+  def updateObserverPerspectiveAnglesWithDeltas(thetax: Double, thetay: Double): Unit = ()
+  def zoomToDistance(dist: Double): Unit                                              = ()
+
+}
+
+abstract class VarviewWindow(override val title: String) extends JFrame(title) with Varview with NetLogoIcon {
   var worldWidth = 0
   var worldHeight = 0
   var viewWidth = 0
@@ -35,10 +60,6 @@ abstract class VarviewWindow(title: String) extends JFrame(title) with NetLogoIc
   var xExpand = 0
   var yExpand = 0
 
-  // scale factor for the rendered turtle/patch variable.
-  var zScale = 1.0
-
-  def zoomZby(amount: Double): Unit
   def getGLWindow: MouseableGLWindow
 
   private var mode = VarviewWindow.ORBIT
@@ -75,9 +96,6 @@ abstract class VarviewWindow(title: String) extends JFrame(title) with NetLogoIc
     frame.setLocation(placeW, placeH)
   }
 
-  def resetPerspective(): Unit
-  def manuallyRefreshReporterView(context: Context): Unit
-
   // Given an AgentSet of turtles, produce a Set of associated Links.
   // Assumes check that AgentSet contains Turtles has already been made.
   // Currently includes links for which only one end is in the AgentSet
@@ -91,4 +109,30 @@ abstract class VarviewWindow(title: String) extends JFrame(title) with NetLogoIc
         turtle.links.filter(!_.hidden)
     }.flatten.toSet
   }
+
+  override def getObserverPerspectiveAngles: Array[Double] =
+    getGLWindow.getObserverPerspectiveAngles
+
+  override def getObserverPerspectiveFocusPoint: Array[Double] =
+    getGLWindow.getObserverPerspectiveFocusPoint
+
+  override def getObserverDistance: Double =
+    getGLWindow.getObserverDistance
+
+  override def shiftObserverFocusPoint(deltax: Double, deltay: Double): Unit = {
+    getGLWindow.shiftObserverFocusPoint(deltax, deltay)
+  }
+
+  override def updateObserverPerspectiveAnglesWithDeltas(thetax: Double, thetay: Double): Unit = {
+    getGLWindow.updateObserverPerspectiveAnglesWithDeltas(thetax, thetay)
+  }
+
+  override def zoomToDistance(dist: Double): Unit = {
+    getGLWindow.zoomToDistance(dist)
+  }
+
+
+
+
+
 }

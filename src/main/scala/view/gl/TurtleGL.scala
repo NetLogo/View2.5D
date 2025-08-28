@@ -6,9 +6,9 @@ import com.jogamp.opengl.glu.{ GLU, GLUquadric }
 
 import org.nlogo.api.Color
 
-import view25d.view.{ MouseableGLWindow, TurtleView }
+import view25d.view.{ MouseableGLWindow, TurtleViewGUI }
 
-class TurtleGL(viewer: TurtleView) extends MouseableGLWindow(viewer) {
+class TurtleGL(viewer: TurtleViewGUI) extends MouseableGLWindow(viewer) {
   // handles for compiled GL shapes
   var patchTileListHandle = 0
   var stemSkyscraperHandle = 0

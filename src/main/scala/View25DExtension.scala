@@ -1,12 +1,13 @@
 package view25d
 
+import java.awt.GraphicsEnvironment
 import java.lang.Double
 
 import org.nlogo.api.{ Argument, Command, Context, DefaultClassManager, ExtensionManager,
                        PrimitiveManager, Reporter }
 import org.nlogo.app.App
 import org.nlogo.core.Syntax
-import org.nlogo.theme.ThemeSync
+import org.nlogo.workspace.{ AbstractWorkspace, ExtensionManager => WorkspaceExtensionManager }
 
 import view25d.prims.{ DecoratePatchView, GetObserverAngles, GetObserverDistance, GetObserverFocus, GetZScale,
                        MakePatchView, MakeTurtleView, SetLinkDisplayMode, SetObserverAngles, SetObserverDistance,
@@ -15,6 +16,29 @@ import view25d.prims.{ DecoratePatchView, GetObserverAngles, GetObserverDistance
 import view25d.view.{ PatchView, TurtleView, View25DShapeChangeListener }
 
 import scala.collection.mutable.Map
+
+// Copied from Language Library --Jason B. (8/28/25)
+private def checkIsGUI(em: ExtensionManager): Boolean = {
+
+  val isHeadlessArgs =
+    GraphicsEnvironment.isHeadless ||
+    "true".equals(System.getProperty("java.awt.headless")) ||
+    "true".equals(System.getProperty("org.nlogo.preferHeadless"))
+
+  // "Can't we just check the `org.nlogo.preferHeadless` property?"  Well, kind-of, but
+  // it turns out that doesn't get set automatically and there are a lot of ways to run
+  // NetLogo models headlessly that "forget" to do it.  It's safer to check if the
+  // workspace we're using is headless in addition to checking the property.  -Jeremy B
+  // July 2022
+  val isHeadless =
+    isHeadlessArgs ||
+      (em.isInstanceOf[WorkspaceExtensionManager] &&
+        em.asInstanceOf[WorkspaceExtensionManager].workspace.isInstanceOf[AbstractWorkspace] &&
+        em.asInstanceOf[WorkspaceExtensionManager].workspace.asInstanceOf[AbstractWorkspace].isHeadless)
+
+  !isHeadless
+
+}
 
 object View25DExtension {
   var patchWindowMap = Map[String, PatchView]()
@@ -58,15 +82,27 @@ object View25DExtension {
   }
 }
 
-class View25DExtension extends DefaultClassManager with ThemeSync {
+class View25DExtension extends DefaultClassManager {
   import View25DExtension._
+
+  private var syncFunctionIDOpt: Option[Long] = None
 
   // run at extension startup.  ensure that the NetLogo native JOGL is loaded.
   override def runOnce(manager: ExtensionManager): Unit = {
     View25DShapeChangeListener.listen()
 
-    if (App.app != null)
-      App.app.addSyncComponent(this)
+    if (checkIsGUI(manager)) {
+      syncFunctionIDOpt =
+        Option(
+          App.app.addSyncFunction(
+            () => {
+              patchWindowMap.values.foreach(_.syncTheme())
+              turtleWindowMap.values.foreach(_.syncTheme())
+            }
+          )
+        )
+    }
+
   }
 
   override def load(manager: PrimitiveManager): Unit = {
@@ -175,12 +211,11 @@ class View25DExtension extends DefaultClassManager with ThemeSync {
     disposeAllPatchViews()
     disposeAllTurtleViews()
 
-    if (App.app != null)
-      App.app.removeSyncComponent(this)
+    if (checkIsGUI(manager)) {
+      syncFunctionIDOpt.foreach(App.app.removeSyncFunction)
+      syncFunctionIDOpt = None
+    }
+
   }
 
-  def syncTheme(): Unit = {
-    patchWindowMap.values.foreach(_.syncTheme())
-    turtleWindowMap.values.foreach(_.syncTheme())
-  }
 }

@@ -14,9 +14,9 @@ class GetObserverAngles extends Reporter {
 
     LogoList(
       if (View25DExtension.turtleWindowMap.contains(title))
-        View25DExtension.turtleWindowMap(title).getGLWindow.getObserverPerspectiveAngles
+        View25DExtension.turtleWindowMap(title).getObserverPerspectiveAngles
       else if (View25DExtension.patchWindowMap.contains(title))
-        View25DExtension.patchWindowMap(title).getGLWindow.getObserverPerspectiveAngles
+        View25DExtension.patchWindowMap(title).getObserverPerspectiveAngles
       else
         Array(0.0, 0.0)
     )

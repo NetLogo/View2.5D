@@ -16,15 +16,15 @@ class SetObserverFocus extends Command {
     val y = args(2).getDoubleValue
 
     View25DExtension.patchWindowMap.get(title).foreach(window => {
-      val coords = window.getGLWindow.getObserverPerspectiveFocusPoint
+      val coords = window.getObserverPerspectiveFocusPoint
 
-      window.getGLWindow.shiftObserverFocusPoint(x - coords(0), y - coords(1))
+      window.shiftObserverFocusPoint(x - coords(0), y - coords(1))
     })
 
     View25DExtension.turtleWindowMap.get(title).foreach(window => {
-      val coords = window.getGLWindow.getObserverPerspectiveFocusPoint
+      val coords = window.getObserverPerspectiveFocusPoint
 
-      window.getGLWindow.shiftObserverFocusPoint(x - coords(0), y - coords(1))
+      window.shiftObserverFocusPoint(x - coords(0), y - coords(1))
     })
   }
 }

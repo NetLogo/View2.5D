@@ -15,9 +15,9 @@ class GetObserverDistance extends Reporter {
     val title = args(0).getString
 
     if (View25DExtension.turtleWindowMap.contains(title))
-      View25DExtension.turtleWindowMap(title).getGLWindow.getObserverDistance
+      View25DExtension.turtleWindowMap(title).getObserverDistance
     else if (View25DExtension.patchWindowMap.contains(title))
-      View25DExtension.patchWindowMap(title).getGLWindow.getObserverDistance
+      View25DExtension.patchWindowMap(title).getObserverDistance
     else
       0
   }
