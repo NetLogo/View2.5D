@@ -47,7 +47,7 @@ class MakeTurtleView extends Command {
     override def run(): TurtleView = {
 
       val manualTurtleView =
-        if (!context.workspace.isHeadless)
+        if (context.workspace.workspaceContext.workspaceGUI)
           new TurtleViewGUI(title, as, turtleReporter)
         else
           new TurtleViewHeadless(title, as, turtleReporter)

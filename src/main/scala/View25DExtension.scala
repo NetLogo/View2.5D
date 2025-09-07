@@ -7,7 +7,7 @@ import org.nlogo.api.{ Argument, Command, Context, DefaultClassManager, Extensio
                        PrimitiveManager, Reporter }
 import org.nlogo.app.App
 import org.nlogo.core.Syntax
-import org.nlogo.workspace.{ AbstractWorkspace, ExtensionManager => WorkspaceExtensionManager }
+import org.nlogo.workspace.AbstractWorkspace
 
 import view25d.prims.{ DecoratePatchView, GetObserverAngles, GetObserverDistance, GetObserverFocus, GetZScale,
                        MakePatchView, MakeTurtleView, SetLinkDisplayMode, SetObserverAngles, SetObserverDistance,
@@ -17,30 +17,9 @@ import view25d.view.{ PatchView, TurtleView, View25DShapeChangeListener }
 
 import scala.collection.mutable.Map
 
-// Copied from Language Library --Jason B. (8/28/25)
-private def checkIsGUI(em: ExtensionManager): Boolean = {
-
-  val isHeadlessArgs =
-    GraphicsEnvironment.isHeadless ||
-    "true".equals(System.getProperty("java.awt.headless")) ||
-    "true".equals(System.getProperty("org.nlogo.preferHeadless"))
-
-  // "Can't we just check the `org.nlogo.preferHeadless` property?"  Well, kind-of, but
-  // it turns out that doesn't get set automatically and there are a lot of ways to run
-  // NetLogo models headlessly that "forget" to do it.  It's safer to check if the
-  // workspace we're using is headless in addition to checking the property.  -Jeremy B
-  // July 2022
-  val isHeadless =
-    isHeadlessArgs ||
-      (em.isInstanceOf[WorkspaceExtensionManager] &&
-        em.asInstanceOf[WorkspaceExtensionManager].workspace.isInstanceOf[AbstractWorkspace] &&
-        em.asInstanceOf[WorkspaceExtensionManager].workspace.asInstanceOf[AbstractWorkspace].isHeadless)
-
-  !isHeadless
-
-}
-
 object View25DExtension {
+  var isHeadless = true
+
   var patchWindowMap = Map[String, PatchView]()
   var turtleWindowMap = Map[String, TurtleView]()
 
@@ -89,9 +68,11 @@ class View25DExtension extends DefaultClassManager {
 
   // run at extension startup.  ensure that the NetLogo native JOGL is loaded.
   override def runOnce(manager: ExtensionManager): Unit = {
+    View25DExtension.isHeadless = !manager.workspaceContext.workspaceGUI
+
     View25DShapeChangeListener.listen()
 
-    if (checkIsGUI(manager)) {
+    if (!View25DExtension.isHeadless) {
       syncFunctionIDOpt =
         Option(
           App.app.addSyncFunction(
@@ -211,7 +192,7 @@ class View25DExtension extends DefaultClassManager {
     disposeAllPatchViews()
     disposeAllTurtleViews()
 
-    if (checkIsGUI(manager)) {
+    if (!View25DExtension.isHeadless) {
       syncFunctionIDOpt.foreach(App.app.removeSyncFunction)
       syncFunctionIDOpt = None
     }

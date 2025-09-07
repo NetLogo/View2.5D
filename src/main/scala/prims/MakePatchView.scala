@@ -47,7 +47,7 @@ class MakePatchView extends Command {
       try {
 
         val manualPatchView =
-          if (!context.workspace.isHeadless)
+          if (context.workspace.workspaceContext.workspaceGUI)
             new PatchViewGUI(title, patchReporter)
           else
             new PatchViewHeadless(title, patchReporter)
