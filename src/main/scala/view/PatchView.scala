@@ -1,7 +1,7 @@
 package view25d.view
 
 import com.jogamp.opengl.{ GLCapabilities, GLProfile }
-import com.jogamp.opengl.awt.GLCanvas
+import com.jogamp.opengl.awt.GLJPanel
 
 import java.awt.{ BorderLayout, Dimension }
 import java.awt.event.{ WindowAdapter, WindowEvent }
@@ -56,7 +56,7 @@ class PatchViewGUI(title: String, reporter: AnonymousReporter) extends VarviewWi
     }
   })
 
-  val glCanvas =  new GLCanvas(new GLCapabilities(GLProfile.get(GLProfile.GL2)))
+  val glCanvas =  new GLJPanel(new GLCapabilities(GLProfile.get(GLProfile.GL2)))
 
   glCanvas.addGLEventListener(glManager);
   glCanvas.addMouseListener(glManager);

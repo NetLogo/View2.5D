@@ -1,7 +1,7 @@
 package view25d.view
 
 import com.jogamp.opengl.{ GLCapabilities, GLProfile }
-import com.jogamp.opengl.awt.GLCanvas
+import com.jogamp.opengl.awt.GLJPanel
 
 import java.awt.{ BorderLayout, Color, Dimension }
 import java.awt.event.{ WindowAdapter, WindowEvent }
@@ -72,7 +72,7 @@ class TurtleViewGUI(title: String, override protected val initialAgents: AgentSe
     }
   })
 
-  private val glCanvas = new GLCanvas(new GLCapabilities(GLProfile.get(GLProfile.GL2)))
+  private val glCanvas = new GLJPanel(new GLCapabilities(GLProfile.get(GLProfile.GL2)))
 
   glCanvas.addGLEventListener(glManager)
   glCanvas.addMouseListener(glManager)

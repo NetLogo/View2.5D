@@ -4,7 +4,7 @@ import java.awt.event.{ MouseAdapter, MouseEvent, MouseWheelEvent }
 import java.nio.{ FloatBuffer, IntBuffer }
 
 import com.jogamp.opengl.{ GL, GL2, GL2ES1, GLAutoDrawable, GLEventListener }
-import com.jogamp.opengl.awt.GLCanvas
+import com.jogamp.opengl.awt.GLJPanel
 import com.jogamp.opengl.fixedfunc.{ GLLightingFunc, GLMatrixFunc }
 import com.jogamp.opengl.glu.GLU
 
@@ -19,12 +19,6 @@ import scala.collection.mutable.Map
 import view25d.view.gl.NetLogoGLU
 
 abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter with GLEventListener {
-  private val uiScale = if (System.getProperty("os.name").toLowerCase.contains("linux")) {
-    Utils.getUIScale
-  } else {
-    1
-  }
-
   // initial values are overwritten immediately - this is the correct initial value for the default model
   val observer = new Observer(0, 0, 49.5)
 
@@ -52,14 +46,14 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter wit
   def getObserverDistance: Double =
     observer.dist
 
-  protected var canvas: GLCanvas = null
+  protected var canvas: GLJPanel = null
 
   protected var oldx = 0
   protected var oldy = 0
 
   var dragging = false
 
-  def setCanvas(glCanvas: GLCanvas): Unit = {
+  def setCanvas(glCanvas: GLJPanel): Unit = {
     canvas = glCanvas
   }
 
@@ -321,8 +315,8 @@ abstract class MouseableGLWindow(viewer: VarviewWindow) extends MouseAdapter wit
 
   // required by Interface GLEventListener
   override def reshape(drawable: GLAutoDrawable, x: Int, y: Int, width: Int, height: Int): Unit = {
-    viewer.viewWidth = (width * uiScale).toInt
-    viewer.viewHeight = (height * uiScale).toInt
+    viewer.viewWidth = width.toInt
+    viewer.viewHeight = height.toInt
 
     mainViewport(drawable.getGL.asInstanceOf[GL2], glu)
   }
