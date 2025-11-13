@@ -263,7 +263,7 @@ view2.5d:show-links-xy-plane Title
   Updates only the turtle-view  or patch-view window with the specified title (if any).
   Links are drawn in the xy-plane (instead of the turtle to turtle default).
   This option can be selected using the Link Options xy-plane radio Button in the 3D view.
-  
+
 
 ### `view2.5d:show-links-xyz`
 
@@ -276,7 +276,7 @@ view2.5d:show-links-xyz Title
   Updates only the turtle-view  or patch-view window with the specified title (if any).
   Links are drawn from turtle to turtle (this is the default way links are displayed).
   This option can be selected using the Link Options xyz radio Button in the 3D view.
-  
+
 
 ### `view2.5d:get-observer-angles`
 
