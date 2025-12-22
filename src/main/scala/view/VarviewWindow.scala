@@ -26,8 +26,6 @@ trait Varview {
   // scale factor for the rendered turtle/patch variable.
   var zScale = 1.0
 
-  def title: String
-
   def setupForRendering(wWidth: Int, wHeight: Int, minX: Int, maxX: Int, minY: Int, maxY: Int): Unit
   def setVisible(isVisible: Boolean): Unit
 
@@ -46,7 +44,7 @@ trait Varview {
 
 }
 
-abstract class VarviewWindow(override val title: String) extends JFrame(title) with Varview with NetLogoIcon {
+abstract class VarviewWindow(title: String) extends JFrame(title) with Varview with NetLogoIcon {
   var worldWidth = 0
   var worldHeight = 0
   var viewWidth = 0

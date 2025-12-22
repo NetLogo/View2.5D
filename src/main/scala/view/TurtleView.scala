@@ -40,7 +40,7 @@ trait TurtleView extends Varview {
 
 }
 
-class TurtleViewHeadless(override val title: String, override protected val initialAgents: AgentSet, reporter: AnonymousReporter)
+class TurtleViewHeadless(title: String, override protected val initialAgents: AgentSet, reporter: AnonymousReporter)
   extends TurtleView {
 
   override def dispose(): Unit                                                                                = ()

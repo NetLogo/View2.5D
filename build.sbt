@@ -6,10 +6,10 @@ name := "view2.5d"
 version := "1.2.3"
 isSnapshot := true
 
-javacOptions ++= Seq("-g", "-deprecation", "-Xlint:all", "-Xlint:-serial", "-Xlint:-path", "-encoding", "us-ascii", "--release", "11")
+javacOptions ++= Seq("-g", "-deprecation", "-Xlint:all", "-Xlint:-serial", "-Xlint:-path", "-encoding", "us-ascii", "--release", "17")
 
 scalaVersion := "3.7.0"
-scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xfatal-warnings", "-encoding", "us-ascii", "-release", "11")
+scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xfatal-warnings", "-encoding", "us-ascii", "-release", "17")
 
 netLogoVersion      := "7.0.0-2486d1e"
 netLogoClassManager := "view25d.View25DExtension"

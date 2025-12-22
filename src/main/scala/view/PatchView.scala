@@ -28,7 +28,7 @@ trait PatchView extends Varview {
 
 }
 
-class PatchViewHeadless(override val title: String, reporter: AnonymousReporter) extends PatchView with Varview {
+class PatchViewHeadless(title: String, reporter: AnonymousReporter) extends PatchView with Varview {
   override def dispose(): Unit                                                                                = ()
   override def setupForRendering(wWidth: Int, wHeight: Int, minX: Int, maxX: Int, minY: Int, maxY: Int): Unit = ()
   override def setVisible(isVisible: Boolean): Unit                                                           = ()
