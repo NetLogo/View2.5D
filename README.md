@@ -76,7 +76,7 @@ view2.5d:patch-view Title Reporter
 
 This command must be called from the Observer context. (Attempting to call from another context causes an error)
 The Title is a string, which will be used to label the new Window and to call for subsequent updates and modifications.
-Specification of the Reporter uses the NetLogo anonymous procedure syntax, from the Observer perspective.
+Specification of the Reporter uses the NetLogo arrow procedure syntax, from the Observer perspective.
 
 Example:
 
@@ -130,7 +130,7 @@ view2.5d:turtle-view Title Agents Reporter
 This command must be called from the Observer context. (Attempting to call from another context causes an error)
 The Title is a string, which will be used to label the new Window and to call for subsequent updates.
 The turtle-set is any selector for turtles.
-Reporter is an anonymous reporter that should take a turtle as input, and report some number from it.
+Reporter is an arrow reporter that should take a turtle as input, and report some number from it.
 
 Example:
 
@@ -204,7 +204,7 @@ view2.5d:set-turtle-stem-color Title colorReporter
 
 This command must be called from the Observer context.
 Updates only the turtle-view window with the specified title (if any).
-colorReporter is an anonymous reporter that should take a turtle as input, and report some number representing a color from it.
+colorReporter is an arrow reporter that should take a turtle as input, and report some number representing a color from it.
 Turtles are now drawn with "pins" or "stems" that have the specified color (instead of the grey default).
 
 Example:
