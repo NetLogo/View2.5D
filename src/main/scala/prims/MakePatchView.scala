@@ -2,7 +2,6 @@ package view25d.prims
 
 import org.nlogo.api.{ AgentException, AnonymousReporter, Argument, Command, Context, ExtensionException,
                        ReporterRunnable }
-import org.nlogo.app.App
 import org.nlogo.core.Syntax
 
 import view25d.View25DExtension
@@ -22,7 +21,7 @@ class MakePatchView extends Command {
     val patchReporter = args(1).getReporter
 
     try {
-      patchReporter.report(context, Array(App.app.workspace.world.getPatchAt(0, 0)))
+      patchReporter.report(context, Array(context.workspace.world.getPatchAt(0, 0)))
     }
 
     catch {
